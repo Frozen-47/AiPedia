@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aipedia - AI Knowledge Encyclopedia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="main">
+        <div class="hero">
+            <h1>Aipedia</h1>
+            <p class="subtitle">A comprehensive encyclopedia of AI tools, models, datasets, and concepts</p>
+            <p class="subtitle" style="font-size: 0.8125rem; margin-top: 0.5rem;">Community-written summaries · Citation-backed · Open knowledge</p>
+        </div>
+
+        <div class="search-container">
+            <div class="search-wrapper">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search for models, datasets, frameworks, papers...">
+            </div>
+        </div>
+
+        <div class="filters" id="filters"></div>
+
+        <div class="entries-grid" id="entriesGrid"></div>
+
+        <div class="no-results" id="noResults" style="display: none;">
+            <p>No entries found. Try adjusting your search or filters.</p>
+        </div>
+
+        <div class="legal-footer">
+            <h3>📚 How Aipedia Works (Legal & Safe)</h3>
+            <p>Aipedia follows the same legal framework as Wikipedia — we provide knowledge through original summaries and proper citations:</p>
+            <ul>
+                <li><strong>Original writing:</strong> All content is written in our own words, not copied from sources</li>
+                <li><strong>Citations:</strong> We link to official sources, papers, and documentation</li>
+                <li><strong>Fair use:</strong> Factual information about AI tools is not copyrightable</li>
+                <li><strong>No permissions needed:</strong> Just like Wikipedia doesn't ask Google or Meta for permission to describe their products</li>
+                <li><strong>Open knowledge:</strong> All entries are CC BY-SA 4.0 licensed for community benefit</li>
+            </ul>
+            <div class="contribution-note">
+                <strong>Contributing?</strong> Remember: Write everything in your own words, cite official sources, never copy text directly, and include links to papers and documentation. This keeps Aipedia safe and valuable for everyone.
+            </div>
+        </div>
+    </div>
+
+    <button class="add-entry-btn" onclick="showAddModal()">+ Add Entry</button>
+
+    <div class="modal" id="detailModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
