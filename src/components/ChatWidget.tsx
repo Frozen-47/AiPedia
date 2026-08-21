@@ -37,18 +37,18 @@ const PREBUILT_QUESTIONS = [
 ];
 
 const markdownComponents = {
-  h1: ({node, ...props}: any) => <h1 className="font-bold text-lg mt-2 mb-1" {...props} />,
-  h2: ({node, ...props}: any) => <h2 className="font-bold text-base mt-2 mb-1" {...props} />,
-  h3: ({node, ...props}: any) => <h3 className="font-bold text-[14px] mt-2 mb-1" {...props} />,
+  h1: ({node, ...props}: any) => <h1 className="font-bold text-lg mt-2 mb-1 text-gray-900 dark:text-white" {...props} />,
+  h2: ({node, ...props}: any) => <h2 className="font-bold text-base mt-2 mb-1 text-gray-900 dark:text-white" {...props} />,
+  h3: ({node, ...props}: any) => <h3 className="font-bold text-[14px] mt-2 mb-1 text-gray-900 dark:text-white" {...props} />,
   p: ({node, ...props}: any) => <p className="mb-2 last:mb-0" {...props} />,
   ul: ({node, ...props}: any) => <ul className="list-disc pl-4 mb-2 space-y-1" {...props} />,
   ol: ({node, ...props}: any) => <ol className="list-decimal pl-4 mb-2 space-y-1" {...props} />,
   li: ({node, ...props}: any) => <li className="" {...props} />,
-  strong: ({node, ...props}: any) => <strong className="font-semibold text-black" {...props} />,
-  code: ({node, ...props}: any) => <code className="bg-black/10 dark:bg-black/40 rounded px-1.5 py-0.5 font-mono text-[12px]" {...props} />,
-  pre: ({node, ...props}: any) => <pre className="bg-black/5 dark:bg-black/50 rounded-xl p-3 overflow-x-auto my-2 font-mono text-[12px] border border-black/5 dark:border-white/5 shadow-inner" {...props} />,
+  strong: ({node, ...props}: any) => <strong className="font-bold text-sky-600 dark:text-sky-400" {...props} />,
+  code: ({node, ...props}: any) => <code className="bg-black/10 dark:bg-white/10 text-gray-900 dark:text-white rounded px-1.5 py-0.5 font-mono text-[12px]" {...props} />,
+  pre: ({node, ...props}: any) => <pre className="bg-black/5 dark:bg-black/50 text-gray-900 dark:text-white rounded-xl p-3 overflow-x-auto my-2 font-mono text-[12px] border border-black/5 dark:border-white/5 shadow-inner" {...props} />,
   a: ({node, children, ...props}: any) => (
-    <a className="inline-flex items-baseline gap-1 text-black dark:text-black hover:text-black dark:hover:text-black transition-colors font-medium underline underline-offset-2" target="_blank" rel="noopener noreferrer" {...props}>
+    <a className="inline-flex items-baseline gap-1 text-sky-600 dark:text-sky-400 hover:text-sky-500 dark:hover:text-sky-300 transition-colors font-medium underline underline-offset-2" target="_blank" rel="noopener noreferrer" {...props}>
       {children}
       <ExternalLink size={12} className="shrink-0 self-center" />
     </a>
@@ -71,13 +71,13 @@ function buildMarkdownComponents(
           <button
             type="button"
             onClick={() => onEntrySelect(match)}
-            className="font-bold text-black dark:text-black hover:text-black dark:hover:text-black underline underline-offset-2 transition-colors"
+            className="font-bold text-sky-600 dark:text-sky-400 hover:text-sky-500 dark:hover:text-sky-300 underline underline-offset-2 transition-colors cursor-pointer"
           >
             {match}
           </button>
         );
       }
-      return <strong className="font-semibold text-black dark:text-black">{children}</strong>;
+      return <strong className="font-bold text-sky-600 dark:text-sky-400">{children}</strong>;
     },
   };
 }
