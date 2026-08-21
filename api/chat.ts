@@ -82,13 +82,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Supported models mapping to ensure we only send valid model strings to Groq
     const VALID_MODELS = [
-      'llama-3.1-8b-instant',
-      'llama-3.3-70b-versatile',
-      'deepseek-r1-distill-qwen-32b',
-      'deepseek-r1-distill-llama-70b'
+      'openai/gpt-oss-20b',
+      'openai/gpt-oss-120b',
+      'qwen/qwen3.6-27b',
+      'groq/compound',
+      'groq/compound-mini',
+      'allam-2-7b'
     ];
 
-    const modelToUse = VALID_MODELS.includes(model) ? model : 'llama-3.1-8b-instant';
+    const modelToUse = VALID_MODELS.includes(model) ? model : 'openai/gpt-oss-20b';
 
     let finalMessages = [systemPrompt, ...sanitizedMessages];
 

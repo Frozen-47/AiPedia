@@ -25,10 +25,10 @@ interface ModelResponse {
 }
 
 const MODELS = [
-  { id: "llama-3.1-8b-instant", label: "Llama 3.1 8B", badge: "Fast" },
-  { id: "llama-3.3-70b-versatile", label: "Llama 3.3 70B", badge: "Smart" },
-  { id: "deepseek-r1-distill-qwen-32b", label: "DeepSeek R1 32B", badge: "Reasoning" },
-  { id: "deepseek-r1-distill-llama-70b", label: "DeepSeek R1 70B", badge: "Reasoning" },
+  { id: "openai/gpt-oss-20b", label: "GPT OSS 20B", badge: "Fast" },
+  { id: "openai/gpt-oss-120b", label: "GPT OSS 120B", badge: "Smart" },
+  { id: "qwen/qwen3.6-27b", label: "Qwen 3.6 27B", badge: "Reasoning" },
+  { id: "groq/compound", label: "Groq Compound", badge: "Compound AI" },
 ];
 
 const TEMPLATES = [
@@ -63,8 +63,8 @@ export const Playground: React.FC = () => {
   const [prompt, setPrompt] = useState("");
   const [systemInstruction, setSystemInstruction] = useState("");
   const [selectedModels, setSelectedModels] = useState<string[]>([
-    "llama-3.1-8b-instant",
-    "deepseek-r1-distill-llama-70b",
+    "openai/gpt-oss-20b",
+    "openai/gpt-oss-120b",
   ]);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [openTemplates, setOpenTemplates] = useState(false);
