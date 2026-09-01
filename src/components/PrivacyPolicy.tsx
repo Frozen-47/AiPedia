@@ -131,12 +131,10 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBackToHome }) =>
                 GitHub Codebase
               </a>
               <a
-                href="https://discord.gg/22YKNrS62h"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="mailto:frozennheart47@gmail.com"
                 className={`w-full py-2 rounded-xl text-[11px] font-bold text-center border transition-all ${t.surface2} ${t.border} ${t.textPrimary} hover:${t.borderHover}`}
               >
-                Contact Maintenance
+                Email Maintenance
               </a>
             </div>
           </div>
@@ -318,12 +316,10 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBackToHome }) =>
                 GitHub Repository
               </a>
               <a
-                href="https://discord.gg/22YKNrS62h"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="mailto:frozennheart47@gmail.com"
                 className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold border transition-all ${t.surface2} ${t.border} ${t.textPrimary} hover:${t.borderHover} hover:${t.textAccent}`}
               >
-                Join Discord Channel
+                Email: frozennheart47@gmail.com
               </a>
             </div>
           </section>

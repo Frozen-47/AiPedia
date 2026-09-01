@@ -262,12 +262,10 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
                 GitHub Project
               </a>
               <a
-                href="https://discord.gg/22YKNrS62h"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="mailto:frozennheart47@gmail.com"
                 className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold border transition-all ${t.surface2} ${t.border} ${t.textPrimary} hover:${t.borderHover} hover:${t.textAccent}`}
               >
-                Discord Server
+                Email: frozennheart47@gmail.com
               </a>
             </div>
           </section>

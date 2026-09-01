@@ -53,9 +53,8 @@ Please read our [Contributing Guide](Contributing.md) for step-by-step local set
 
 Interested in joining the team? Have ideas or suggestions?
 
-- **Discord**: [Join our server](#) _(coming soon)_
-- **Email**: sabareeshgm47@gmail.com
-- **Issues**: Feel free to open an issue for discussion!
+- **Email**: [frozennheart47@gmail.com](mailto:frozennheart47@gmail.com)
+- **GitHub Issues**: Feel free to open an issue for discussion or feature requests!
 
 ## 📋 Project Roadmap
 
