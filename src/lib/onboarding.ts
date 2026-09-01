@@ -74,7 +74,7 @@ export const onboardingOptions: OnboardingOptions = {
     { id: "friend", label: "Friend or colleague" },
     { id: "github", label: "GitHub" },
     { id: "newsletter", label: "Newsletter or blog" },
-    { id: "community", label: "Discord / community" },
+    { id: "community", label: "Online community" },
     { id: "other", label: "Other" },
   ],
 };
