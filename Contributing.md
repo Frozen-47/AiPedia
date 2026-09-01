@@ -2,7 +2,7 @@
 
 Thank you for taking the time to contribute to **AiVerse**! Whether you are a student, an open-source enthusiast, or a professional developer, your contributions help build the ultimate centralized encyclopedia of AI models, frameworks, datasets, and tools.
 
-We welcome all forms of contribution, including UI/UX enhancements, new database entries, backend optimizations, documentation, and bug reports.
+We welcome all forms of contribution, including UI/UX enhancements, new database entries, backend optimizations, documentation, and [bug reports](https://github.com/Frozen-47/AiVerse/issues).
 
 ---
 
@@ -20,7 +20,7 @@ We welcome all forms of contribution, including UI/UX enhancements, new database
 
 ### 📝 Content & AI Curation
 * **AI Tool Research**: Verifying and adding new AI tools, developer packages, datasets, and platforms.
-* **Accuracy Checks**: Spotting outdated citations, broken official links, or incorrect licensing tags on existing database entries.
+* **Accuracy Checks**: Spotting outdated citations, broken official links, or incorrect licensing tags on existing database entries (open an [Issue](https://github.com/Frozen-47/AiVerse/issues)).
 
 ---
 
@@ -90,7 +90,7 @@ Please follow this structured process to submit changes:
    ```bash
    git push origin feature/your-feature-name
    ```
-5. **Request Review**: Open a PR against the `main` branch of the official repository. Provide a description of the changes and any visual previews (screenshots/GIFs) if you altered UI elements.
+5. **Request Review**: Open a [Pull Request](https://github.com/Frozen-47/AiVerse/pulls) against the `main` branch of the official repository. Provide a description of the changes and any visual previews (screenshots/GIFs) if you altered UI elements.
 
 ---
 

@@ -879,7 +879,10 @@ const Inner: React.FC = () => {
           </div>
 
           <p className={`text-[11px] leading-relaxed ${t.textMuted}`}>
-            If you believe this was an error or would like to appeal, please contact the administrators.
+            If you believe this was an error or would like to appeal, please contact the administrators at{" "}
+            <a href="mailto:frozennheart47@gmail.com" className="text-sky-500 hover:underline">frozennheart47@gmail.com</a>
+            {" "}or submit an appeal on{" "}
+            <a href="https://github.com/Frozen-47/AiVerse/issues" target="_blank" rel="noopener noreferrer" className="text-sky-500 hover:underline">GitHub Issues</a>.
           </p>
 
           <button

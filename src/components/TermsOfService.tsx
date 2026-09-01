@@ -260,6 +260,14 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
                 GitHub Project
               </a>
               <a
+                href="https://github.com/Frozen-47/AiVerse/issues"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold border transition-all ${t.surface2} ${t.border} ${t.textPrimary} hover:${t.borderHover} hover:${t.textAccent}`}
+              >
+                Feedback & Issues
+              </a>
+              <a
                 href="mailto:frozennheart47@gmail.com"
                 className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold border transition-all ${t.surface2} ${t.border} ${t.textPrimary} hover:${t.borderHover} hover:${t.textAccent}`}
               >
