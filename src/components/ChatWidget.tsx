@@ -12,28 +12,26 @@ interface Message {
 }
 
 const PREBUILT_QUESTIONS = [
-  "What is the best model for coding?",
-  "Tell me about Llama 3.1 405B capabilities",
-  "Compare Claude Haiku vs GPT-4o mini",
-  "What models are best for image generation?",
-  "Explain what Grok-2 is",
-  "Which model is best for fast inference?",
-  "What is Flux.1 used for?",
-  "Tell me about Runway Gen-3 Alpha",
-  "Which models have the largest context window?",
-  "What is the difference between open-weights and proprietary?",
-  "How does Suno v3.5 generate music?",
-  "What is the most capable reasoning model?",
-  "Are there any good models for audio generation?",
-  "What are the benefits of using Gemma 2?",
-  "Can you list the multimodal models available?",
-  "What makes ElevenLabs good for voice synthesis?",
-  "How does GPT-4o mini compare to the main GPT-4o?",
-  "Which open-weights model is the smartest right now?",
-  "What models should I use for video generation?",
-  "Give me an overview of the Llama 3 family",
-  "What is Grok-2's main advantage?",
-  "Which model has the lowest latency?"
+  "How does DeepSeek-R1 compare to OpenAI o1 for reasoning?",
+  "What are the key architectural breakthroughs of DeepSeek-V3?",
+  "What is the best open-source model for AI coding?",
+  "Tell me about Llama 3.3 (70B) capabilities vs 405B",
+  "How does Claude 3.7 Sonnet handle hybrid reasoning?",
+  "Explain Gemini 2.0 Flash and its multimodal speeds",
+  "What is FLUX.1 Schnell used for?",
+  "How does LangGraph help orchestrate multi-agent workflows?",
+  "What are the benefits of Unsloth for fine-tuning LLMs?",
+  "Which models have the largest context windows?",
+  "What is the difference between open-weights and proprietary models?",
+  "Tell me about HunyuanVideo and CogVideoX video generation",
+  "What makes Kokoro-82M special for text-to-speech?",
+  "How does v0 by Vercel generate React & Tailwind components?",
+  "What is the MATH-500 dataset used for?",
+  "Can you list the best platforms for fast serverless AI inference?",
+  "What are the key features of Qwen 2.5-Coder (32B)?",
+  "Explain what GroqCloud LPU inference is",
+  "What makes OpenRouter useful for AI developers?",
+  "Which open-weights model is the smartest right now?"
 ];
 
 const markdownComponents = {

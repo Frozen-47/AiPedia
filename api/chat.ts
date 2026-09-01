@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import Groq from 'groq-sdk';
 import { createClient } from '@supabase/supabase-js';
+import { entries as staticEntries } from '../src/data';
 
 // Initialize Groq client with environment variable
 // Vercel securely injects this at runtime
@@ -19,19 +20,51 @@ async function getCatalogContext(): Promise<string> {
     return catalogCache.context;
   }
 
-  let entries: { name: string; type: string; task?: string; url?: string }[] = [];
-  if (supabase) {
-    const { data, error } = await supabase
-      .from('entries')
-      .select('name, type, task, url')
-      .eq('approved', true)
-      .order('created_at', { ascending: false });
-    if (!error && data) entries = data;
+  const entriesMap = new Map<string, any>();
+
+  // Always seed with the 227 comprehensive static entries
+  for (const e of staticEntries) {
+    entriesMap.set(e.name.toLowerCase().trim(), e);
   }
 
-  const context = entries
-    .map((e) => `- **${e.name}** (${e.type}, ${e.task || 'General'})${e.url ? ` - URL: ${e.url}` : ''}`)
-    .join('\n');
+  // Overlay any newer or approved items from Supabase if available
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('entries')
+        .select('*')
+        .eq('approved', true)
+        .order('created_at', { ascending: false });
+      if (!error && data && data.length > 0) {
+        for (const item of data) {
+          entriesMap.set(item.name.toLowerCase().trim(), item);
+        }
+      }
+    } catch (err) {
+      console.warn('Supabase catalog fetch fallback to static entries:', err);
+    }
+  }
+
+  const allEntries = Array.from(entriesMap.values());
+
+  const context = allEntries
+    .map((e) => {
+      const parts = [
+        `- **${e.name}** [Type: ${e.type} | Task: ${e.task || 'General'}] (Org: ${e.org || 'Open Source'}, Year: ${e.year || 'Recent'})`,
+        `  Summary: ${e.summary}`,
+      ];
+      if (e.benchmarks && e.benchmarks !== 'N/A') {
+        parts.push(`  Key Benchmarks: ${e.benchmarks}`);
+      }
+      if (e.architecture && e.architecture !== 'N/A') {
+        parts.push(`  Architecture: ${e.architecture}`);
+      }
+      if (e.url) {
+        parts.push(`  URL: ${e.url}`);
+      }
+      return parts.join('\n');
+    })
+    .join('\n\n');
 
   catalogCache = { context, at: Date.now() };
   return context;
@@ -73,15 +106,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const systemPromptContent = systemInstruction && typeof systemInstruction === 'string'
       ? systemInstruction
-      : `You are Vox, an AI assistant strictly dedicated to the AiVerse encyclopedia. ${nameStr} You MUST REFUSE to answer any questions that are not related to Artificial Intelligence, machine learning, AI models, datasets, or the AiVerse platform itself. If a user asks about coding (like Rust loops, general web dev, etc. unless specifically about AI frameworks like PyTorch), general trivia, or off-topic subjects, politely decline and steer the conversation back to AI models and technologies.\n\nHere is the current catalog of AI items available in the AiVerse database:\n${catalogContext || 'No catalog provided'}\n\nUse this catalog to inform your answers. If someone asks what models are available or asks for recommendations, draw from this list.\n\nCRITICAL INSTRUCTION:\nYou MUST ONLY recommend or mention models and tools that are explicitly listed in the catalog above. Do NOT hallucinate or mention any models outside of this catalog under any circumstances.\n\nIMPORTANT RESPONSE GUIDELINES:\n1. **ORGANIZE CLEARLY**: Provide clean, highly structured, and refined responses. Use bullet points and paragraphs effectively to break up the text.\n2. Use **bold text** for all AI model and tool names so they stand out in blue. Format them exactly like this: **Model Name**.\n3. **INCLUDE LINKS**: If a URL is provided in the catalog for an item, you MUST include it in your response formatted exactly like this: [Official Website](URL). Place the link naturally after the model name or at the end of its summary.`;
+      : `You are Vox, an AI assistant and expert encyclopedia curator strictly dedicated to the AiVerse platform. ${nameStr} You MUST REFUSE to answer any questions that are not related to Artificial Intelligence, machine learning, AI models, frameworks, platforms, datasets, or the AiVerse platform itself. If a user asks about off-topic subjects, politely decline and steer the conversation back to AI technologies.\n\nHere is the complete, current catalog of AI items available in the AiVerse encyclopedia (${staticEntries.length}+ entries):\n${catalogContext || 'No catalog provided'}\n\nUse this comprehensive catalog to answer user questions, explain technical architectures, compare models, and give recommendations.\n\nCRITICAL INSTRUCTIONS:\n1. **ACCURACY & CATALOG GROUNDING**: When answering questions about models, frameworks, datasets, and AI platforms, rely on the detailed technical facts, benchmarks, and architectures provided in the catalog.\n2. **ORGANIZE CLEARLY**: Provide clean, highly structured, and refined responses. Use bullet points, bold headers, and short paragraphs effectively.\n3. **HIGHLIGHT ENTITY NAMES**: Use **bold text** for all AI entity names (e.g. **DeepSeek-R1**, **Llama 3.3 (70B)**, **LangGraph**, **FLUX.1 Schnell**, **Cursor**).\n4. **INCLUDE LINKS**: If a URL is available for an item in the catalog, include it formatted exactly as [Official Website](URL) or [Documentation](URL) naturally with the item.`;
 
     const systemPrompt = {
       role: 'system',
       content: systemPromptContent,
     };
 
-    // Supported models mapping to ensure we only send valid model strings to Groq
+    // Supported models mapping on Groq
     const VALID_MODELS = [
+      'llama-3.3-70b-versatile',
+      'llama-3.1-8b-instant',
+      'deepseek-r1-distill-llama-70b',
+      'mixtral-8x7b-32768',
+      'gemma2-9b-it',
       'openai/gpt-oss-20b',
       'openai/gpt-oss-120b',
       'qwen/qwen3.6-27b',
@@ -90,12 +128,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       'allam-2-7b'
     ];
 
-    const modelToUse = VALID_MODELS.includes(model) ? model : 'openai/gpt-oss-20b';
+    const modelToUse = VALID_MODELS.includes(model) ? model : 'llama-3.3-70b-versatile';
 
     let finalMessages = [systemPrompt, ...sanitizedMessages];
 
     // DeepSeek R1 models on Groq do not support the 'system' role.
-    // If using DeepSeek, we merge the system instructions into the first user message instead.
     if (modelToUse.toLowerCase().includes('deepseek')) {
       const firstUserIndex = sanitizedMessages.findIndex(m => m.role === 'user');
       if (firstUserIndex !== -1) {
@@ -125,3 +162,4 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     res.status(500).json({ content: `Backend Error: ${error.message}` });
   }
 }
+
