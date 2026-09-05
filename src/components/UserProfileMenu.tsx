@@ -22,7 +22,6 @@ import {
   BookOpen,
   Terminal,
   Globe,
-  Image as ImageIcon,
   Lock,
   ChevronDown,
   ChevronUp,
@@ -52,13 +51,7 @@ const LinkedinLogo = ({ className }: { className?: string }) => (
   </svg>
 );
 
-// Premium Avatar Presets (Dicebear SVGs)
-const AVATAR_PRESETS = [
-  "https://api.dicebear.com/7.x/shapes/svg?seed=spark&backgroundColor=312e81",
-  "https://api.dicebear.com/7.x/bottts/svg?seed=circuit&colors[]=blue&colors[]=cyan",
-  "https://api.dicebear.com/7.x/pixel-art/svg?seed=neural&backgroundColor=065f46",
-  "https://api.dicebear.com/7.x/lorelei/svg?seed=matrix&backgroundColor=1e1b4b",
-];
+
 
 // Premium Role Details for Visual Cards Grid
 const ROLE_DETAILS: Record<
@@ -235,13 +228,12 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
   const [medium, setMedium] = useState("");
   const [devto, setDevto] = useState("");
   const [portfolio, setPortfolio] = useState("");
-  const [editAvatarUrl, setEditAvatarUrl] = useState("");
   const [role, setRole] = useState<UserRole | null>(null);
   const [interests, setInterests] = useState<OnboardingInterest[]>([]);
 
   const username = (user?.user_metadata?.username as string) || parsedMeta?.username || "";
   const email = user?.email || "";
-  const avatarUrl = user?.user_metadata?.avatar_url as string | undefined;
+  const avatarUrl = (user?.user_metadata?.avatar_url || user?.user_metadata?.picture) as string | undefined;
   const firstName = (user?.user_metadata?.firstName as string) || "";
   const lastName = (user?.user_metadata?.lastName as string) || "";
   const initials = firstName
@@ -250,13 +242,6 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
   const displayName = firstName || email.split("@")[0] || "User";
 
   const [socialsExpanded, setSocialsExpanded] = useState(false);
-  const [avatarError, setAvatarError] = useState(false);
-
-  useEffect(() => {
-    setAvatarError(false);
-  }, [editAvatarUrl]);
-
-  const fallbackAvatarUrl = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name.trim() || username || displayName || "User")}&backgroundColor=4f46e5,065f46,3730a3,1e3a8a,581c87`;
 
   const wrapperCls = (readOnly: boolean) => [
     "relative flex items-center rounded-xl border transition-all duration-300 w-full",
@@ -316,7 +301,6 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
     setMedium((meta?.medium as string) || parsedMeta?.medium || "");
     setDevto((meta?.devto as string) || parsedMeta?.devto || "");
     setPortfolio((meta?.portfolio as string) || parsedMeta?.portfolio || "");
-    setEditAvatarUrl((meta?.avatarUrl as string) || (meta?.avatar_url as string) || parsedMeta?.avatarUrl || "");
     setRole(onboardingProfile?.role ?? null);
     setInterests(onboardingProfile?.interests ?? []);
   }, [user, parsedMeta, onboardingProfile]);
@@ -355,7 +339,7 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
         medium: medium.trim(),
         devto: devto.trim(),
         portfolio: portfolio.trim(),
-        avatarUrl: editAvatarUrl.trim(),
+        avatarUrl: avatarUrl || undefined,
       }),
       completedAt: new Date().toISOString(),
     };
@@ -370,7 +354,7 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
     medium: medium.trim(),
     devto: devto.trim(),
     portfolio: portfolio.trim(),
-    avatarUrl: editAvatarUrl.trim(),
+    avatarUrl: avatarUrl || undefined,
   });
 
   const saveProfile = async () => {
@@ -450,44 +434,40 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
         </div>
 
         <div className="space-y-4 px-2">
-          {/* Live Avatar Preview & Presets Sandbox */}
-          <div className={`p-3.5 rounded-xl border flex items-center gap-4 transition-all duration-300 ${
-            isDark ? "bg-white/[0.01] border-white/5" : "bg-black/[0.01] border-black/5"
+          {/* Profile Photo (Read-Only - Strictly synced with Google / GitHub) */}
+          <div className={`p-3 rounded-xl border flex items-center gap-3.5 transition-all duration-300 ${
+            isDark ? "bg-white/[0.02] border-white/8" : "bg-black/[0.02] border-black/8"
           }`}>
-            {/* Live Preview Avatar */}
-            <div className="relative shrink-0 w-16 h-16 rounded-full overflow-hidden ring-2 ring-indigo-500/20 shadow-[0_0_15px_rgba(99,102,241,0.12)] bg-neutral-800">
-              <img
-                src={avatarError || !editAvatarUrl ? fallbackAvatarUrl : editAvatarUrl}
-                onError={() => setAvatarError(true)}
-                alt=""
-                className="w-full h-full object-cover"
-              />
+            <div className="relative shrink-0 w-14 h-14 rounded-full overflow-hidden ring-2 ring-white/10 shadow-md">
+              {avatarUrl ? (
+                <img
+                  src={avatarUrl}
+                  alt={displayName}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className={`w-full h-full flex items-center justify-center font-bold text-base ${isDark ? "bg-white text-black" : "bg-black text-white"}`}>
+                  {initials}
+                </div>
+              )}
             </div>
 
-            {/* Presets Grid */}
-            <div className="flex flex-col gap-1.5 min-w-0">
-              <span className="text-[9px] font-extrabold uppercase tracking-wider text-white/40 dark:text-white/40">
-                Quick Presets
-              </span>
-              <div className="flex gap-2">
-                {AVATAR_PRESETS.map((preset, index) => {
-                  const isSelected = editAvatarUrl === preset;
-                  return (
-                    <button
-                      key={index}
-                      type="button"
-                      onClick={() => setEditAvatarUrl(preset)}
-                      className={`w-8 h-8 rounded-full overflow-hidden border-2 transition-all duration-300 hover:scale-110 active:scale-90 cursor-pointer ${
-                        isSelected
-                          ? "border-indigo-500 scale-105 shadow-[0_0_10px_rgba(99,102,241,0.4)]"
-                          : "border-white/10 hover:border-white/30"
-                      }`}
-                    >
-                      <img src={preset} alt="" className="w-full h-full object-cover" />
-                    </button>
-                  );
-                })}
+            <div className="flex flex-col min-w-0">
+              <div className="flex items-center gap-1.5">
+                <span className={`text-xs font-semibold ${t.textPrimary}`}>
+                  Profile Photo
+                </span>
+                <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-medium ${
+                  isDark ? "bg-white/10 text-white/70" : "bg-black/10 text-black/70"
+                }`}>
+                  {avatarUrl ? "OAuth Synced" : "Default Initials"}
+                </span>
               </div>
+              <p className={`text-[11px] leading-relaxed mt-0.5 ${t.textMuted}`}>
+                {avatarUrl
+                  ? "Profile photo is automatically synced from your Google or GitHub account."
+                  : "Profile photo is available when signed in with Google or GitHub."}
+              </p>
             </div>
           </div>
 
@@ -502,17 +482,6 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
                 className={innerInputCls}
                 maxLength={50}
                 placeholder="Your name"
-              />
-            ))}
-
-            {/* Avatar URL */}
-            {renderInputWrapper(ImageIcon, "Avatar Image URL", (
-              <input
-                type="url"
-                value={editAvatarUrl}
-                onChange={(e) => setEditAvatarUrl(e.target.value)}
-                className={innerInputCls}
-                placeholder="https://example.com/avatar.png"
               />
             ))}
 

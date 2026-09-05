@@ -1096,15 +1096,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     className={`w-full p-2.5 rounded-xl border text-[13px] outline-none transition-all ${t.input}`}
                   />
                 </div>
-                {/* Avatar URL */}
+                {/* Avatar URL (Read-only OAuth sync) */}
                 <div>
-                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 opacity-70">Avatar URL</label>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider mb-1 opacity-70">Avatar (Google / GitHub Synced)</label>
                   <input
-                    type="url"
-                    value={editingUser.avatarUrl || ""}
-                    onChange={(e) => setEditingUser({ ...editingUser, avatarUrl: e.target.value })}
-                    className={`w-full p-2.5 rounded-xl border text-[13px] outline-none transition-all ${t.input}`}
-                    placeholder="https://example.com/avatar.png"
+                    type="text"
+                    readOnly
+                    disabled
+                    value={editingUser.avatarUrl || "None (Initials only)"}
+                    className={`w-full p-2.5 rounded-xl border text-[13px] outline-none transition-all opacity-60 cursor-not-allowed ${t.input}`}
                   />
                 </div>
               </div>

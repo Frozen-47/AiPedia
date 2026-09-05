@@ -315,7 +315,7 @@ export const WelcomeOnboarding: React.FC<WelcomeOnboardingProps> = ({
     medium: medium.trim(),
     devto: devto.trim(),
     portfolio: portfolio.trim(),
-    avatarUrl: (user?.user_metadata?.avatar_url as string) || undefined,
+    avatarUrl: ((user?.user_metadata?.avatar_url || user?.user_metadata?.picture) as string) || undefined,
   });
 
   const buildReferralSourcePayload = (): string | ReferralSource | null => {
