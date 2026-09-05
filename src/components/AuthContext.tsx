@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import type { User, Session } from "@supabase/supabase-js";
-import { supabase } from "../lib/supabase";
+import { supabase, getOAuthAvatarUrl } from "../lib/supabase";
 
 interface AuthContextType {
   user: User | null;
@@ -23,16 +23,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
 
+  const syncOAuthAvatar = async (currentUser: User) => {
+    try {
+      const realAvatar = getOAuthAvatarUrl(currentUser);
+      if (!realAvatar) return;
+      const meta = currentUser.user_metadata || {};
+      if (!meta.avatar_url || meta.avatar_url.includes("dicebear.com") || meta.avatar_url !== realAvatar) {
+        await supabase.auth.updateUser({
+          data: {
+            ...meta,
+            avatar_url: realAvatar,
+            avatarUrl: realAvatar,
+            picture: realAvatar,
+          },
+        });
+      }
+    } catch {
+      // Non-critical background sync
+    }
+  };
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       setIsLoaded(true);
+      if (session?.user) {
+        syncOAuthAvatar(session.user);
+      }
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
+      if (session?.user) {
+        syncOAuthAvatar(session.user);
+      }
     });
 
     return () => subscription.unsubscribe();

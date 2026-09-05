@@ -17,7 +17,7 @@ import {
   ArrowUpRight,
   ChevronRight,
 } from "lucide-react";
-import { supabase, fetchProfileByUsername, type PublicBuilderProfile } from "../lib/supabase";
+import { supabase, fetchProfileByUsername, getOAuthAvatarUrl, type PublicBuilderProfile } from "../lib/supabase";
 import type { Entry } from "../types";
 import { useTokens, useTheme } from "../lib/theme";
 import { useAuth } from "./AuthContext";
@@ -185,7 +185,7 @@ export const UserProfileModal: React.FC<UserProfileModalProps> = ({
           portfolio: meta?.portfolio || "",
           role: meta?.role || "developer",
           interests: meta?.interests || [],
-          avatarUrl: meta?.avatarUrl || meta?.avatar_url || undefined,
+          avatarUrl: getOAuthAvatarUrl(user) || undefined,
         };
       } else {
         try {

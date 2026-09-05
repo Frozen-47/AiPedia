@@ -131,6 +131,8 @@ export async function fetchProfileByUsername(
         typeof parsed === "object" &&
         parsed.username?.toLowerCase() === cleanUsername.toLowerCase()
       ) {
+        const rawAvatar = parsed.avatarUrl || parsed.avatar_url || "";
+        const cleanAvatar = rawAvatar && !rawAvatar.includes("dicebear.com") ? rawAvatar : undefined;
         return {
           userKey: row.user_key,
           displayName: parsed.displayName || "Builder",
@@ -143,7 +145,7 @@ export async function fetchProfileByUsername(
           portfolio: parsed.portfolio || "",
           role: row.role || "",
           interests: row.interests || [],
-          avatarUrl: parsed.avatarUrl || parsed.avatar_url || "",
+          avatarUrl: cleanAvatar,
         };
       }
     } catch {
@@ -195,3 +197,43 @@ export async function checkUsernameAvailable(
 
   return true; // available
 }
+
+/**
+ * Resolves the genuine Google or GitHub OAuth profile avatar.
+ * Prioritizes pristine provider identity_data from Google/GitHub,
+ * and completely ignores legacy synthetic dicebear placeholders.
+ */
+export function getOAuthAvatarUrl(user: any): string | undefined {
+  if (!user) return undefined;
+
+  // 1. Inspect OAuth identities (immutable provider records from Google/GitHub)
+  const identities = user.identities || [];
+  for (const identity of identities) {
+    const data = identity.identity_data;
+    if (data) {
+      if (identity.provider === "google") {
+        const googlePic = (data.avatar_url || data.picture) as string | undefined;
+        if (googlePic && !googlePic.includes("dicebear.com")) return googlePic;
+      }
+      if (identity.provider === "github") {
+        const ghPic = (data.avatar_url || data.picture) as string | undefined;
+        if (ghPic && !ghPic.includes("dicebear.com")) return ghPic;
+      }
+    }
+  }
+
+  // 2. Google OAuth standard picture field
+  const metaPicture = user.user_metadata?.picture as string | undefined;
+  if (metaPicture && !metaPicture.includes("dicebear.com")) {
+    return metaPicture;
+  }
+
+  // 3. Metadata avatar_url, rejecting synthetic dicebear URLs
+  const metaAvatar = user.user_metadata?.avatar_url as string | undefined;
+  if (metaAvatar && !metaAvatar.includes("dicebear.com")) {
+    return metaAvatar;
+  }
+
+  return undefined;
+}
+

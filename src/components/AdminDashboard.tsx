@@ -24,7 +24,7 @@ import {
   FileJson,
   Database,
 } from "lucide-react";
-import { supabase } from "../lib/supabase";
+import { supabase, getOAuthAvatarUrl } from "../lib/supabase";
 import { useTokens, useTheme, typeBadge, taskBadge, typeIcon, TYPE_GLYPH } from "../lib/theme";
 import type { Entry } from "../types";
 import { entries as defaultEntries } from "../data";
@@ -255,12 +255,25 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
         let blockedUntilDate: string | undefined = undefined;
         let isUserBlocked = false;
-        if (row.blocked_until) {
-          const bDate = new Date(row.blocked_until);
+        const rawBlockedUntil = row.blocked_until || meta.blockedUntil || meta.blocked_until;
+        if (rawBlockedUntil) {
+          const bDate = new Date(rawBlockedUntil);
           if (bDate.getTime() > Date.now()) {
             isUserBlocked = true;
-            blockedUntilDate = row.blocked_until;
+            blockedUntilDate = rawBlockedUntil;
           }
+        } else if (meta.isBlocked) {
+          isUserBlocked = true;
+          blockedUntilDate = "9999-12-31T23:59:59.999Z";
+        }
+
+        let userAvatar = meta.avatarUrl || meta.avatar_url || undefined;
+        if (userAvatar && userAvatar.includes("dicebear.com")) {
+          userAvatar = undefined;
+        }
+        if (user && (row.user_key === currentUserKey || (user.id && row.user_key === user.id) || (user.id && row.user_key.includes(user.id)))) {
+          const realOAuth = getOAuthAvatarUrl(user);
+          if (realOAuth) userAvatar = realOAuth;
         }
 
         return {
@@ -273,7 +286,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           medium: meta.medium || "",
           devto: meta.devto || "",
           portfolio: meta.portfolio || "",
-          avatarUrl: meta.avatarUrl || meta.avatar_url || undefined,
+          avatarUrl: userAvatar,
           role: row.role || "developer",
           interests: row.interests || [],
           updatedAt: row.updated_at || new Date().toISOString(),
@@ -482,7 +495,31 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     if (!editingUser) return;
     setActioningId(editingUser.userKey);
     try {
+      // Preserve existing flags like isBlocked / blockedUntil
+      const { data: currentPref } = await supabase
+        .from("user_preferences")
+        .select("referral_source")
+        .eq("user_key", editingUser.userKey)
+        .maybeSingle();
+
+      let existingMeta: any = {};
+      try {
+        if (currentPref?.referral_source) {
+          existingMeta = JSON.parse(currentPref.referral_source);
+        }
+      } catch {}
+
+      let finalAvatar = editingUser.avatarUrl || undefined;
+      if (finalAvatar && finalAvatar.includes("dicebear.com")) {
+        finalAvatar = undefined;
+      }
+      if (user && (editingUser.userKey === currentUserKey || editingUser.userKey === user.id)) {
+        const oAuthPic = getOAuthAvatarUrl(user);
+        if (oAuthPic) finalAvatar = oAuthPic;
+      }
+
       const referralSourceObj = {
+        ...existingMeta,
         source: "other",
         displayName: editingUser.displayName.trim(),
         username: editingUser.username,
@@ -492,7 +529,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         medium: editingUser.medium.trim(),
         devto: editingUser.devto.trim(),
         portfolio: editingUser.portfolio.trim(),
-        avatarUrl: editingUser.avatarUrl || undefined,
+        avatarUrl: finalAvatar,
       };
 
       const { error: err } = await supabase
@@ -506,8 +543,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       if (err) throw err;
 
+      const updatedUser: UserProfile = {
+        ...editingUser,
+        avatarUrl: finalAvatar,
+      };
+
       setUsers((prev) =>
-        prev.map((u) => (u.userKey === editingUser.userKey ? editingUser : u))
+        prev.map((u) => (u.userKey === editingUser.userKey ? updatedUser : u))
       );
       showToast("success", `Profile for "${editingUser.displayName}" updated.`);
       logAudit("Edit User", `Updated profile for "${editingUser.displayName}" (${editingUser.username})`);
@@ -524,7 +566,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     isBlocked: boolean,
     durationMs: number = 0
   ) => {
-    if (profile.userKey === currentUserKey) {
+    if (profile.userKey === currentUserKey || (user && profile.userKey === user.id)) {
       showToast("error", "Security violation: You cannot suspend your own admin account.");
       return;
     }
@@ -540,9 +582,29 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         }
       }
 
+      // Fetch current referral_source JSON to store suspension state safely without schema changes
+      const { data: currentPref } = await supabase
+        .from("user_preferences")
+        .select("referral_source")
+        .eq("user_key", profile.userKey)
+        .maybeSingle();
+
+      let metaObj: any = {};
+      try {
+        if (currentPref?.referral_source) {
+          metaObj = JSON.parse(currentPref.referral_source);
+        }
+      } catch {}
+
+      metaObj.blockedUntil = blockedUntilValue;
+      metaObj.isBlocked = isBlocked;
+
       const { error: err } = await supabase
         .from("user_preferences")
-        .update({ blocked_until: blockedUntilValue })
+        .update({
+          referral_source: JSON.stringify(metaObj),
+          updated_at: new Date().toISOString(),
+        })
         .eq("user_key", profile.userKey);
 
       if (err) throw err;

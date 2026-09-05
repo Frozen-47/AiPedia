@@ -36,6 +36,7 @@ import {
   type UserRole,
 } from "../lib/onboarding";
 import { useTokens, useTheme } from "../lib/theme";
+import { getOAuthAvatarUrl } from "../lib/supabase";
 
 // Custom SVG Logos for platforms not in standard Lucide version
 const GithubLogo = ({ className }: { className?: string }) => (
@@ -233,7 +234,7 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
 
   const username = (user?.user_metadata?.username as string) || parsedMeta?.username || "";
   const email = user?.email || "";
-  const avatarUrl = (user?.user_metadata?.avatar_url || user?.user_metadata?.picture) as string | undefined;
+  const avatarUrl = getOAuthAvatarUrl(user);
   const firstName = (user?.user_metadata?.firstName as string) || "";
   const lastName = (user?.user_metadata?.lastName as string) || "";
   const initials = firstName

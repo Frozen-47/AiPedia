@@ -4,6 +4,7 @@ import { Plus, Moon, Sun, SlidersHorizontal } from "lucide-react";
 import { useTokens, useTheme } from "../lib/theme";
 import { UserProfileMenu } from "./UserProfileMenu";
 import type { OnboardingProfile } from "../lib/onboarding";
+import { getOAuthAvatarUrl } from "../lib/supabase";
 
 interface NavbarProps {
   onAddEntry: () => void;
@@ -51,7 +52,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const avatarButtonRef = useRef<HTMLButtonElement>(null);
 
-  const avatarUrl = (user?.user_metadata?.avatar_url || user?.user_metadata?.picture) as string | undefined;
+  const avatarUrl = getOAuthAvatarUrl(user);
   const firstName = (user?.user_metadata?.firstName as string) || "";
   const lastName = (user?.user_metadata?.lastName as string) || "";
   const email = user?.email || "";
