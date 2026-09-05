@@ -261,8 +261,12 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
       let data;
       try {
         data = JSON.parse(responseText);
-      } catch (e) {
-        throw new Error(`Server returned non-JSON response (Status ${response.status}): ${responseText.substring(0, 100)}...`);
+      } catch {
+        throw new Error(
+          response.status === 500
+            ? "The AI backend encountered a temporary server error. Please try again in a few moments."
+            : `Server returned an unexpected response (Status ${response.status}).`
+        );
       }
       
       if (!response.ok) {
