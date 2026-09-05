@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback, useRef, lazy, Suspense } from "react";
-import { Filter, X, Check, BookOpen, Shield, Sparkles, Cpu, Layers, ArrowRight, ArrowLeft, AlertTriangle } from "lucide-react";
+import { Filter, X, Check, Sparkles, ArrowLeft, AlertTriangle } from "lucide-react";
 import { ThemeContext, useTheme } from "./lib/theme";
 import { useTokens } from "./lib/theme";
 import { Navbar } from "./components/Navbar";
@@ -14,6 +14,8 @@ import { WelcomeOnboarding } from "./components/WelcomeOnboarding";
 import { UserProfileModal } from "./components/UserProfileModal";
 import { OverviewCards } from "./components/OverviewCards";
 import { DailyPulseSection } from "./components/DailyPulseSection";
+import { DashboardHero } from "./components/DashboardHero";
+import { FeatureRibbon } from "./components/FeatureRibbon";
 import { PreferencesLoginPrompt } from "./components/PreferencesLoginPrompt";
 import { AuthProvider, useAuth } from "./components/AuthContext";
 import { AuthModal } from "./components/AuthModal";
@@ -52,8 +54,6 @@ import {
   partitionByInterests,
   persistOnboardingProfile,
   preferencesUserKey,
-  roleHeadline,
-  roleLabel,
   sortByInterestMatch,
   type OnboardingProfile,
 } from "./lib/onboarding";
@@ -104,6 +104,10 @@ const Inner: React.FC = () => {
       : null,
   );
   const [urlSyncReady, setUrlSyncReady] = useState(false);
+  const catalogSectionRef = useRef<HTMLDivElement | null>(null);
+  const scrollToCatalog = useCallback(() => {
+    catalogSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
   const [isAdding, setIsAdding] = useState(false);
   const [showBackendToast, setShowBackendToast] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -1039,223 +1043,207 @@ const Inner: React.FC = () => {
         />
       ) : (
         <div className="w-full px-4 sm:px-6 xl:px-12 py-8">
-          {/* Hero */}
-          {activeView === "landing" && (
-            <div className="mb-10">
-              <div className={`inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-widest border rounded-full px-4 py-1.5 mb-5 ${t.surface} ${t.border} ${t.textMuted}`}>
-                <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${resolvedTheme === 'amoled' ? 'bg-white' : 'bg-black'}`} />
-                Open-Source AI Knowledge Base · {entries.length} Entities
-              </div>
-              <h1 className={`text-[clamp(32px,5vw,52px)] font-black leading-[1.2] tracking-[-0.03em] mb-4`}>
-                <span className={resolvedTheme === "amoled" ? "text-white" : "text-neutral-900"}>
-                  Every AI tool,{" "}
-                </span>
-                <span className={`inline-block px-3.5 py-0.5 rounded-2xl align-middle select-none ${
-                  resolvedTheme === "amoled"
-                    ? "bg-white text-black"
-                    : "bg-neutral-950 text-white"
-                }`}>
-                  one universe.
-                </span>
-              </h1>
-              <p className={`text-[15px] leading-relaxed max-w-xl font-light ${t.textSecondary}`}>
-                {onboardingProfile?.interests.length ? (
-                  <>
-                    Hi{user?.user_metadata?.firstName ? ` ${user.user_metadata.firstName}` : (user?.email ? ` ${user.email.split('@')[0]}` : "")} — here are{" "}
-                    {roleHeadline(onboardingProfile.role)} as a{" "}
-                    <span className={t.textAccent}>{roleLabel(onboardingProfile.role).toLowerCase()}</span>.
-                  </>
-                ) : (
-                  "A citation-backed encyclopedia of models, frameworks, datasets, and platforms — built for builders."
-                )}
-              </p>
-            </div>
-          )}
-
           {activeView === "landing" ? (
-            <div className="flex flex-col gap-8 animate-[fadeUp_0.4s_ease-out]">
-              {/* Search */}
-              <div className="mb-4 max-w-2xl">
-                <SearchBar
-                  query={searchInput}
-                  onChange={handleSearchChange}
-                  entries={entries}
-                  onSelect={handleSearchSelect}
-                />
+            <div className="flex flex-col gap-10 animate-[fadeUp_0.4s_ease-out]">
+              {/* Modern Ambient Hero */}
+              <DashboardHero
+                searchQuery={searchInput}
+                onSearchChange={handleSearchChange}
+                totalEntries={entries.length}
+                activeType={typeFilter}
+                onSelectType={(val) => setTypeFilter(val as TypeFilter)}
+                activeTask={taskFilter}
+                onSelectTask={(val) => setTaskFilter(val as TaskFilter)}
+                onScrollToCatalog={scrollToCatalog}
+              />
+
+              {/* Action Ribbon: Quick Feature Launchers */}
+              <FeatureRibbon
+                user={user}
+                onOpenAuth={openAuthModal}
+                onOpenWizard={() => setIsWizard(true)}
+                onOpenArena={() => setIsArena(true)}
+                onOpenPlayground={() => setIsPlayground(true)}
+                onOpenSuite={() => {
+                  window.location.hash = "";
+                  setIsFeatures(true);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+              />
+
+              {/* Live Intelligence Stats */}
+              <div>
+                <OverviewCards totalEntriesCount={entries.length} />
               </div>
 
-              {/* Stats Overview */}
-              <div className="mb-4">
-                <OverviewCards />
-              </div>
-
-              {/* Premium Action Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Card 1: Browse AI Registry */}
-                <button
-                  onClick={() => {
-                    setBrowseAll(true);
-                    setActiveView("catalog");
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  className={`group relative overflow-hidden p-8 rounded-3xl text-left transition-all duration-300 cursor-pointer ${t.card}`.trim()}
-                >
-                  <div className="absolute inset-0 bg-linear-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className={`p-3.5 rounded-2xl mb-6 w-fit transition-colors ${t.iconBg}`}>
-                    <BookOpen size={24} />
-                  </div>
-                  <h3 className={`text-xl font-bold mb-2  transition-colors ${t.textPrimary}`}>
-                    Browse AI Registry
-                  </h3>
-                  <p className={`text-[13px] leading-relaxed font-light mb-6 ${t.textSecondary}`}>
-                    Explore the complete catalog of models, training weights, open datasets, ML developer frameworks, and cloud hosting platforms.
-                  </p>
-                  <span className={`inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider ${t.textAccent}`}>
-                    Open Catalog <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
-                  </span>
-                </button>
-
-                {/* Card 2: AI Discovery Wizard */}
-                <button
-                  onClick={() => {
-                    if (!user) {
-                      openAuthModal("signin");
-                    } else {
-                      setIsWizard(true);
-                    }
-                  }}
-                  className={`group relative overflow-hidden p-8 rounded-3xl text-left transition-all duration-300 cursor-pointer ${t.card}`.trim()}
-                >
-                  <div className="absolute inset-0 bg-linear-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="flex items-center justify-between mb-6">
-                    <div className={`p-3.5 rounded-2xl transition-colors ${t.iconBg}`}>
-                      <Sparkles size={24} />
-                    </div>
-                    {!user && (
-                      <span className={`flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-lg border ${
-                        resolvedTheme === "amoled"
-                          ? "bg-amber-500/10 border-amber-500/20 text-amber-400"
-                          : "bg-amber-50 border-amber-500/15 text-amber-700"
-                      }`}>
-                        <Shield size={11} className="stroke-[3px]" /> Premium Lock
-                      </span>
-                    )}
-                  </div>
-                  <h3 className={`text-xl font-bold mb-2  transition-colors ${t.textPrimary}`}>
-                    AI Discovery Wizard
-                  </h3>
-                  <p className={`text-[13px] leading-relaxed font-light mb-6 ${t.textSecondary}`}>
-                    Answer a few questions about your technical goals, stack targets, and licensing requirements to find the ideal AI options.
-                  </p>
-                  <span className={`inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider ${t.textAccent}`}>
-                    {!user ? "Unlock Wizard (Login)" : "Launch Quiz"} <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
-                  </span>
-                </button>
-
-                {/* Card 3: Side-by-Side Arena */}
-                <button
-                  onClick={() => {
-                    if (!user) {
-                      openAuthModal("signin");
-                    } else {
-                      setIsArena(true);
-                    }
-                  }}
-                  className={`group relative overflow-hidden p-8 rounded-3xl text-left transition-all duration-300 cursor-pointer ${t.card}`.trim()}
-                >
-                  <div className="absolute inset-0 bg-linear-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="flex items-center justify-between mb-6">
-                    <div className={`p-3.5 rounded-2xl transition-colors ${t.iconBg}`}>
-                      <Cpu size={24} />
-                    </div>
-                    {!user && (
-                      <span className={`flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-lg border ${
-                        resolvedTheme === "amoled"
-                          ? "bg-amber-500/10 border-amber-500/20 text-amber-400"
-                          : "bg-amber-50 border-amber-500/15 text-amber-700"
-                      }`}>
-                        <Shield size={11} className="stroke-[3px]" /> Premium Lock
-                      </span>
-                    )}
-                  </div>
-                  <h3 className={`text-xl font-bold mb-2  transition-colors ${t.textPrimary}`}>
-                    Comparison Arena
-                  </h3>
-                  <p className={`text-[13px] leading-relaxed font-light mb-6 ${t.textSecondary}`}>
-                    Perform head-to-head architectural and technical comparisons side-by-side across our database of advanced machine learning assets.
-                  </p>
-                  <span className={`inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider ${t.textAccent}`}>
-                    {!user ? "Unlock Arena (Login)" : "Enter Arena"} <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
-                  </span>
-                </button>
-
-                {/* Card 4: Complete Ecosystem Features */}
-                <button
-                  onClick={() => {
-                    window.location.hash = "";
-                    setIsFeatures(true);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                  className={`group relative overflow-hidden p-8 rounded-3xl text-left transition-all duration-300 cursor-pointer ${t.card}`.trim()}
-                >
-                  <div className="absolute inset-0 bg-linear-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className={`p-3.5 rounded-2xl mb-6 w-fit transition-colors ${t.iconBg}`}>
-                    <Layers size={24} />
-                  </div>
-                  <h3 className={`text-xl font-bold mb-2  transition-colors ${t.textPrimary}`}>
-                    Ecosystem Features Suite
-                  </h3>
-                  <p className={`text-[13px] leading-relaxed font-light mb-6 ${t.textSecondary}`}>
-                    Explore category dashboards, system capacity metrics, spotlight highlights, values prop overlays, and all integrated capabilities.
-                  </p>
-                  <span className={`inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider ${t.textAccent}`}>
-                    Explore Suite <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
-                  </span>
-                </button>
-
-                {/* Card 5: AI Model Playground */}
-                <button
-                  onClick={() => {
-                    if (!user) {
-                      openAuthModal("signin");
-                    } else {
-                      setIsPlayground(true);
-                    }
-                  }}
-                  className={`group relative overflow-hidden p-8 rounded-3xl text-left transition-all duration-300 cursor-pointer ${t.card}`.trim()}
-                >
-                  <div className="absolute inset-0 bg-linear-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="flex items-center justify-between mb-6">
-                    <div className={`p-3.5 rounded-2xl transition-colors ${t.iconBg}`}>
-                      <Sparkles size={24} className="text-indigo-400" />
-                    </div>
-                    {!user && (
-                      <span className={`flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-lg border ${
-                        resolvedTheme === "amoled"
-                          ? "bg-amber-500/10 border-amber-500/20 text-amber-400"
-                          : "bg-amber-50 border-amber-500/15 text-amber-700"
-                      }`}>
-                        <Shield size={11} className="stroke-[3px]" /> Premium Lock
-                      </span>
-                    )}
-                  </div>
-                  <h3 className={`text-xl font-bold mb-2  transition-colors ${t.textPrimary}`}>
-                    AI Model Playground
-                  </h3>
-                  <p className={`text-[13px] leading-relaxed font-light mb-6 ${t.textSecondary}`}>
-                    Compare responses from Llama, Mixtral, and Gemma side-by-side in real-time. Test prompts with custom system constraints.
-                  </p>
-                  <span className={`inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider ${t.textAccent}`}>
-                    {!user ? "Unlock Playground (Login)" : "Enter Playground"} <ArrowRight size={13} className="transition-transform group-hover:translate-x-1" />
-                  </span>
-                </button>
-              </div>
-
-              {/* Live Daily AI Pulse & Spotlight */}
+              {/* Live Daily AI Pulse & Tool of the Day */}
               <DailyPulseSection entries={entries} onSelectEntry={setSelected} />
-              
+
+              {/* ──────────────────────────────────────────────────────────── */}
+              {/* ALL-IN-ONE DIRECT CATALOG EXPLORER */}
+              {/* ──────────────────────────────────────────────────────────── */}
+              <div ref={catalogSectionRef} className="mt-6 pt-10 border-t border-slate-200 dark:border-white/5 scroll-mt-20">
+                {/* Catalog Controls Header */}
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 mb-8">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                        Ecosystem Catalog
+                      </span>
+                      <span className={`text-[12px] font-semibold ${t.textMuted}`}>
+                        Showing {filtered.length} of {entries.length} assets
+                      </span>
+                    </div>
+                    <h2 className={`text-2xl md:text-3xl font-black tracking-tight ${t.textPrimary}`}>
+                      Explore All AI Technologies
+                    </h2>
+                  </div>
+
+                  {/* Filter controls & view full catalog */}
+                  <div className="flex flex-wrap items-center gap-2.5">
+                    {/* Category pills */}
+                    <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+                      {(["All", "Model", "Framework", "Dataset", "Platform", "AI"] as const).map((type) => (
+                        <button
+                          key={type}
+                          onClick={() => {
+                            setTypeFilter(type);
+                            setCurrentPage(1);
+                          }}
+                          className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                            typeFilter === type
+                              ? "bg-sky-500 text-white shadow-xs"
+                              : `${t.textSecondary} hover:${t.textPrimary}`
+                          }`}
+                        >
+                          {type === "All" ? "All Types" : type}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Starred toggle */}
+                    <button
+                      onClick={() => {
+                        setPopularOnly((p) => !p);
+                        setCurrentPage(1);
+                      }}
+                      className={`px-3 py-1.5 rounded-xl text-[11px] font-bold border transition-all cursor-pointer flex items-center gap-1.5 ${
+                        popularOnly
+                          ? "bg-amber-500/15 text-amber-500 border-amber-500/30"
+                          : `${t.card} ${t.textSecondary} hover:${t.textPrimary}`
+                      }`}
+                    >
+                      <Sparkles size={12} />
+                      Featured Only
+                    </button>
+
+                    {/* Saved toggle */}
+                    <button
+                      onClick={handleSavedToggle}
+                      className={`px-3 py-1.5 rounded-xl text-[11px] font-bold border transition-all cursor-pointer flex items-center gap-1.5 ${
+                        savedOnly
+                          ? "bg-indigo-500/15 text-indigo-400 border-indigo-500/30"
+                          : `${t.card} ${t.textSecondary} hover:${t.textPrimary}`
+                      }`}
+                    >
+                      <span>Bookmarks ({bookmarks.length})</span>
+                    </button>
+
+                    {/* Sidebar mode button */}
+                    <button
+                      onClick={() => {
+                        setBrowseAll(true);
+                        setActiveView("catalog");
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className="px-3.5 py-1.5 rounded-xl text-[11px] font-bold bg-slate-200/80 dark:bg-white/10 text-slate-700 dark:text-white/90 hover:bg-slate-300 dark:hover:bg-white/20 transition-all cursor-pointer flex items-center gap-1.5"
+                    >
+                      <Filter size={11} /> Advanced Filters
+                    </button>
+                  </div>
+                </div>
+
+                {/* Cards Grid or Empty State */}
+                {paginatedEntries.length === 0 ? (
+                  <div className={`p-12 text-center rounded-2xl border ${t.card} flex flex-col items-center justify-center`}>
+                    <p className={`text-base font-semibold mb-2 ${t.textPrimary}`}>
+                      No tools found matching your filters
+                    </p>
+                    <p className={`text-xs ${t.textSecondary} mb-4`}>
+                      Try clearing search terms or selecting a different category.
+                    </p>
+                    <button
+                      onClick={() => {
+                        setSearchInput("");
+                        setTypeFilter("All");
+                        setTaskFilter("All Tasks");
+                        setPopularOnly(false);
+                        setSavedOnly(false);
+                      }}
+                      className="px-4 py-2 rounded-xl text-xs font-bold bg-sky-500 text-white shadow-xs cursor-pointer hover:bg-sky-400 transition-all"
+                    >
+                      Reset All Filters
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                    {paginatedEntries.map((entry, i) => (
+                      <EntryCard
+                        key={entry.name}
+                        entry={entry}
+                        entryName={entry.name}
+                        onSelect={selectEntryByName}
+                        index={i}
+                        ratingSummary={ratingSummaries[entry.name]}
+                        isBookmarked={bookmarks.includes(entry.name)}
+                        onToggleBookmark={handleToggleBookmark}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-3 mt-10">
+                    <button
+                      onClick={() => {
+                        setCurrentPage((p) => Math.max(1, p - 1));
+                        scrollToCatalog();
+                      }}
+                      disabled={currentPage === 1}
+                      className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
+                        currentPage === 1
+                          ? "opacity-40 cursor-not-allowed bg-slate-100 dark:bg-white/5 border-transparent text-slate-400"
+                          : `${t.card} ${t.textPrimary} hover:border-sky-400`
+                      }`}
+                    >
+                      ← Previous
+                    </button>
+
+                    <span className={`text-xs font-bold px-3 ${t.textMuted}`}>
+                      Page {currentPage} of {totalPages}
+                    </span>
+
+                    <button
+                      onClick={() => {
+                        setCurrentPage((p) => Math.min(totalPages, p + 1));
+                        scrollToCatalog();
+                      }}
+                      disabled={currentPage === totalPages}
+                      className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
+                        currentPage === totalPages
+                          ? "opacity-40 cursor-not-allowed bg-slate-100 dark:bg-white/5 border-transparent text-slate-400"
+                          : `${t.card} ${t.textPrimary} hover:border-sky-400`
+                      }`}
+                    >
+                      Next →
+                    </button>
+                  </div>
+                )}
+              </div>
+
               {/* Value Propositions */}
-              <div className="mt-4">
+              <div className="mt-8">
                 <ValueProps />
               </div>
             </div>
