@@ -170,6 +170,33 @@ const Inner: React.FC = () => {
     Record<string, EntryRatingSummary>
   >({});
 
+  // Site-wide Announcement Banner State
+  const [announcement, setAnnouncement] = useState<{
+    enabled: boolean;
+    message: string;
+    type: "info" | "warning" | "success" | "special";
+    linkText?: string;
+    linkUrl?: string;
+  } | null>(() => {
+    try {
+      const stored = localStorage.getItem("aiverse_site_announcement");
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  useEffect(() => {
+    const handleAnnouncementChange = () => {
+      try {
+        const stored = localStorage.getItem("aiverse_site_announcement");
+        setAnnouncement(stored ? JSON.parse(stored) : null);
+      } catch {}
+    };
+    window.addEventListener("announcement_updated", handleAnnouncementChange);
+    return () => window.removeEventListener("announcement_updated", handleAnnouncementChange);
+  }, []);
+
   const typeCounts = useMemo(() => {
     return {
       AI: entries.filter((e) => e.type === "AI").length,
@@ -953,6 +980,40 @@ const Inner: React.FC = () => {
         onboardingProfile={onboardingProfile}
         onSaveProfile={handleProfileComplete}
       />
+
+      {announcement?.enabled && announcement.message && (
+        <div className={`w-full py-2.5 px-4 text-xs font-semibold flex items-center justify-between gap-4 border-b transition-colors z-40 ${
+          announcement.type === "warning"
+            ? "bg-amber-500/15 border-amber-500/30 text-amber-300"
+            : announcement.type === "success"
+            ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-300"
+            : announcement.type === "special"
+            ? "bg-gradient-to-r from-violet-600/20 via-fuchsia-600/20 to-amber-500/20 border-violet-500/30 text-white"
+            : "bg-sky-500/15 border-sky-500/30 text-sky-300"
+        }`}>
+          <div className="flex items-center gap-2 max-w-5xl mx-auto w-full justify-center">
+            <Sparkles size={14} className="shrink-0" />
+            <span>{announcement.message}</span>
+            {announcement.linkUrl && (
+              <a
+                href={announcement.linkUrl}
+                target={announcement.linkUrl.startsWith("http") ? "_blank" : undefined}
+                rel={announcement.linkUrl.startsWith("http") ? "noopener noreferrer" : undefined}
+                className="underline ml-2 hover:opacity-80 font-bold cursor-pointer"
+              >
+                {announcement.linkText || "Learn more"} →
+              </a>
+            )}
+          </div>
+          <button
+            onClick={() => setAnnouncement((prev) => prev ? { ...prev, enabled: false } : null)}
+            className="opacity-70 hover:opacity-100 p-1 cursor-pointer"
+            title="Dismiss announcement"
+          >
+            <X size={13} />
+          </button>
+        </div>
+      )}
 
       {isPrivacy ? (
         <PrivacyPolicy onBackToHome={() => {
