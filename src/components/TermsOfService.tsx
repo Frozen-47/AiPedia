@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   ArrowLeft,
   Scale,
@@ -23,6 +23,8 @@ interface TermsOfServiceProps {
 export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) => {
   const t = useTokens();
   const [activeSection, setActiveSection] = useState("acceptance");
+  const isProgrammaticScroll = useRef(false);
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const sections = [
     { id: "acceptance", label: "1. Acceptance & Eligibility", icon: CheckCircle2 },
@@ -39,38 +41,70 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
 
   const scrollToSection = (id: string) => {
     setActiveSection(id);
+    isProgrammaticScroll.current = true;
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+
     const element = document.getElementById(id);
     if (element) {
-      const offset = 80;
-      const bodyRect = document.body.getBoundingClientRect().top;
-      const elementRect = element.getBoundingClientRect().top;
-      const elementPosition = elementRect - bodyRect;
-      const offsetPosition = elementPosition - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+
+    // Release programmatic scroll lock once smooth scroll is complete
+    scrollTimeoutRef.current = setTimeout(() => {
+      isProgrammaticScroll.current = false;
+    }, 1000);
   };
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + 120;
+      if (isProgrammaticScroll.current) return;
+
+      // When reaching near bottom of page, highlight the last section
+      const isBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100;
+      if (isBottom) {
+        setActiveSection(sections[sections.length - 1].id);
+        return;
+      }
+
+      // Check which section is currently at the top of the viewport below header
+      const navbarOffset = 140;
+      let currentSection = sections[0].id;
+
       for (const section of sections) {
         const el = document.getElementById(section.id);
         if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(section.id);
-            break;
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= navbarOffset) {
+            currentSection = section.id;
           }
         }
       }
+      setActiveSection(currentSection);
     };
+
+    const handleScrollEnd = () => {
+      isProgrammaticScroll.current = false;
+    };
+
+    const handleUserInterrupt = () => {
+      if (isProgrammaticScroll.current) {
+        isProgrammaticScroll.current = false;
+        if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scrollend", handleScrollEnd);
+    window.addEventListener("wheel", handleUserInterrupt, { passive: true });
+    window.addEventListener("touchstart", handleUserInterrupt, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scrollend", handleScrollEnd);
+      window.removeEventListener("wheel", handleUserInterrupt);
+      window.removeEventListener("touchstart", handleUserInterrupt);
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    };
   }, []);
 
   const activeColorMap: Record<string, { bg: string; text: string; icon: string }> = {
@@ -188,7 +222,7 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
           </div>
 
           {/* Section 1: Acceptance & Eligibility */}
-          <section id="acceptance" className="space-y-4 pt-2 first:pt-0 scroll-mt-24">
+          <section id="acceptance" className="space-y-4 pt-2 first:pt-0 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
                 <CheckCircle2 size={18} />
@@ -213,7 +247,7 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
           <hr className={t.border} />
 
           {/* Section 2: Platform Scope & Services */}
-          <section id="purpose" className="space-y-4 scroll-mt-24">
+          <section id="purpose" className="space-y-4 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-400">
                 <FileText size={18} />
@@ -245,7 +279,7 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
           <hr className={t.border} />
 
           {/* Section 3: Accounts & Security */}
-          <section id="accounts" className="space-y-4 scroll-mt-24">
+          <section id="accounts" className="space-y-4 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-violet-500/15 border border-violet-500/30 text-violet-400">
                 <ShieldAlert size={18} />
@@ -276,7 +310,7 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
           <hr className={t.border} />
 
           {/* Section 4: Community Submissions */}
-          <section id="contributions" className="space-y-4 scroll-mt-24">
+          <section id="contributions" className="space-y-4 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400">
                 <AlertTriangle size={18} />
@@ -298,7 +332,7 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
           <hr className={t.border} />
 
           {/* Section 5: Licensing & Model Weights */}
-          <section id="licensing" className="space-y-4 scroll-mt-24">
+          <section id="licensing" className="space-y-4 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400">
                 <Code2 size={18} />
@@ -329,7 +363,7 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
           <hr className={t.border} />
 
           {/* Section 6: DMCA & Copyright Policy */}
-          <section id="dmca" className="space-y-4 scroll-mt-24">
+          <section id="dmca" className="space-y-4 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-fuchsia-500/15 border border-fuchsia-500/30 text-fuchsia-400">
                 <BookOpen size={18} />
@@ -355,7 +389,7 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
           <hr className={t.border} />
 
           {/* Section 7: Acceptable Use */}
-          <section id="acceptable-use" className="space-y-4 scroll-mt-24">
+          <section id="acceptable-use" className="space-y-4 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-orange-500/15 border border-orange-500/30 text-orange-400">
                 <Ban size={18} />
@@ -385,7 +419,7 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
           <hr className={t.border} />
 
           {/* Section 8: Third-Party Integrations */}
-          <section id="third-party" className="space-y-4 scroll-mt-24">
+          <section id="third-party" className="space-y-4 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-teal-500/15 border border-teal-500/30 text-teal-400">
                 <ExternalLink size={18} />
@@ -405,7 +439,7 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
           <hr className={t.border} />
 
           {/* Section 9: Warranties & Liability */}
-          <section id="disclaimer" className="space-y-4 scroll-mt-24">
+          <section id="disclaimer" className="space-y-4 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-400">
                 <Scale size={18} />
@@ -430,7 +464,7 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
           <hr className={t.border} />
 
           {/* Section 10: Modifications & Contact */}
-          <section id="contact" className="space-y-4 scroll-mt-24">
+          <section id="contact" className="space-y-4 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400">
                 <HelpCircle size={18} />

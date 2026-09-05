@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   ArrowLeft,
   Shield,
@@ -24,6 +24,8 @@ interface PrivacyPolicyProps {
 export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBackToHome }) => {
   const t = useTokens();
   const [activeSection, setActiveSection] = useState("intro");
+  const isProgrammaticScroll = useRef(false);
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const sections = [
     { id: "intro", label: "1. Introduction & Scope", icon: Eye },
@@ -40,38 +42,70 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBackToHome }) =>
 
   const scrollToSection = (id: string) => {
     setActiveSection(id);
+    isProgrammaticScroll.current = true;
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+
     const element = document.getElementById(id);
     if (element) {
-      const offset = 80;
-      const bodyRect = document.body.getBoundingClientRect().top;
-      const elementRect = element.getBoundingClientRect().top;
-      const elementPosition = elementRect - bodyRect;
-      const offsetPosition = elementPosition - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+
+    // Release programmatic scroll lock once smooth scroll is complete
+    scrollTimeoutRef.current = setTimeout(() => {
+      isProgrammaticScroll.current = false;
+    }, 1000);
   };
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + 120;
+      if (isProgrammaticScroll.current) return;
+
+      // When reaching near bottom of page, highlight the last section
+      const isBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100;
+      if (isBottom) {
+        setActiveSection(sections[sections.length - 1].id);
+        return;
+      }
+
+      // Check which section is currently at the top of the viewport below header
+      const navbarOffset = 140;
+      let currentSection = sections[0].id;
+
       for (const section of sections) {
         const el = document.getElementById(section.id);
         if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(section.id);
-            break;
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= navbarOffset) {
+            currentSection = section.id;
           }
         }
       }
+      setActiveSection(currentSection);
     };
+
+    const handleScrollEnd = () => {
+      isProgrammaticScroll.current = false;
+    };
+
+    const handleUserInterrupt = () => {
+      if (isProgrammaticScroll.current) {
+        isProgrammaticScroll.current = false;
+        if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scrollend", handleScrollEnd);
+    window.addEventListener("wheel", handleUserInterrupt, { passive: true });
+    window.addEventListener("touchstart", handleUserInterrupt, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scrollend", handleScrollEnd);
+      window.removeEventListener("wheel", handleUserInterrupt);
+      window.removeEventListener("touchstart", handleUserInterrupt);
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    };
   }, []);
 
   const activeColorMap: Record<string, { bg: string; text: string; icon: string }> = {
@@ -189,7 +223,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBackToHome }) =>
           </div>
 
           {/* Section 1: Introduction & Scope */}
-          <section id="intro" className="space-y-4 pt-2 first:pt-0 scroll-mt-24">
+          <section id="intro" className="space-y-4 pt-2 first:pt-0 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
                 <Eye size={18} />
@@ -209,7 +243,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBackToHome }) =>
           <hr className={t.border} />
 
           {/* Section 2: Information We Collect */}
-          <section id="collection" className="space-y-4 scroll-mt-24">
+          <section id="collection" className="space-y-4 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-400">
                 <Database size={18} />
@@ -252,7 +286,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBackToHome }) =>
           <hr className={t.border} />
 
           {/* Section 3: How We Process Data */}
-          <section id="usage" className="space-y-4 scroll-mt-24">
+          <section id="usage" className="space-y-4 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-violet-500/15 border border-violet-500/30 text-violet-400">
                 <UserCheck size={18} />
@@ -285,7 +319,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBackToHome }) =>
           <hr className={t.border} />
 
           {/* Section 4: Legal Bases (GDPR) */}
-          <section id="legal-bases" className="space-y-4 scroll-mt-24">
+          <section id="legal-bases" className="space-y-4 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-teal-500/15 border border-teal-500/30 text-teal-400">
                 <Scale size={18} />
@@ -307,7 +341,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBackToHome }) =>
           <hr className={t.border} />
 
           {/* Section 5: Cookies & Local Storage */}
-          <section id="cookies" className="space-y-4 scroll-mt-24">
+          <section id="cookies" className="space-y-4 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400">
                 <Cookie size={18} />
@@ -338,7 +372,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBackToHome }) =>
           <hr className={t.border} />
 
           {/* Section 6: Cloud Infrastructure */}
-          <section id="storage" className="space-y-4 scroll-mt-24">
+          <section id="storage" className="space-y-4 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400">
                 <Lock size={18} />
@@ -375,7 +409,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBackToHome }) =>
           <hr className={t.border} />
 
           {/* Section 7: Data Retention & Purging */}
-          <section id="retention" className="space-y-4 scroll-mt-24">
+          <section id="retention" className="space-y-4 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-400">
                 <Trash2 size={18} />
@@ -398,7 +432,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBackToHome }) =>
           <hr className={t.border} />
 
           {/* Section 8: Global Privacy Rights */}
-          <section id="rights" className="space-y-4 scroll-mt-24">
+          <section id="rights" className="space-y-4 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-fuchsia-500/15 border border-fuchsia-500/30 text-fuchsia-400">
                 <Globe size={18} />
@@ -428,7 +462,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBackToHome }) =>
           <hr className={t.border} />
 
           {/* Section 9: Security Safeguards */}
-          <section id="security" className="space-y-4 scroll-mt-24">
+          <section id="security" className="space-y-4 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400">
                 <ShieldCheck size={18} />
@@ -450,7 +484,7 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBackToHome }) =>
           <hr className={t.border} />
 
           {/* Section 10: Updates & Inquiries */}
-          <section id="changes" className="space-y-4 scroll-mt-24">
+          <section id="changes" className="space-y-4 scroll-mt-28">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-orange-500/15 border border-orange-500/30 text-orange-400">
                 <HelpCircle size={18} />
