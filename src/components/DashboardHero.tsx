@@ -37,12 +37,12 @@ const CATEGORY_CHIPS = [
 ];
 
 const TASK_CHIPS = [
-  { id: "All Tasks", label: "All Tasks", icon: Sparkles },
-  { id: "NLP", label: "NLP & Reasoning", icon: MessageSquare },
-  { id: "Computer Vision", label: "Vision & Imaging", icon: Eye },
-  { id: "Multimodal", label: "Multimodal", icon: Layers },
-  { id: "AI Coding", label: "Coding & Dev", icon: Code2 },
-  { id: "Audio", label: "Audio & Speech", icon: Volume2 },
+  { id: "All Tasks", label: "All Tasks", icon: Sparkles, color: "text-neutral-400", activeBg: "bg-white/20 text-white border-white/30" },
+  { id: "NLP", label: "NLP & Reasoning", icon: MessageSquare, color: "text-teal-400", activeBg: "bg-teal-500/20 text-teal-300 border-teal-500/40" },
+  { id: "Computer Vision", label: "Vision & Imaging", icon: Eye, color: "text-rose-400", activeBg: "bg-rose-500/20 text-rose-300 border-rose-500/40" },
+  { id: "Multimodal", label: "Multimodal", icon: Layers, color: "text-purple-400", activeBg: "bg-purple-500/20 text-purple-300 border-purple-500/40" },
+  { id: "AI Coding", label: "Coding & Dev", icon: Code2, color: "text-cyan-400", activeBg: "bg-cyan-500/20 text-cyan-300 border-cyan-500/40" },
+  { id: "Audio", label: "Audio & Speech", icon: Volume2, color: "text-amber-400", activeBg: "bg-amber-500/20 text-amber-300 border-amber-500/40" },
 ];
 
 export const DashboardHero: React.FC<DashboardHeroProps> = ({
@@ -60,15 +60,16 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
 
   return (
     <div className="relative overflow-hidden pt-6 pb-10">
-      {/* Monochromatic ambient glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[350px] bg-white/[0.04] rounded-full blur-3xl pointer-events-none -z-10" />
+      {/* Dynamic ambient nebula glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[380px] bg-gradient-to-r from-violet-600/15 via-fuchsia-600/10 to-amber-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
+      <div className="absolute top-1/3 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[200px] bg-emerald-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
 
       <div className="flex flex-col items-center text-center max-w-4xl mx-auto px-4">
         {/* Top Intelligence Badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border mb-6 text-[11px] font-bold tracking-wide transition-all shadow-xs backdrop-blur-md bg-white/[0.03] border-white/10">
           <span className="flex h-2 w-2 relative">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white/75 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
           </span>
           <span className={t.textSecondary}>AiVerse Intelligence Compendium</span>
           <span className="text-white/20">•</span>
@@ -77,13 +78,13 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
           </span>
         </div>
 
-        {/* Hero Title */}
+        {/* Hero Title with Iridescent Gradient */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.1] mb-6">
           <span className={resolvedTheme === "amoled" ? "text-white" : "text-neutral-900"}>
             Every AI Tool, Model & Tech.
           </span>
           <br />
-          <span className="bg-linear-to-r from-white via-neutral-200 to-neutral-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-amber-300 bg-clip-text text-transparent">
             One Unified Universe.
           </span>
         </h1>
@@ -93,13 +94,13 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
           The citation-backed, open encyclopedia of artificial intelligence. Explore architectural blueprints, benchmark scores, licenses, and verified resources.
         </p>
 
-        {/* Minimalist Black & White Search Bar */}
+        {/* Search Bar with Iridescent Glow */}
         <div className="w-full max-w-2xl relative mb-8 group">
-          <div className="absolute -inset-0.5 bg-linear-to-r from-white/15 to-white/5 rounded-2xl blur-md opacity-40 group-hover:opacity-75 transition duration-300 pointer-events-none" />
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-violet-500/25 via-fuchsia-500/20 to-amber-500/25 rounded-2xl blur-md opacity-40 group-hover:opacity-100 group-focus-within:opacity-100 transition duration-300 pointer-events-none" />
           <div className={`relative flex items-center rounded-2xl border px-4 py-3.5 shadow-2xl backdrop-blur-xl transition-all ${
             resolvedTheme === "amoled"
-              ? "bg-neutral-950/90 border-white/15 focus-within:border-white/40"
-              : "bg-white border-neutral-300 focus-within:border-black shadow-sm"
+              ? "bg-neutral-950/90 border-white/15 focus-within:border-violet-500/50"
+              : "bg-white border-neutral-300 focus-within:border-violet-500 shadow-sm"
           }`}>
             <Search size={18} className="text-neutral-400 mr-3 shrink-0" />
             <input
@@ -163,10 +164,10 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
                     onSelectTask(task.id);
                     onScrollToCatalog();
                   }}
-                  className={`px-3 py-1 rounded-lg text-[11px] font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-3 py-1 rounded-lg text-[11px] font-semibold transition-all flex items-center gap-1.5 cursor-pointer border ${
                     isActive
-                      ? "bg-white/15 text-white border border-white/25 font-bold"
-                      : `text-neutral-400 hover:text-white`
+                      ? `${task.activeBg} font-bold shadow-xs`
+                      : `border-transparent ${task.color} hover:bg-white/5`
                   }`}
                 >
                   <Icon size={11} className="shrink-0" />

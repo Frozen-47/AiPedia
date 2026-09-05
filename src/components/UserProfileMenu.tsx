@@ -763,8 +763,8 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
               <div
                 className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-all duration-300 ${
                   linkCopied
-                    ? "bg-emerald-500/15 text-emerald-600"
-                    : `${isDark ? "bg-white/8 text-white/70" : "bg-black/5 text-black/60"}`
+                    ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                    : `${isDark ? "bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20" : "bg-fuchsia-50 text-fuchsia-600 border border-fuchsia-200"}`
                 }`}
               >
                 {linkCopied ? (
@@ -785,7 +785,7 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
             onClick={() => setCurrentView("profile")}
             className={menuItemCls}
           >
-            <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${isDark ? "bg-white/8 text-white/70" : "bg-black/5 text-black/60"}`}>
+            <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${isDark ? "bg-violet-500/10 text-violet-400 border border-violet-500/20" : "bg-violet-50 text-violet-600 border border-violet-200"}`}>
               <User size={14} />
             </div>
             <span className="flex-1">Edit profile</span>
@@ -802,7 +802,7 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
             }}
             className={menuItemCls}
           >
-            <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${isDark ? "bg-white/8 text-white/70" : "bg-black/5 text-black/60"}`}>
+            <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${isDark ? "bg-amber-500/10 text-amber-400 border border-amber-500/20" : "bg-amber-50 text-amber-600 border border-amber-200"}`}>
               <Bookmark size={14} />
             </div>
             <span className="flex-1">Saved entries</span>
@@ -816,7 +816,7 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
             onClick={() => setCurrentView("preferences")}
             className={menuItemCls}
           >
-            <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${isDark ? "bg-white/8 text-white/70" : "bg-black/5 text-black/60"}`}>
+            <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${isDark ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-emerald-50 text-emerald-600 border border-emerald-200"}`}>
               <SlidersHorizontal size={14} />
             </div>
             <span className="flex-1">Feed preferences</span>
@@ -834,10 +834,10 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
               }}
               className={menuItemCls}
             >
-              <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${isDark ? "bg-amber-500/10 text-amber-400" : "bg-amber-500/10 text-amber-600"}`}>
+              <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${isDark ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" : "bg-rose-50 text-rose-600 border border-rose-200"}`}>
                 <Shield size={14} className="stroke-[2px]" />
               </div>
-              <span className={`flex-1 font-semibold ${isDark ? "text-amber-400" : "text-amber-600"}`}>Admin Dashboard</span>
+              <span className={`flex-1 font-semibold ${isDark ? "text-rose-400" : "text-rose-600"}`}>Admin Dashboard</span>
             </button>
           </div>
         ) : null}
@@ -902,7 +902,7 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
             isDark ? "hover:bg-red-500/6" : "hover:bg-red-500/4",
           ].join(" ")}
         >
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 bg-red-500/10 text-red-400 transition-colors duration-200 group-hover:bg-red-500/20">
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 bg-red-500/10 text-red-400 border border-red-500/20 transition-colors duration-200 group-hover:bg-red-500/20">
             <LogOut size={14} />
           </div>
           Sign out

@@ -1149,11 +1149,11 @@ const Inner: React.FC = () => {
                       }}
                       className={`px-3 py-1.5 rounded-xl text-[11px] font-bold border transition-all cursor-pointer flex items-center gap-1.5 ${
                         popularOnly
-                          ? "bg-white text-black border-white font-extrabold shadow-sm"
+                          ? "bg-amber-400 text-black border-amber-300 font-black shadow-[0_0_12px_rgba(251,191,36,0.35)]"
                           : `${t.card} ${t.textSecondary} hover:${t.textPrimary}`
                       }`}
                     >
-                      <Sparkles size={12} />
+                      <Sparkles size={12} className={popularOnly ? "text-black fill-black" : "text-amber-400"} />
                       Featured Only
                     </button>
 
@@ -1162,7 +1162,7 @@ const Inner: React.FC = () => {
                       onClick={handleSavedToggle}
                       className={`px-3 py-1.5 rounded-xl text-[11px] font-bold border transition-all cursor-pointer flex items-center gap-1.5 ${
                         savedOnly
-                          ? "bg-white text-black border-white font-extrabold shadow-sm"
+                          ? "bg-violet-500 text-white border-violet-400 font-black shadow-[0_0_12px_rgba(139,92,246,0.35)]"
                           : `${t.card} ${t.textSecondary} hover:${t.textPrimary}`
                       }`}
                     >
