@@ -1,0 +1,38 @@
+{
+  "timestamp": "2026-09-05T10:18:37.441Z",
+  "checked": 25,
+  "healthy": 19,
+  "broken": 6,
+  "issues": [
+    {
+      "name": "Gamma",
+      "url": "https://gamma.app",
+      "status": 403
+    },
+    {
+      "name": "Canva AI",
+      "url": "https://www.canva.com/ai-image-generator",
+      "status": 403
+    },
+    {
+      "name": "Character.ai",
+      "url": "https://character.ai",
+      "status": 403
+    },
+    {
+      "name": "NightCafe",
+      "url": "https://creator.nightcafe.studio",
+      "status": 403
+    },
+    {
+      "name": "Google Gemini",
+      "url": "https://gemini.google.com",
+      "status": "Network Error"
+    },
+    {
+      "name": "Playground AI",
+      "url": "https://playground.com",
+      "status": 403
+    }
+  ]
+}

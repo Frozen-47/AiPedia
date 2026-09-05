@@ -13,6 +13,20 @@
 **AiVerse** is an open-source platform that organizes and explains different AI tools, models, and technologies in one centralized location. Think of it as a Wikipedia for AI — making artificial intelligence more accessible and understandable for everyone.
 ## ✨ Features
 
+<!-- DAILY_PULSE:START -->
+### ⚡ Daily AI Pulse (2026-09-05)
+| Metric | Status / Count |
+| :--- | :--- |
+| 🗄️ **Catalog Entries** | **227** AI assets tracked (181 featured) |
+| 🔥 **Top Trending Model** | [deepseek-ai/DeepSeek-V4-Flash-Vision-Exp](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp) |
+| 📜 **Top Daily Paper** | [RoboTok: An Internet-Scale Data Engine for Human Demonstrati...](https://huggingface.co/papers/2609.03199) |
+| 🛡️ **Catalog Links Checked** | **19/25** operational |
+| 🕒 **Last Daily Run** | `Sat, 05 Sep 2026 10:18:41 GMT` |
+
+*Full daily metrics and paper summaries available in [DAILY_PULSE.md](DAILY_PULSE.md).*
+<!-- DAILY_PULSE:END -->
+
+
 - 🗄️ **Dynamic Database** - Comprehensive catalog of models, frameworks, datasets, and platforms synced with Supabase.
 - 🔍 **Real-time Search** - Fast, dynamic catalog filtering and full command-style search shortcuts (`Ctrl+K`/`⌘K`).
 - 👥 **User Contributions** - Secure submission panel and admin review dashboard for ecosystem growth.

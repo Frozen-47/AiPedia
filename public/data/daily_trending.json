@@ -1,0 +1,95 @@
+{
+  "timestamp": "2026-09-05T10:18:36.729Z",
+  "models": [
+    {
+      "id": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
+      "author": "deepseek-ai",
+      "likes": 630,
+      "downloads": 184542,
+      "pipeline_tag": "image-text-to-text",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp"
+    },
+    {
+      "id": "Qwen/Qwen3.8-27B",
+      "author": "Qwen",
+      "likes": 13986,
+      "downloads": 6024467,
+      "pipeline_tag": "image-text-to-text",
+      "url": "https://huggingface.co/Qwen/Qwen3.8-27B"
+    },
+    {
+      "id": "Qwen/Qwen3.8-Flash-Next",
+      "author": "Qwen",
+      "likes": 4892,
+      "downloads": 401327,
+      "pipeline_tag": "image-text-to-text",
+      "url": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next"
+    },
+    {
+      "id": "zai-org/GLM-5.3-Flash",
+      "author": "zai-org",
+      "likes": 2063,
+      "downloads": 727610,
+      "pipeline_tag": "image-text-to-text",
+      "url": "https://huggingface.co/zai-org/GLM-5.3-Flash"
+    },
+    {
+      "id": "XHToken/Spark-X2.5-4B",
+      "author": "XHToken",
+      "likes": 496,
+      "downloads": 4755,
+      "pipeline_tag": "text-generation",
+      "url": "https://huggingface.co/XHToken/Spark-X2.5-4B"
+    },
+    {
+      "id": "zai-org/GLM-5.3",
+      "author": "zai-org",
+      "likes": 1711,
+      "downloads": 370417,
+      "pipeline_tag": "text-generation",
+      "url": "https://huggingface.co/zai-org/GLM-5.3"
+    }
+  ],
+  "papers": [
+    {
+      "title": "RoboTok: An Internet-Scale Data Engine for Human Demonstration Retrieval and Dexterous Manipulation Learning",
+      "summary": "RoboTok retrieves relevant human manipulation videos from the web using a latent motion space derived from 3D hand trajectories to improve robot policy training.",
+      "upvotes": 33,
+      "arxiv_id": "2609.03199",
+      "url": "https://huggingface.co/papers/2609.03199",
+      "githubRepo": "https://github.com/Rice-RobotPI-Lab/RoboTok-Code"
+    },
+    {
+      "title": "A Common Measure of Communication for Speech Brain-Computer Interfaces",
+      "summary": "Open-vocabulary mutual information provides a unified metric to compare speech brain-computer interfaces across different vocabularies and conditions, revealing trade-offs between vocabulary coverage and decoding accuracy.",
+      "upvotes": 8,
+      "arxiv_id": "2609.02887",
+      "url": "https://huggingface.co/papers/2609.02887",
+      "githubRepo": "https://github.com/neural-processing-lab/OVMI"
+    },
+    {
+      "title": "VeriPhy: Agentic Physical Reasoning for World Model Evaluation and Refinement",
+      "summary": "VeriPhy verifies generated video by compiling prompts into typed physical obligations, executing frozen expert analyses with provenance tracking, and mapping evidence to auditable three-valued verdicts.",
+      "upvotes": 12,
+      "arxiv_id": "2609.03153",
+      "url": "https://huggingface.co/papers/2609.03153",
+      "githubRepo": null
+    },
+    {
+      "title": "Locked at the Entrance, Open Inside: Where RLVR Narrows the Solution Space",
+      "summary": "Reinforcement learning with verifiable rewards narrows reasoning diversity primarily at the initial solution step rather than during execution, and targeted interventions can restore coverage without sacrificing accuracy.",
+      "upvotes": 8,
+      "arxiv_id": "2608.29188",
+      "url": "https://huggingface.co/papers/2608.29188",
+      "githubRepo": "https://github.com/ershiyidian/early-branch-locking"
+    },
+    {
+      "title": "DRACO: Fine-Grained Credit Assignment with Dynamic Rubrics for Long-Horizon Agent Training",
+      "summary": "DRACO dynamically generates rubrics and redistributes trajectory-level scores into per-step advantages for reinforcement learning without verifiers, improving long-horizon agent performance.",
+      "upvotes": 23,
+      "arxiv_id": "2609.04094",
+      "url": "https://huggingface.co/papers/2609.04094",
+      "githubRepo": "https://github.com/IBM/draco"
+    }
+  ]
+}
