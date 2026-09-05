@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ArrowLeft, Scale, ShieldAlert, FileText, CheckCircle2, AlertTriangle, HelpCircle, ChevronRight } from "lucide-react";
-import { useTokens, useTheme } from "../lib/theme";
+import { useTokens } from "../lib/theme";
 
 interface TermsOfServiceProps {
   onBackToHome: () => void;
@@ -8,8 +8,6 @@ interface TermsOfServiceProps {
 
 export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) => {
   const t = useTokens();
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === "amoled";
   const [activeSection, setActiveSection] = useState("acceptance");
 
   const sections = [
@@ -62,8 +60,8 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
       {/* Header Banner */}
       <div className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-dashed border-slate-200 dark:border-white/6">
         <div>
-          <div className={`inline-flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-widest border rounded-full px-3 py-1 mb-3.5 ${t.surface} ${t.border} ${t.textMuted}`}>
-            <Scale size={10} className={isDark ? "text-white/50" : "text-black/50"} />
+          <div className="inline-flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-widest border rounded-full px-3 py-1 mb-3.5 bg-emerald-500/10 border-emerald-500/30 text-emerald-400 shadow-xs">
+            <Scale size={11} className="text-emerald-400" />
             Legal Framework Agreement
           </div>
           <h1 className={`text-[clamp(32px,4vw,48px)] font-black leading-[1.05] tracking-[-0.03em] mb-2.5 ${t.textPrimary}`}>
@@ -76,7 +74,7 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
 
         <button
           onClick={onBackToHome}
-          className={`shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[12px] font-bold border shadow-sm transition-all cursor-pointer ${t.surface} ${t.border} ${t.textPrimary} hover:${t.borderHover} hover:${t.textAccent}`}
+          className={`shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[12px] font-bold border shadow-sm transition-all cursor-pointer ${t.surface} ${t.border} ${t.textPrimary} hover:border-emerald-500/40 hover:text-emerald-400`}
         >
           <ArrowLeft size={14} />
           Back to Dashboard
@@ -94,21 +92,33 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
               {sections.map((sect) => {
                 const Icon = sect.icon;
                 const isActive = activeSection === sect.id;
+
+                const activeColorMap: Record<string, { bg: string; text: string; icon: string }> = {
+                  acceptance: { bg: "bg-emerald-500/10 border-emerald-500/30", text: "text-emerald-400", icon: "text-emerald-400" },
+                  purpose: { bg: "bg-sky-500/10 border-sky-500/30", text: "text-sky-400", icon: "text-sky-400" },
+                  accounts: { bg: "bg-violet-500/10 border-violet-500/30", text: "text-violet-400", icon: "text-violet-400" },
+                  contributions: { bg: "bg-amber-500/10 border-amber-500/30", text: "text-amber-400", icon: "text-amber-400" },
+                  disclaimer: { bg: "bg-rose-500/10 border-rose-500/30", text: "text-rose-400", icon: "text-rose-400" },
+                  contact: { bg: "bg-indigo-500/10 border-indigo-500/30", text: "text-indigo-400", icon: "text-indigo-400" },
+                };
+
+                const activeTheme = activeColorMap[sect.id] || { bg: "bg-white/10 border-white/20", text: "text-white", icon: "text-white" };
+
                 return (
                   <button
                     key={sect.id}
                     onClick={() => scrollToSection(sect.id)}
-                    className={`w-full flex items-center justify-between p-2.5 rounded-xl text-[12px] font-bold text-left transition-all duration-300 cursor-pointer ${
+                    className={`w-full flex items-center justify-between p-2.5 rounded-xl text-[12px] font-bold text-left transition-all duration-300 cursor-pointer border ${
                       isActive
-                        ? `${isDark ? "bg-white/10 border-white/20 text-white shadow-md" : "bg-black/5 border-black/10 text-neutral-900 shadow-sm"}`
-                        : `${t.textSecondary} border border-transparent hover:bg-black/5 dark:hover:bg-white/5 ${isDark ? "hover:text-white" : "hover:text-neutral-900"}`
+                        ? `${activeTheme.bg} ${activeTheme.text} shadow-xs font-black`
+                        : `${t.textSecondary} border-transparent hover:bg-white/5 hover:text-white`
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <Icon size={14} className={isActive ? (isDark ? "text-white" : "text-neutral-900") : "text-slate-400"} />
+                      <Icon size={14} className={isActive ? activeTheme.icon : "text-neutral-500"} />
                       <span>{sect.label}</span>
                     </div>
-                    {isActive && <ChevronRight size={12} className={`${isDark ? "text-white" : "text-neutral-900"} animate-pulse`} />}
+                    {isActive && <ChevronRight size={12} className={`${activeTheme.icon} animate-pulse`} />}
                   </button>
                 );
               })}
@@ -116,7 +126,7 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
           </div>
 
           {/* Quick Help Box */}
-          <div className={`hidden lg:block p-5 rounded-2xl border shadow-md ${t.surface} ${t.border}`}>
+          <div className={`hidden lg:block p-5 rounded-2xl border shadow-md ${t.surface} ${t.border} bg-gradient-to-br from-indigo-950/20 to-transparent`}>
             <h4 className={`text-[12px] font-bold ${t.textPrimary} mb-1.5`}>Have Inquiries?</h4>
             <p className={`text-[11px] leading-relaxed ${t.textSecondary} mb-3.5`}>
               View our open-source codebase, inspect core files, or collaborate with the design crew.
@@ -126,13 +136,13 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
                 href="https://github.com/Frozen-47/AiVerse"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`w-full py-2 rounded-xl text-[11px] font-bold text-center border transition-all ${t.surface2} ${t.border} ${t.textPrimary} hover:${t.borderHover}`}
+                className={`w-full py-2 rounded-xl text-[11px] font-bold text-center border transition-all ${t.surface2} ${t.border} text-indigo-400 hover:border-indigo-500/40 hover:bg-indigo-500/10`}
               >
                 GitHub Core
               </a>
               <a
                 href="mailto:frozennheart47@gmail.com"
-                className={`w-full py-2 rounded-xl text-[11px] font-bold text-center border transition-all ${t.surface2} ${t.border} ${t.textPrimary} hover:${t.borderHover}`}
+                className={`w-full py-2 rounded-xl text-[11px] font-bold text-center border transition-all ${t.surface2} ${t.border} text-sky-400 hover:border-sky-500/40 hover:bg-sky-500/10`}
               >
                 Email Support
               </a>
@@ -142,23 +152,23 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
 
         {/* Right Column: Complete Immersive content */}
         <div className={`flex-1 min-w-0 border rounded-3xl p-6 sm:p-10 backdrop-blur-xl ${t.surface} ${t.border} shadow-2xl space-y-12`}>
-          <div className={`p-4 rounded-xl border leading-normal text-[12px] font-semibold flex items-center gap-2.5 ${isDark ? "border-white/10 bg-white/5 text-white" : "border-black/10 bg-black/5 text-neutral-900"}`}>
-            <Scale size={16} className="shrink-0" />
+          <div className="p-4.5 rounded-2xl border leading-normal text-[12px] font-medium flex items-center gap-3 border-emerald-500/30 bg-emerald-500/5 text-emerald-300">
+            <Scale size={18} className="shrink-0 text-emerald-400" />
             <span>By interacting with the AiVerse catalog, you agree to prioritize data accuracy and respect intellectual property rights across the directory.</span>
           </div>
 
           {/* Acceptance Section */}
           <section id="acceptance" className="space-y-4 pt-2 first:pt-0 scroll-mt-24">
             <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-lg ${t.iconBgSolid}`}>
+              <div className="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
                 <CheckCircle2 size={18} />
               </div>
-              <h2 className={`text-xl font-bold tracking-tight ${t.textPrimary}`}>
+              <h2 className={`text-xl font-black tracking-tight ${t.textPrimary}`}>
                 1. Acceptance of Terms
               </h2>
             </div>
             <p className={`text-[13px] leading-relaxed font-light ${t.textSecondary}`}>
-              By accessing or using <strong>AiVerse</strong> (available at <a href="https://aiverse.frozenn.in" className={`${isDark ? "text-cyan-400 hover:text-cyan-300" : "text-cyan-600 hover:text-cyan-700"} hover:underline font-semibold`}>https://aiverse.frozenn.in</a>), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not access or use our platform.
+              By accessing or using <strong>AiVerse</strong> (available at <a href="https://aiverse.frozenn.in" className="text-emerald-400 hover:text-emerald-300 hover:underline font-semibold">https://aiverse.frozenn.in</a>), you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not access or use our platform.
             </p>
           </section>
 
@@ -167,10 +177,10 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
           {/* Purpose Section */}
           <section id="purpose" className="space-y-4 scroll-mt-24">
             <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-lg ${t.iconBgSolid}`}>
+              <div className="p-2.5 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-400">
                 <FileText size={18} />
               </div>
-              <h2 className={`text-xl font-bold tracking-tight ${t.textPrimary}`}>
+              <h2 className={`text-xl font-black tracking-tight ${t.textPrimary}`}>
                 2. Description of Service
               </h2>
             </div>
@@ -184,10 +194,10 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
           {/* Accounts Section */}
           <section id="accounts" className="space-y-4 scroll-mt-24">
             <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-lg ${t.iconBgSolid}`}>
+              <div className="p-2.5 rounded-xl bg-violet-500/15 border border-violet-500/30 text-violet-400">
                 <ShieldAlert size={18} />
               </div>
-              <h2 className={`text-xl font-bold tracking-tight ${t.textPrimary}`}>
+              <h2 className={`text-xl font-black tracking-tight ${t.textPrimary}`}>
                 3. Accounts & Authentication
               </h2>
             </div>
@@ -201,10 +211,10 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
           {/* Contributions Section */}
           <section id="contributions" className="space-y-4 scroll-mt-24">
             <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-lg ${t.iconBgSolid}`}>
+              <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400">
                 <AlertTriangle size={18} />
               </div>
-              <h2 className={`text-xl font-bold tracking-tight ${t.textPrimary}`}>
+              <h2 className={`text-xl font-black tracking-tight ${t.textPrimary}`}>
                 4. User Contributions & Directory Submissions
               </h2>
             </div>
@@ -221,10 +231,10 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
           {/* Disclaimer Section */}
           <section id="disclaimer" className="space-y-4 scroll-mt-24">
             <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-lg ${t.iconBgSolid}`}>
+              <div className="p-2.5 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-400">
                 <Scale size={18} />
               </div>
-              <h2 className={`text-xl font-bold tracking-tight ${t.textPrimary}`}>
+              <h2 className={`text-xl font-black tracking-tight ${t.textPrimary}`}>
                 5. Disclaimer of Warranties
               </h2>
             </div>
@@ -238,10 +248,10 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
           {/* Contact Section */}
           <section id="contact" className="space-y-4 scroll-mt-24">
             <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-lg ${t.iconBgSolid}`}>
+              <div className="p-2.5 rounded-xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400">
                 <HelpCircle size={18} />
               </div>
-              <h2 className={`text-xl font-bold tracking-tight ${t.textPrimary}`}>
+              <h2 className={`text-xl font-black tracking-tight ${t.textPrimary}`}>
                 6. Changes to Terms & Contact Information
               </h2>
             </div>
@@ -256,7 +266,7 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
                 href="https://github.com/Frozen-47/AiVerse"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold border transition-all ${t.surface2} ${t.border} ${t.textPrimary} hover:${t.borderHover} hover:${t.textAccent}`}
+                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold border transition-all ${t.surface2} ${t.border} text-indigo-400 hover:border-indigo-500/40 hover:bg-indigo-500/10`}
               >
                 GitHub Project
               </a>
@@ -264,13 +274,13 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
                 href="https://github.com/Frozen-47/AiVerse/issues"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold border transition-all ${t.surface2} ${t.border} ${t.textPrimary} hover:${t.borderHover} hover:${t.textAccent}`}
+                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold border transition-all ${t.surface2} ${t.border} text-amber-400 hover:border-amber-500/40 hover:bg-amber-500/10`}
               >
                 Feedback & Issues
               </a>
               <a
                 href="mailto:frozennheart47@gmail.com"
-                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold border transition-all ${t.surface2} ${t.border} ${t.textPrimary} hover:${t.borderHover} hover:${t.textAccent}`}
+                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold border transition-all ${t.surface2} ${t.border} text-sky-400 hover:border-sky-500/40 hover:bg-sky-500/10`}
               >
                 Email: frozennheart47@gmail.com
               </a>
