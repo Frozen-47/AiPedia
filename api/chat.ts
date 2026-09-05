@@ -12,17 +12,10 @@ const supabaseUrl = process.env.VITE_SUPABASE_URL;
 const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
 const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
 
-const CATALOG_CACHE_TTL_MS = 5 * 60 * 1000;
-let catalogCache: { context: string; at: number } | null = null;
-
-async function getCatalogContext(): Promise<string> {
-  if (catalogCache && Date.now() - catalogCache.at < CATALOG_CACHE_TTL_MS) {
-    return catalogCache.context;
-  }
-
+async function getCatalogEntries(): Promise<any[]> {
   const entriesMap = new Map<string, any>();
 
-  // Always seed with the 227 comprehensive static entries
+  // Always seed with the static entries
   for (const e of staticEntries) {
     entriesMap.set(e.name.toLowerCase().trim(), e);
   }
@@ -45,29 +38,48 @@ async function getCatalogContext(): Promise<string> {
     }
   }
 
-  const allEntries = Array.from(entriesMap.values());
+  return Array.from(entriesMap.values());
+}
 
-  const context = allEntries
+function getRelevantCatalogContext(query: string, allEntries: any[]): string {
+  const queryLower = (query || "").toLowerCase();
+  const queryWords = queryLower.split(/\s+/).filter((w) => w.length > 2);
+
+  const scored = allEntries.map((e) => {
+    let score = 0;
+    const nameLower = e.name.toLowerCase();
+    const taskLower = (e.task || "").toLowerCase();
+    const orgLower = (e.org || "").toLowerCase();
+    const summaryLower = (e.summary || "").toLowerCase();
+
+    if (queryLower.includes(nameLower)) score += 50;
+
+    for (const w of queryWords) {
+      if (nameLower.includes(w)) score += 10;
+      if (taskLower.includes(w)) score += 4;
+      if (orgLower.includes(w)) score += 3;
+      if (summaryLower.includes(w)) score += 1;
+    }
+    return { entry: e, score };
+  });
+
+  scored.sort((a, b) => b.score - a.score);
+
+  const top = scored.filter((s) => s.score > 0).slice(0, 10).map((s) => s.entry);
+  const selected = top.length > 0 ? top : allEntries.slice(0, 6);
+
+  return selected
     .map((e) => {
       const parts = [
         `- **${e.name}** [Type: ${e.type} | Task: ${e.task || 'General'}] (Org: ${e.org || 'Open Source'}, Year: ${e.year || 'Recent'})`,
         `  Summary: ${e.summary}`,
       ];
-      if (e.benchmarks && e.benchmarks !== 'N/A') {
-        parts.push(`  Key Benchmarks: ${e.benchmarks}`);
-      }
-      if (e.architecture && e.architecture !== 'N/A') {
-        parts.push(`  Architecture: ${e.architecture}`);
-      }
-      if (e.url) {
-        parts.push(`  URL: ${e.url}`);
-      }
+      if (e.benchmarks && e.benchmarks !== 'N/A') parts.push(`  Key Benchmarks: ${e.benchmarks}`);
+      if (e.architecture && e.architecture !== 'N/A') parts.push(`  Architecture: ${e.architecture}`);
+      if (e.url) parts.push(`  URL: ${e.url}`);
       return parts.join('\n');
     })
     .join('\n\n');
-
-  catalogCache = { context, at: Date.now() };
-  return context;
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -100,61 +112,88 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Sanitize messages to remove UI-specific properties like 'isTyping'
     const sanitizedMessages = messages.map(({ role, content }) => ({ role, content }));
 
-    const catalogContext = await getCatalogContext();
+    const userMessages = sanitizedMessages.filter(m => m.role === 'user');
+    const latestUserQuery = userMessages.length > 0 ? userMessages[userMessages.length - 1].content : '';
+
+    const allEntries = await getCatalogEntries();
+    const catalogContext = getRelevantCatalogContext(latestUserQuery, allEntries);
 
     const nameStr = userName ? `The user's name is ${userName}. Greet them or address them by this name occasionally to be polite and personal.` : '';
 
     const systemPromptContent = systemInstruction && typeof systemInstruction === 'string'
       ? systemInstruction
-      : `You are Vox, an AI assistant and expert encyclopedia curator strictly dedicated to the AiVerse platform. ${nameStr} You MUST REFUSE to answer any questions that are not related to Artificial Intelligence, machine learning, AI models, frameworks, platforms, datasets, or the AiVerse platform itself. If a user asks about off-topic subjects, politely decline and steer the conversation back to AI technologies.\n\nHere is the complete, current catalog of AI items available in the AiVerse encyclopedia (${staticEntries.length}+ entries):\n${catalogContext || 'No catalog provided'}\n\nUse this comprehensive catalog to answer user questions, explain technical architectures, compare models, and give recommendations.\n\nCRITICAL INSTRUCTIONS:\n1. **ACCURACY & CATALOG GROUNDING**: When answering questions about models, frameworks, datasets, and AI platforms, rely on the detailed technical facts, benchmarks, and architectures provided in the catalog.\n2. **ORGANIZE CLEARLY**: Provide clean, highly structured, and refined responses. Use bullet points, bold headers, and short paragraphs effectively.\n3. **HIGHLIGHT ENTITY NAMES**: Use **bold text** for all AI entity names (e.g. **DeepSeek-R1**, **Llama 3.3 (70B)**, **LangGraph**, **FLUX.1 Schnell**, **Cursor**).\n4. **INCLUDE LINKS**: If a URL is available for an item in the catalog, include it formatted exactly as [Official Website](URL) or [Documentation](URL) naturally with the item.`;
+      : `You are Vox, an AI assistant and expert encyclopedia curator strictly dedicated to the AiVerse platform. ${nameStr} You MUST REFUSE to answer any questions that are not related to Artificial Intelligence, machine learning, AI models, frameworks, platforms, datasets, or the AiVerse platform itself. If a user asks about off-topic subjects, politely decline and steer the conversation back to AI technologies.\n\nHere are relevant AI items from the AiVerse encyclopedia (${allEntries.length}+ total indexed entries):\n${catalogContext || 'No catalog items found'}\n\nUse these technical facts, architectures, and benchmarks to accurately answer questions and offer comparisons.\n\nCRITICAL INSTRUCTIONS:\n1. **ACCURACY & CATALOG GROUNDING**: Rely on facts, benchmarks, and architectures provided in the catalog.\n2. **ORGANIZE CLEARLY**: Provide clean, highly structured responses with bullet points and bold headers.\n3. **HIGHLIGHT ENTITY NAMES**: Use **bold text** for AI entity names (e.g. **DeepSeek-R1**, **Llama 3.3 (70B)**, **LangGraph**, **FLUX.1 Schnell**, **Cursor**).\n4. **INCLUDE LINKS**: If a URL is available in the catalog, format as [Official Website](URL) or [Documentation](URL).`;
 
     const systemPrompt = {
       role: 'system',
       content: systemPromptContent,
     };
 
-    // Supported models mapping on Groq
-    const VALID_MODELS = [
+    // Priority list of models to try
+    const FALLBACK_MODELS = [
+      'qwen/qwen3.8-27b',
+      'qwen/qwen3.6-27b',
+      'groq/compound-mini',
+      'groq/compound',
       'llama-3.3-70b-versatile',
       'llama-3.1-8b-instant',
-      'deepseek-r1-distill-llama-70b',
-      'mixtral-8x7b-32768',
-      'gemma2-9b-it',
-      'openai/gpt-oss-20b',
       'openai/gpt-oss-120b',
-      'qwen/qwen3.6-27b',
-      'groq/compound',
-      'groq/compound-mini',
+      'openai/gpt-oss-20b',
       'allam-2-7b'
     ];
 
-    const modelToUse = VALID_MODELS.includes(model) ? model : 'llama-3.3-70b-versatile';
+    // If a specific model is requested and in the list, try it first
+    const candidates = model && FALLBACK_MODELS.includes(model)
+      ? [model, ...FALLBACK_MODELS.filter(m => m !== model)]
+      : FALLBACK_MODELS;
 
-    let finalMessages = [systemPrompt, ...sanitizedMessages];
+    let responseContent: string | null = null;
+    let lastError: any = null;
 
-    // DeepSeek R1 models on Groq do not support the 'system' role.
-    if (modelToUse.toLowerCase().includes('deepseek')) {
-      const firstUserIndex = sanitizedMessages.findIndex(m => m.role === 'user');
-      if (firstUserIndex !== -1) {
-        const mergedMessages = [...sanitizedMessages];
-        mergedMessages[firstUserIndex] = {
-          role: 'user',
-          content: `${systemPromptContent}\n\n[Instructions Above. User Query Below]\n${sanitizedMessages[firstUserIndex].content}`
-        };
-        finalMessages = mergedMessages;
-      } else {
-        finalMessages = sanitizedMessages;
+    for (const currentModel of candidates) {
+      try {
+        let finalMessages: any[] = [systemPrompt, ...sanitizedMessages];
+
+        // DeepSeek models on Groq do not support the 'system' role
+        if (currentModel.toLowerCase().includes('deepseek')) {
+          const firstUserIndex = sanitizedMessages.findIndex(m => m.role === 'user');
+          if (firstUserIndex !== -1) {
+            const mergedMessages = [...sanitizedMessages];
+            mergedMessages[firstUserIndex] = {
+              role: 'user',
+              content: `${systemPromptContent}\n\n[Instructions Above. User Query Below]\n${sanitizedMessages[firstUserIndex].content}`
+            };
+            finalMessages = mergedMessages;
+          } else {
+            finalMessages = sanitizedMessages;
+          }
+        }
+
+        const chatCompletion = await groq.chat.completions.create({
+          messages: finalMessages,
+          model: currentModel,
+          temperature: 0.5,
+          max_tokens: 1024,
+        });
+
+        let rawContent = chatCompletion.choices[0]?.message?.content || "";
+        // Clean any <think>...</think> reasoning tags if present
+        rawContent = rawContent.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+
+        if (rawContent) {
+          responseContent = rawContent;
+          break;
+        }
+      } catch (err: any) {
+        console.warn(`Groq model ${currentModel} failed:`, err.message);
+        lastError = err;
+        // Continue to next candidate model
       }
     }
 
-    const chatCompletion = await groq.chat.completions.create({
-      messages: finalMessages,
-      model: modelToUse,
-      temperature: 0.5,
-      max_tokens: 1024,
-    });
-
-    const responseContent = chatCompletion.choices[0]?.message?.content || "I'm sorry, I couldn't generate a response.";
+    if (!responseContent) {
+      throw lastError || new Error("All AI models currently unavailable. Please try again in a moment.");
+    }
 
     res.status(200).json({ content: responseContent });
   } catch (error: any) {
