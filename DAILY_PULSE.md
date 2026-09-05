@@ -2,7 +2,7 @@
 
 > Automatically generated daily intelligence report syncing top trending AI models, research papers, catalog metrics, and repository health.
 
-*Last Synchronized: `Sat, 05 Sep 2026 10:18:41 GMT`*
+*Last Synchronized: `Sat, 05 Sep 2026 10:23:30 GMT`*
 
 ---
 
@@ -43,7 +43,7 @@
 ---
 
 ## 🛡️ Daily System & Ecosystem Health
-- **Sample Link Health Check**: `19/25` healthy verified (`6` flagged / timed out)
+- **Sample Link Health Check**: `22/25` healthy verified (`3` flagged / timed out)
 - **Dependency Security**: `20` advisories flagged across `539` dependencies (`1` critical, `16` high)
 
 ---

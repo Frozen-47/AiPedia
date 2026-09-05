@@ -1,38 +1,23 @@
 {
-  "timestamp": "2026-09-05T10:18:37.441Z",
+  "timestamp": "2026-09-05T10:23:27.573Z",
   "checked": 25,
-  "healthy": 19,
-  "broken": 6,
+  "healthy": 22,
+  "broken": 3,
   "issues": [
     {
-      "name": "Gamma",
-      "url": "https://gamma.app",
+      "name": "Grok-1",
+      "url": "https://x.ai/",
       "status": 403
     },
     {
-      "name": "Canva AI",
-      "url": "https://www.canva.com/ai-image-generator",
-      "status": 403
+      "name": "UltraFeedback",
+      "url": "https://huggingface.co/datasets/argilla/ultrafeedback",
+      "status": 401
     },
     {
-      "name": "Character.ai",
-      "url": "https://character.ai",
-      "status": 403
-    },
-    {
-      "name": "NightCafe",
-      "url": "https://creator.nightcafe.studio",
-      "status": 403
-    },
-    {
-      "name": "Google Gemini",
-      "url": "https://gemini.google.com",
+      "name": "LMSYS Chatbot Arena Conversations",
+      "url": "https://chat.lmsys.org",
       "status": "Network Error"
-    },
-    {
-      "name": "Playground AI",
-      "url": "https://playground.com",
-      "status": 403
     }
   ]
 }

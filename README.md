@@ -20,8 +20,8 @@
 | 🗄️ **Catalog Entries** | **227** AI assets tracked (181 featured) |
 | 🔥 **Top Trending Model** | [deepseek-ai/DeepSeek-V4-Flash-Vision-Exp](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp) |
 | 📜 **Top Daily Paper** | [RoboTok: An Internet-Scale Data Engine for Human Demonstrati...](https://huggingface.co/papers/2609.03199) |
-| 🛡️ **Catalog Links Checked** | **19/25** operational |
-| 🕒 **Last Daily Run** | `Sat, 05 Sep 2026 10:18:41 GMT` |
+| 🛡️ **Catalog Links Checked** | **22/25** operational |
+| 🕒 **Last Daily Run** | `Sat, 05 Sep 2026 10:23:30 GMT` |
 
 *Full daily metrics and paper summaries available in [DAILY_PULSE.md](DAILY_PULSE.md).*
 <!-- DAILY_PULSE:END -->
