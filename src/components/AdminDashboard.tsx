@@ -1313,7 +1313,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       {/* Sleek Custom Toast */}
       {toast && (
-        <div className="fixed bottom-6 right-6 z-50 animate-[fadeUp_0.15s_ease-out]">
+        <div className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-50 animate-[fadeUp_0.2s_ease-out]">
           <div className={`p-4 rounded-xl border flex items-center gap-3 text-[13px] font-medium shadow-2xl backdrop-blur-xl ${
             toast.type === "success" ? t.successToast : t.errorToast
           }`}>
