@@ -46,31 +46,30 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
 
   return (
     <div className="relative overflow-hidden pt-6 pb-10">
-      {/* Ambient background glows */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-sky-500/10 dark:bg-sky-500/15 rounded-full blur-3xl pointer-events-none -z-10" />
-      <div className="absolute top-1/3 right-10 w-[300px] h-[250px] bg-indigo-500/10 dark:bg-indigo-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
+      {/* Monochromatic ambient glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[350px] bg-white/[0.04] rounded-full blur-3xl pointer-events-none -z-10" />
 
       <div className="flex flex-col items-center text-center max-w-4xl mx-auto px-4">
         {/* Top Intelligence Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border mb-6 text-[11px] font-bold tracking-wide transition-all shadow-xs backdrop-blur-md bg-white/60 dark:bg-white/5 border-slate-200/80 dark:border-white/10">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border mb-6 text-[11px] font-bold tracking-wide transition-all shadow-xs backdrop-blur-md bg-white/[0.03] border-white/10">
           <span className="flex h-2 w-2 relative">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white/75 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
           </span>
           <span className={t.textSecondary}>AiVerse Intelligence Compendium</span>
-          <span className="text-slate-300 dark:text-white/20">•</span>
-          <span className="text-sky-500 dark:text-sky-400 font-extrabold">
+          <span className="text-white/20">•</span>
+          <span className="text-white font-black tracking-wide">
             {totalEntries > 0 ? `${totalEntries} AI Assets Indexed` : "228+ Assets Indexed"}
           </span>
         </div>
 
         {/* Hero Title */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.1] mb-6">
-          <span className={resolvedTheme === "amoled" ? "text-white" : "text-slate-900"}>
+          <span className={resolvedTheme === "amoled" ? "text-white" : "text-neutral-900"}>
             Every AI Tool, Model & Tech.
           </span>
           <br />
-          <span className="bg-linear-to-r from-sky-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
+          <span className="bg-linear-to-r from-white via-neutral-200 to-neutral-400 bg-clip-text text-transparent">
             One Unified Universe.
           </span>
         </h1>
@@ -80,15 +79,15 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
           The citation-backed, open encyclopedia of artificial intelligence. Explore architectural blueprints, benchmark scores, licenses, and verified resources.
         </p>
 
-        {/* Glowing Search Bar */}
+        {/* Minimalist Black & White Search Bar */}
         <div className="w-full max-w-2xl relative mb-8 group">
-          <div className="absolute -inset-0.5 bg-linear-to-r from-sky-500/30 to-indigo-500/30 rounded-2xl blur-md opacity-40 group-hover:opacity-75 transition duration-300 pointer-events-none" />
-          <div className={`relative flex items-center rounded-2xl border px-4 py-3.5 shadow-xl backdrop-blur-xl transition-all ${
+          <div className="absolute -inset-0.5 bg-linear-to-r from-white/15 to-white/5 rounded-2xl blur-md opacity-40 group-hover:opacity-75 transition duration-300 pointer-events-none" />
+          <div className={`relative flex items-center rounded-2xl border px-4 py-3.5 shadow-2xl backdrop-blur-xl transition-all ${
             resolvedTheme === "amoled"
-              ? "bg-neutral-900/90 border-white/12 focus-within:border-sky-500/60"
-              : "bg-white/95 border-slate-200 focus-within:border-sky-500/60"
+              ? "bg-neutral-950/90 border-white/15 focus-within:border-white/40"
+              : "bg-white border-neutral-300 focus-within:border-black shadow-sm"
           }`}>
-            <Search size={19} className="text-sky-400 mr-3 shrink-0" />
+            <Search size={18} className="text-neutral-400 mr-3 shrink-0" />
             <input
               type="text"
               data-search="true"
@@ -104,8 +103,8 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
             />
             <div className={`hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold shrink-0 border ${
               resolvedTheme === "amoled"
-                ? "bg-white/8 text-white/50 border-white/10"
-                : "bg-slate-100 text-slate-500 border-slate-200"
+                ? "bg-white/8 text-white/60 border-white/10"
+                : "bg-neutral-100 text-neutral-600 border-neutral-200"
             }`}>
               <Command size={10} /> K
             </div>
@@ -126,8 +125,8 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
                   }}
                   className={`px-3.5 py-1.5 rounded-xl text-[12px] font-bold transition-all duration-200 flex items-center gap-1.5 cursor-pointer border ${
                     isActive
-                      ? "bg-sky-500 text-white border-sky-400 shadow-md shadow-sky-500/20 scale-105"
-                      : `${t.card} ${t.textSecondary} hover:${t.textPrimary} hover:border-sky-500/40`
+                      ? "bg-white text-black border-white shadow-md shadow-white/5 scale-105"
+                      : `${t.card} ${t.textSecondary} hover:${t.textPrimary} hover:border-white/30`
                   }`}
                 >
                   <span>{chip.icon}</span>
@@ -150,8 +149,8 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
                   }}
                   className={`px-3 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
                     isActive
-                      ? "bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 font-bold"
-                      : `text-slate-500 dark:text-slate-400 hover:text-sky-400`
+                      ? "bg-white/15 text-white border border-white/25 font-bold"
+                      : `text-neutral-400 hover:text-white`
                   }`}
                 >
                   {task.label}

@@ -233,7 +233,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
         ref={modalRef}
         className={`relative w-full max-w-2xl sm:max-w-3xl lg:max-w-4xl max-h-[92vh] flex flex-col rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 ${
           isNew
-            ? "border-2 border-indigo-500/30 ring-2 ring-indigo-500/10 shadow-indigo-500/[0.02]"
+            ? "border-2 border-white/25 ring-2 ring-white/10 shadow-sm"
             : ""
         } ${t.modal}`}
       >
@@ -250,7 +250,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
             <button
               onClick={onToggleBookmark}
               title={isBookmarked ? "Remove bookmark" : "Bookmark"}
-              className={`w-8 h-8 flex items-center justify-center rounded-full border transition-all ${t.surface} ${t.border} ${isBookmarked ? "text-amber-400 border-amber-500/30" : t.textMuted}`}
+              className={`w-8 h-8 flex items-center justify-center rounded-full border transition-all ${t.surface} ${t.border} ${isBookmarked ? "text-white border-white/30 bg-white/10" : t.textMuted}`}
             >
               <Bookmark size={13} className={isBookmarked ? "fill-current" : ""} />
             </button>
@@ -273,7 +273,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
               <div className="flex items-center gap-2 flex-wrap mb-1">
                 <h2 className={`text-xl font-black tracking-tight ${t.textPrimary}`}>{entry.name}</h2>
                 {isNew && (
-                  <span className="inline-flex items-center text-[9px] font-black uppercase px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-400 border border-indigo-500/20 animate-pulse">
+                  <span className="inline-flex items-center text-[9px] font-black uppercase px-2 py-0.5 rounded bg-white/15 text-white border border-white/25 animate-pulse">
                     NEW
                   </span>
                 )}
@@ -475,7 +475,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                             <div className="flex items-center justify-between gap-2">
                               <p className={`text-[13px] font-semibold truncate ${t.textPrimary}`}>{related.name}</p>
                               {isRelatedNew && (
-                                <span className="inline-flex items-center text-[7.5px] font-black uppercase px-1.5 py-0.5 rounded bg-indigo-500/15 text-indigo-400 border border-indigo-500/20 animate-pulse shrink-0">
+                                <span className="inline-flex items-center text-[7.5px] font-black uppercase px-1.5 py-0.5 rounded bg-white/15 text-white border border-white/25 animate-pulse shrink-0">
                                   NEW
                                 </span>
                               )}

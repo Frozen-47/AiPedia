@@ -32,24 +32,24 @@ export const OverviewCards: React.FC<OverviewCardsProps> = ({ totalEntriesCount 
       value: displayEntries, 
       icon: Database,
       trend: "+12 new",
-      trendColor: "text-emerald-500 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/10",
-      iconColor: "text-sky-500 dark:text-sky-400 bg-sky-500/10 border-sky-500/20"
+      trendColor: "text-neutral-300 dark:text-neutral-300 bg-white/5 border border-white/10",
+      iconColor: "text-white bg-white/10 border-white/15 shadow-xs"
     },
     { 
       label: "Active Builders", 
       value: stats.totalUsers, 
       icon: Users,
       trend: "+4 today",
-      trendColor: "text-emerald-500 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/10",
-      iconColor: "text-amber-500 dark:text-amber-400 bg-amber-500/10 border-amber-500/20"
+      trendColor: "text-neutral-300 dark:text-neutral-300 bg-white/5 border border-white/10",
+      iconColor: "text-white bg-white/10 border-white/15 shadow-xs"
     },
     { 
       label: "Average Rating", 
       value: stats.averageRating.toFixed(2), 
       icon: Award,
       trend: "out of 5.0",
-      trendColor: "text-indigo-500 dark:text-indigo-400 bg-indigo-500/10 border border-indigo-500/10",
-      iconColor: "text-emerald-500 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
+      trendColor: "text-neutral-300 dark:text-neutral-300 bg-white/5 border border-white/10",
+      iconColor: "text-white bg-white/10 border-white/15 shadow-xs"
     },
   ];
 

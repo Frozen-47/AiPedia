@@ -35,7 +35,7 @@ export const EntryCard = memo(function EntryCard({
       className={`
         group flex flex-col rounded-xl p-5 cursor-pointer glow-card transition-all ${
           isNew
-            ? "border-indigo-500/30 ring-1 ring-indigo-500/10 shadow-sm shadow-indigo-500/[0.02] bg-indigo-500/[0.005] hover:border-indigo-500/50"
+            ? "border-white/25 ring-1 ring-white/10 shadow-sm bg-white/[0.02] hover:border-white/50"
             : t.card
         }
         [content-visibility:auto]
@@ -56,7 +56,7 @@ export const EntryCard = memo(function EntryCard({
               }}
               className={`p-1.5 rounded-lg border transition-colors ${
                 isBookmarked
-                  ? "border-amber-500/40 text-amber-400 bg-amber-500/10"
+                  ? "border-white/30 text-white bg-white/15"
                   : `${t.surface} ${t.border} ${t.textMuted} opacity-0 group-hover:opacity-100`
               } ${isBookmarked ? "opacity-100" : ""}`}
               aria-label={isBookmarked ? "Remove bookmark" : "Bookmark"}
@@ -65,7 +65,7 @@ export const EntryCard = memo(function EntryCard({
             </button>
           )}
           {isNew && (
-            <span className="inline-flex items-center text-[8px] font-black uppercase px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-400 border border-indigo-500/20 animate-pulse">
+            <span className="inline-flex items-center text-[8px] font-black uppercase px-2 py-0.5 rounded bg-white/15 text-white border border-white/25 animate-pulse">
               NEW
             </span>
           )}

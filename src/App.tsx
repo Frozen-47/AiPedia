@@ -884,9 +884,9 @@ const Inner: React.FC = () => {
 
           <p className={`text-[11px] leading-relaxed ${t.textMuted}`}>
             If you believe this was an error or would like to appeal, please contact the administrators at{" "}
-            <a href="mailto:frozennheart47@gmail.com" className="text-sky-500 hover:underline">frozennheart47@gmail.com</a>
+            <a href="mailto:frozennheart47@gmail.com" className="text-white hover:underline font-semibold">frozennheart47@gmail.com</a>
             {" "}or submit an appeal on{" "}
-            <a href="https://github.com/Frozen-47/AiVerse/issues" target="_blank" rel="noopener noreferrer" className="text-sky-500 hover:underline">GitHub Issues</a>.
+            <a href="https://github.com/Frozen-47/AiVerse/issues" target="_blank" rel="noopener noreferrer" className="text-white hover:underline font-semibold">GitHub Issues</a>.
           </p>
 
           <button
@@ -1086,7 +1086,7 @@ const Inner: React.FC = () => {
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 mb-8">
                   <div>
                     <div className="flex items-center gap-2 mb-1.5">
-                      <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20">
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white/10 text-white border border-white/20">
                         Ecosystem Catalog
                       </span>
                       <span className={`text-[12px] font-semibold ${t.textMuted}`}>
@@ -1111,7 +1111,7 @@ const Inner: React.FC = () => {
                           }}
                           className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
                             typeFilter === type
-                              ? "bg-sky-500 text-white shadow-xs"
+                              ? "bg-white text-black font-extrabold shadow-sm"
                               : `${t.textSecondary} hover:${t.textPrimary}`
                           }`}
                         >
@@ -1128,7 +1128,7 @@ const Inner: React.FC = () => {
                       }}
                       className={`px-3 py-1.5 rounded-xl text-[11px] font-bold border transition-all cursor-pointer flex items-center gap-1.5 ${
                         popularOnly
-                          ? "bg-amber-500/15 text-amber-500 border-amber-500/30"
+                          ? "bg-white text-black border-white font-extrabold shadow-sm"
                           : `${t.card} ${t.textSecondary} hover:${t.textPrimary}`
                       }`}
                     >
@@ -1141,7 +1141,7 @@ const Inner: React.FC = () => {
                       onClick={handleSavedToggle}
                       className={`px-3 py-1.5 rounded-xl text-[11px] font-bold border transition-all cursor-pointer flex items-center gap-1.5 ${
                         savedOnly
-                          ? "bg-indigo-500/15 text-indigo-400 border-indigo-500/30"
+                          ? "bg-white text-black border-white font-extrabold shadow-sm"
                           : `${t.card} ${t.textSecondary} hover:${t.textPrimary}`
                       }`}
                     >
@@ -1179,7 +1179,7 @@ const Inner: React.FC = () => {
                         setPopularOnly(false);
                         setSavedOnly(false);
                       }}
-                      className="px-4 py-2 rounded-xl text-xs font-bold bg-sky-500 text-white shadow-xs cursor-pointer hover:bg-sky-400 transition-all"
+                      className="px-4 py-2 rounded-xl text-xs font-bold bg-white text-black shadow-sm cursor-pointer hover:bg-neutral-200 transition-all"
                     >
                       Reset All Filters
                     </button>
@@ -1213,7 +1213,7 @@ const Inner: React.FC = () => {
                       className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
                         currentPage === 1
                           ? "opacity-40 cursor-not-allowed bg-slate-100 dark:bg-white/5 border-transparent text-slate-400"
-                          : `${t.card} ${t.textPrimary} hover:border-sky-400`
+                          : `${t.card} ${t.textPrimary} hover:border-white/40`
                       }`}
                     >
                       ← Previous
@@ -1232,7 +1232,7 @@ const Inner: React.FC = () => {
                       className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
                         currentPage === totalPages
                           ? "opacity-40 cursor-not-allowed bg-slate-100 dark:bg-white/5 border-transparent text-slate-400"
-                          : `${t.card} ${t.textPrimary} hover:border-sky-400`
+                          : `${t.card} ${t.textPrimary} hover:border-white/40`
                       }`}
                     >
                       Next →
