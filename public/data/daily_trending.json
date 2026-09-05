@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-05T10:23:27.322Z",
+  "timestamp": "2026-09-05T10:31:38.748Z",
   "models": [
     {
       "id": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
@@ -54,7 +54,7 @@
     {
       "title": "RoboTok: An Internet-Scale Data Engine for Human Demonstration Retrieval and Dexterous Manipulation Learning",
       "summary": "RoboTok retrieves relevant human manipulation videos from the web using a latent motion space derived from 3D hand trajectories to improve robot policy training.",
-      "upvotes": 33,
+      "upvotes": 34,
       "arxiv_id": "2609.03199",
       "url": "https://huggingface.co/papers/2609.03199",
       "githubRepo": "https://github.com/Rice-RobotPI-Lab/RoboTok-Code"

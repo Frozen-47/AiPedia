@@ -1,23 +1,23 @@
 {
-  "timestamp": "2026-09-05T10:23:27.573Z",
+  "timestamp": "2026-09-05T10:31:39.517Z",
   "checked": 25,
   "healthy": 22,
   "broken": 3,
   "issues": [
     {
-      "name": "Grok-1",
-      "url": "https://x.ai/",
+      "name": "Midjourney (Platform)",
+      "url": "https://www.midjourney.com/",
       "status": 403
     },
     {
-      "name": "UltraFeedback",
-      "url": "https://huggingface.co/datasets/argilla/ultrafeedback",
-      "status": 401
+      "name": "Llama 3.2 (90B Vision)",
+      "url": "https://llama.meta.com/",
+      "status": 400
     },
     {
-      "name": "LMSYS Chatbot Arena Conversations",
-      "url": "https://chat.lmsys.org",
-      "status": "Network Error"
+      "name": "TensorFlow",
+      "url": "https://www.tensorflow.org",
+      "status": "Timeout"
     }
   ]
 }

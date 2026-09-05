@@ -13,6 +13,7 @@ import { EntryCard } from "./components/EntryCard";
 import { WelcomeOnboarding } from "./components/WelcomeOnboarding";
 import { UserProfileModal } from "./components/UserProfileModal";
 import { OverviewCards } from "./components/OverviewCards";
+import { DailyPulseSection } from "./components/DailyPulseSection";
 import { PreferencesLoginPrompt } from "./components/PreferencesLoginPrompt";
 import { AuthProvider, useAuth } from "./components/AuthContext";
 import { AuthModal } from "./components/AuthModal";
@@ -1250,60 +1251,8 @@ const Inner: React.FC = () => {
                 </button>
               </div>
 
-              {/* Trending AI Spotlight */}
-              <div className="mt-8 border-t border-slate-200 dark:border-white/5 pt-10">
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h3 className={`text-xl font-bold tracking-tight ${t.textPrimary}`}>
-                      Trending AI Spotlight
-                    </h3>
-                    <p className={`text-[12px] ${t.textSecondary} mt-1`}>
-                      Currently featured models and frameworks dominating research and industry.
-                    </p>
-                  </div>
-                  <button 
-                    onClick={() => { setBrowseAll(true); setActiveView("catalog"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                    className={`text-[12px] font-bold tracking-wide uppercase cursor-pointer hover:underline flex items-center gap-1.5 ${t.textAccent}`}
-                  >
-                    View Full Catalog <ArrowRight size={12} />
-                  </button>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {entries.slice(0, 3).map((item) => (
-                    <button 
-                      key={item.name} 
-                      onClick={() => setSelected(item)}
-                      className={`group p-6 rounded-2xl border text-left transition-all duration-300 cursor-pointer flex flex-col justify-between ${t.card}`}
-                    >
-                      <div className="w-full">
-                        <div className="flex items-center justify-between mb-4">
-                          <span className={`text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider ${
-                            item.type === "Model" 
-                              ? "bg-sky-500/10 text-sky-400 border border-sky-500/20" 
-                              : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                          }`}>
-                            {item.type}
-                          </span>
-                          <span className={`text-[11px] font-semibold ${t.textMuted}`}>{item.org}</span>
-                        </div>
-                        <h4 className={`text-base font-bold mb-2 group-hover:${t.textAccent} transition-colors ${t.textPrimary}`}>
-                          {item.name}
-                        </h4>
-                        <p className={`text-[12px] leading-relaxed font-light ${t.textSecondary} line-clamp-3 mb-6`}>
-                          {item.summary}
-                        </p>
-                      </div>
-                      <div className={`w-full flex items-center justify-between text-[11px] font-bold ${t.textMuted}`}>
-                        <span>Year: {item.year}</span>
-                        <span className={`group-hover:translate-x-0.5 transition-transform flex items-center gap-1 ${t.textAccent}`}>
-                          View Details <ArrowRight size={11} />
-                        </span>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
+              {/* Live Daily AI Pulse & Spotlight */}
+              <DailyPulseSection entries={entries} onSelectEntry={setSelected} />
               
               {/* Value Propositions */}
               <div className="mt-4">

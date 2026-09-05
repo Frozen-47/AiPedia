@@ -2,7 +2,18 @@
 
 > Automatically generated daily intelligence report syncing top trending AI models, research papers, catalog metrics, and repository health.
 
-*Last Synchronized: `Sat, 05 Sep 2026 10:23:30 GMT`*
+*Last Synchronized: `Sat, 05 Sep 2026 10:31:45 GMT`*
+
+---
+
+## 🌟 Featured AI Tool of the Day
+### **DeepSeek-V2** (`Model` • *DeepSeek AI*)
+> DeepSeek's efficient MoE model with 236B total parameters but only 21B active, offering GPT-4 class performance at dramatically lower inference cost.
+
+- 🏛️ **Architecture**: Multi-head Latent Attention (MLA) + DeepSeekMoE architecture.
+- ⚡ **Benchmarks**: `MMLU: 78.5%, strong on math and code`
+- 🏷️ **Domain & License**: `NLP` • `DeepSeek License` (Released: 2024)
+- 🔗 **Resource Link**: [https://www.deepseek.com/](https://www.deepseek.com/)
 
 ---
 
@@ -26,7 +37,7 @@
 
 | Paper | Upvotes | Summary | Link |
 | :--- | :--- | :--- | :--- |
-| **RoboTok: An Internet-Scale Data Engine for Human Demonstration Retrieval and Dexterous Manipulation Learning** | 👍 33 | RoboTok retrieves relevant human manipulation videos from the web using a latent motion space derived from 3D hand trajectories to improve robot policy training. | [Read](https://huggingface.co/papers/2609.03199) |
+| **RoboTok: An Internet-Scale Data Engine for Human Demonstration Retrieval and Dexterous Manipulation Learning** | 👍 34 | RoboTok retrieves relevant human manipulation videos from the web using a latent motion space derived from 3D hand trajectories to improve robot policy training. | [Read](https://huggingface.co/papers/2609.03199) |
 | **A Common Measure of Communication for Speech Brain-Computer Interfaces** | 👍 8 | Open-vocabulary mutual information provides a unified metric to compare speech brain-computer interfaces across different vocabularies and conditions, revealing trade-offs between vocabulary coverage and decoding accuracy. | [Read](https://huggingface.co/papers/2609.02887) |
 | **VeriPhy: Agentic Physical Reasoning for World Model Evaluation and Refinement** | 👍 12 | VeriPhy verifies generated video by compiling prompts into typed physical obligations, executing frozen expert analyses with provenance tracking, and mapping evidence to auditable three-valued verdicts. | [Read](https://huggingface.co/papers/2609.03153) |
 | **Locked at the Entrance, Open Inside: Where RLVR Narrows the Solution Space** | 👍 8 | Reinforcement learning with verifiable rewards narrows reasoning diversity primarily at the initial solution step rather than during execution, and targeted interventions can restore coverage without sacrificing accuracy. | [Read](https://huggingface.co/papers/2608.29188) |

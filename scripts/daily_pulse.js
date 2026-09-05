@@ -41,21 +41,35 @@ function getCatalogStats() {
       }
     }
 
+    // Select deterministic "AI Tool of the Day"
+    const candidates = entries.filter(e => e.popular && e.architecture && e.summary);
+    const pool = candidates.length > 0 ? candidates : entries;
+    const now = new Date();
+    const startOfYear = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
+    const dayOfYear = Math.floor((now - startOfYear) / (24 * 60 * 60 * 1000));
+    const spotlightIndex = dayOfYear % pool.length;
+    const toolOfTheDay = pool[spotlightIndex];
+
     const stats = {
       timestamp: new Date().toISOString(),
       totalEntries: entries.length,
       popularEntries: popularCount,
       byType,
       byTask,
-      byLicense
+      byLicense,
+      toolOfTheDay
     };
 
     fs.writeFileSync(path.join(publicDataDir, 'catalog_stats.json'), JSON.stringify(stats, null, 2));
-    console.log(`[Stats] Catalog analyzed: ${entries.length} entries.`);
-    return { stats, urls };
+    fs.writeFileSync(path.join(publicDataDir, 'tool_of_the_day.json'), JSON.stringify({
+      date: now.toISOString().split('T')[0],
+      tool: toolOfTheDay
+    }, null, 2));
+    console.log(`[Stats] Catalog analyzed: ${entries.length} entries. Tool of the Day: "${toolOfTheDay.name}"`);
+    return { stats, urls, toolOfTheDay };
   } catch (err) {
     console.error('[Stats] Error analyzing catalog:', err.message);
-    return { stats: null, urls: [] };
+    return { stats: null, urls: [], toolOfTheDay: null };
   }
 }
 
@@ -212,9 +226,26 @@ function getSecurityAudit() {
 }
 
 // 5. Generate Markdown Daily Pulse & Update README
-function generatePulseDocs(stats, trending, health, security) {
+function generatePulseDocs(stats, trending, health, security, toolOfTheDay) {
   const today = new Date().toISOString().split('T')[0];
   const timeUtc = new Date().toUTCString();
+  const tool = toolOfTheDay || stats?.toolOfTheDay;
+
+  // AI Tool of the Day spotlight markdown
+  let toolSpotlight = '';
+  if (tool) {
+    toolSpotlight = `## 🌟 Featured AI Tool of the Day
+### **${tool.name}** (\`${tool.type}\` • *${tool.org}*)
+> ${tool.summary}
+
+- 🏛️ **Architecture**: ${tool.architecture || 'Proprietary / Undisclosed'}
+- ⚡ **Benchmarks**: \`${tool.benchmarks || 'N/A'}\`
+- 🏷️ **Domain & License**: \`${tool.task}\` • \`${tool.license || 'Open Source'}\` (Released: ${tool.year})
+- 🔗 **Resource Link**: [${tool.url || tool.name}](${tool.url || '#'})
+
+---
+`;
+  }
 
   // Top trending models table
   let modelsTable = '| Model | Pipeline | Likes | Downloads | Link |\n| :--- | :--- | :--- | :--- | :--- |\n';
@@ -248,6 +279,7 @@ function generatePulseDocs(stats, trending, health, security) {
 
 ---
 
+${toolSpotlight}
 ## 🔥 Today's Top Trending Open AI Models
 *Live from Hugging Face Community Trending Scores*
 
@@ -290,9 +322,10 @@ ${papersTable}
 ### ⚡ Daily AI Pulse (${today})
 | Metric | Status / Count |
 | :--- | :--- |
+| 🌟 **Tool of the Day** | **${tool ? tool.name : 'N/A'}** (${tool ? tool.org : ''}) — [Explore](${tool?.url || '#'}) |
 | 🗄️ **Catalog Entries** | **${stats ? stats.totalEntries : 'N/A'}** AI assets tracked (${stats ? stats.popularEntries : 'N/A'} featured) |
 | 🔥 **Top Trending Model** | [${trending.models[0]?.id || 'N/A'}](${trending.models[0]?.url || '#'}) |
-| 📜 **Top Daily Paper** | [${trending.papers[0]?.title?.slice(0, 60) || 'N/A'}...](${trending.papers[0]?.url || '#'}) |
+| 📜 **Top Daily Paper** | [${trending.papers[0]?.title?.slice(0, 50) || 'N/A'}...](${trending.papers[0]?.url || '#'}) |
 | 🛡️ **Catalog Links Checked** | **${health.healthy}/${health.checked}** operational |
 | 🕒 **Last Daily Run** | \`${timeUtc}\` |
 
@@ -322,11 +355,11 @@ ${papersTable}
 
 async function run() {
   console.log('🚀 Running AiVerse Daily Pulse...');
-  const { stats, urls } = getCatalogStats();
+  const { stats, urls, toolOfTheDay } = getCatalogStats();
   const trending = await fetchTrendingAI();
   const health = await checkLinksHealth(urls, 25);
   const security = getSecurityAudit();
-  generatePulseDocs(stats, trending, health, security);
+  generatePulseDocs(stats, trending, health, security, toolOfTheDay);
   console.log('✨ Daily Pulse completed successfully!');
 }
 
