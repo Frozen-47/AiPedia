@@ -17,12 +17,13 @@
 ### ⚡ Daily AI Pulse (2026-09-05)
 | Metric | Status / Count |
 | :--- | :--- |
-| 🌟 **Tool of the Day** | **DeepSeek-V2** (DeepSeek AI) — [Explore](https://www.deepseek.com/) |
-| 🗄️ **Catalog Entries** | **227** AI assets tracked (181 featured) |
+| 🆕 **New Model Added** | **DeepSeek-V4-Flash-Vision-Exp** (DeepSeek) — [Explore](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp) |
+| 🌟 **Tool of the Day** | **Qwen2 (72B)** (Alibaba Cloud) — [Explore](https://qwenlm.github.io/) |
+| 🗄️ **Catalog Entries** | **228** AI assets tracked (182 featured) |
 | 🔥 **Top Trending Model** | [deepseek-ai/DeepSeek-V4-Flash-Vision-Exp](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp) |
 | 📜 **Top Daily Paper** | [RoboTok: An Internet-Scale Data Engine for Human D...](https://huggingface.co/papers/2609.03199) |
-| 🛡️ **Catalog Links Checked** | **22/25** operational |
-| 🕒 **Last Daily Run** | `Sat, 05 Sep 2026 10:31:45 GMT` |
+| 🛡️ **Catalog Links Checked** | **23/25** operational |
+| 🕒 **Last Daily Run** | `Sat, 05 Sep 2026 10:39:27 GMT` |
 
 *Full daily metrics and paper summaries available in [DAILY_PULSE.md](DAILY_PULSE.md).*
 <!-- DAILY_PULSE:END -->

@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-09-05T10:31:38.737Z",
-  "totalEntries": 227,
-  "popularEntries": 181,
+  "timestamp": "2026-09-05T10:39:21.213Z",
+  "totalEntries": 228,
+  "popularEntries": 182,
   "byType": {
-    "Model": 85,
+    "Model": 86,
     "Framework": 22,
     "Platform": 25,
     "Dataset": 24,
@@ -12,7 +12,7 @@
   "byTask": {
     "NLP": 85,
     "AI Coding": 18,
-    "Multimodal": 7,
+    "Multimodal": 8,
     "Research": 11,
     "Image Generation": 9,
     "Video Generation": 10,
@@ -23,7 +23,7 @@
     "Education": 4
   },
   "byLicense": {
-    "MIT": 33,
+    "MIT": 34,
     "Llama 3.3 Community License": 1,
     "Llama 3.2 Community License": 3,
     "Apache-2.0": 32,
@@ -64,24 +64,24 @@
     "Free": 1
   },
   "toolOfTheDay": {
-    "name": "DeepSeek-V2",
+    "name": "Qwen2 (72B)",
     "type": "Model",
-    "summary": "DeepSeek's efficient MoE model with 236B total parameters but only 21B active, offering GPT-4 class performance at dramatically lower inference cost.",
+    "summary": "Alibaba's powerful open-weights model series competitive with leading frontier models, with strong multilingual and coding capabilities.",
     "task": "NLP",
-    "license": "DeepSeek License",
+    "license": "Qwen License",
     "year": 2024,
-    "org": "DeepSeek AI",
-    "size": "236B total (21B active)",
-    "architecture": "Multi-head Latent Attention (MLA) + DeepSeekMoE architecture.",
-    "usage": "from transformers import AutoModelForCausalLM, AutoTokenizer\ntokenizer = AutoTokenizer.from_pretrained(\"deepseek-ai/DeepSeek-V2\")\nmodel = AutoModelForCausalLM.from_pretrained(\"deepseek-ai/DeepSeek-V2\", trust_remote_code=True)",
-    "benchmarks": "MMLU: 78.5%, strong on math and code",
-    "limitations": "Complex MoE deployment, license restricts certain commercial uses.",
+    "org": "Alibaba Cloud",
+    "size": "72B params",
+    "architecture": "Transformer with GQA, long-context support up to 128K tokens.",
+    "usage": "from transformers import AutoModelForCausalLM, AutoTokenizer\nmodel = AutoModelForCausalLM.from_pretrained(\"Qwen/Qwen2-72B-Instruct\")\ntokenizer = AutoTokenizer.from_pretrained(\"Qwen/Qwen2-72B-Instruct\")",
+    "benchmarks": "MMLU: 84.2%, HumanEval: 86.0%",
+    "limitations": "Large VRAM requirement for local inference, license restrictions for commercial use.",
     "popular": true,
-    "url": "https://www.deepseek.com/",
+    "url": "https://qwenlm.github.io/",
     "citations": [
       {
-        "text": "DeepSeek-V2 Paper",
-        "url": "https://arxiv.org/abs/2405.04434"
+        "text": "Qwen2 Technical Report",
+        "url": "https://arxiv.org/abs/2407.10671"
       }
     ]
   }

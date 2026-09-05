@@ -32,10 +32,15 @@ jobs:
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/data/ DAILY_PULSE.md README.md
+          git add src/data.ts public/data/ DAILY_PULSE.md README.md
           if git diff --staged --quiet; then
             echo "No updates to commit today."
           else
-            git commit -m "chore(pulse): sync daily AI trends, catalog metrics & ecosystem health [skip ci]"
+            if [ -f public/data/latest_added_model.txt ]; then
+              MODEL_NAME=$(cat public/data/latest_added_model.txt)
+              git commit -m "chore(pulse): add new model ${MODEL_NAME} & update daily AI pulse [skip ci]"
+            else
+              git commit -m "chore(pulse): sync daily AI trends, catalog metrics & ecosystem health [skip ci]"
+            fi
             git push origin HEAD:${{ github.ref }}
           fi

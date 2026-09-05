@@ -1,23 +1,18 @@
 {
-  "timestamp": "2026-09-05T10:31:39.517Z",
+  "timestamp": "2026-09-05T10:39:21.916Z",
   "checked": 25,
-  "healthy": 22,
-  "broken": 3,
+  "healthy": 23,
+  "broken": 2,
   "issues": [
     {
-      "name": "Midjourney (Platform)",
-      "url": "https://www.midjourney.com/",
-      "status": 403
-    },
-    {
-      "name": "Llama 3.2 (90B Vision)",
-      "url": "https://llama.meta.com/",
+      "name": "Llama 3.2 Vision (11B)",
+      "url": "https://ai.meta.com/llama/",
       "status": 400
     },
     {
-      "name": "TensorFlow",
-      "url": "https://www.tensorflow.org",
-      "status": "Timeout"
+      "name": "Llama 3.2 (3B)",
+      "url": "https://ai.meta.com/llama/",
+      "status": 400
     }
   ]
 }

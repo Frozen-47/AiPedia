@@ -12,18 +12,143 @@ if (!fs.existsSync(publicDataDir)) {
   fs.mkdirSync(publicDataDir, { recursive: true });
 }
 
+// Helper to get raw entries from src/data.ts
+function readRawEntries() {
+  const dataPath = path.join(rootDir, 'src', 'data.ts');
+  const content = fs.readFileSync(dataPath, 'utf-8');
+  const jsContent = content
+    .replace(/import type .*?;/g, '')
+    .replace(/export const entries: Entry\[\] =/g, 'const entries =')
+    .replace(/export const /g, 'const ') + '\nreturn entries;';
+  const getEntries = new Function(jsContent);
+  return getEntries();
+}
+
+// 0. Auto-Ingest New Trending Models from Hugging Face
+async function ingestNewModels(maxToIngest = 1) {
+  const added = [];
+  try {
+    const existingEntries = readRawEntries();
+    const existingNames = new Set(existingEntries.map(e => (e.name || '').toLowerCase().trim()));
+    const existingUrls = new Set(existingEntries.map(e => (e.url || '').toLowerCase().trim()));
+
+    const res = await fetch('https://huggingface.co/api/models?sort=trendingScore&direction=-1&limit=15', {
+      headers: { 'User-Agent': 'AiVerse-PulseBot/1.0' }
+    });
+
+    if (!res.ok) return added;
+    const models = await res.json();
+
+    for (const m of models) {
+      if (added.length >= maxToIngest) break;
+      const modelName = m.id.includes('/') ? m.id.split('/')[1] : m.id;
+      const modelUrl = `https://huggingface.co/${m.id}`;
+
+      // Skip if already in catalog
+      if (existingNames.has(modelName.toLowerCase()) || existingUrls.has(modelUrl.toLowerCase())) {
+        continue;
+      }
+
+      // Must have traction
+      if ((m.likes || 0) < 30 && (m.downloads || 0) < 300) {
+        continue;
+      }
+
+      // Map task
+      let task = "NLP";
+      const p = m.pipeline_tag || "";
+      if (p.includes("image-text") || p.includes("multimodal")) task = "Multimodal";
+      else if (p.includes("text-to-image") || p.includes("image-generation")) task = "Image Generation";
+      else if (p.includes("text-to-video") || p.includes("video")) task = "Video Generation";
+      else if (p.includes("audio") || p.includes("speech") || p.includes("voice")) task = "Audio";
+      else if (p.includes("code")) task = "AI Coding";
+      else if (p.includes("vision")) task = "Computer Vision";
+
+      // Extract license
+      let license = "Open Weights";
+      const tags = m.tags || [];
+      const licTag = tags.find(t => t.startsWith("license:"));
+      if (licTag) {
+        license = licTag.replace("license:", "").toUpperCase();
+      }
+
+      // Extract size
+      const sizeMatch = modelName.match(/(\d+(\.\d+)?[BMKbmk]|\d+x\d+[BMKbmk])/);
+      const size = sizeMatch ? `${sizeMatch[0].toUpperCase()} params` : "Open Weights";
+
+      // Clean author/org
+      const rawAuthor = m.author || (m.id.includes('/') ? m.id.split('/')[0] : 'Open Source');
+      let org = rawAuthor;
+      if (rawAuthor.toLowerCase() === 'deepseek-ai') org = 'DeepSeek';
+      else if (rawAuthor.toLowerCase() === 'qwen') org = 'Alibaba (Qwen)';
+      else if (rawAuthor.toLowerCase() === 'meta-llama') org = 'Meta AI';
+      else if (rawAuthor.toLowerCase() === 'mistralai') org = 'Mistral AI';
+      else if (rawAuthor.toLowerCase() === 'microsoft') org = 'Microsoft';
+      else if (rawAuthor.toLowerCase() === 'google') org = 'Google';
+      else if (rawAuthor.toLowerCase() === 'zai-org') org = 'Zhipu AI';
+
+      const newEntry = {
+        name: modelName,
+        type: "Model",
+        summary: `High-performance ${task} open-weights model by ${org}, trending with over ${(m.likes || 0).toLocaleString()} community likes and ${(m.downloads || 0).toLocaleString()} downloads on Hugging Face.`,
+        task,
+        license,
+        year: new Date().getFullYear(),
+        org,
+        size,
+        architecture: `${org} ${p ? p.replace(/-/g, ' ') : 'transformer'} architecture with community-tuned weights.`,
+        usage: `from transformers import AutoModelForCausalLM, AutoTokenizer\n\nmodel = AutoModelForCausalLM.from_pretrained("${m.id}", device_map="auto")\ntokenizer = AutoTokenizer.from_pretrained("${m.id}")`,
+        benchmarks: `Trending Score: ${Math.round(m.trendingScore || 0)}, Likes: ${(m.likes || 0).toLocaleString()}, Downloads: ${(m.downloads || 0).toLocaleString()}`,
+        limitations: `Requires GPU VRAM or quantization for efficient local deployment.`,
+        popular: true,
+        url: modelUrl,
+        citations: [
+          {
+            text: `${m.id} on Hugging Face`,
+            url: modelUrl
+          }
+        ]
+      };
+
+      added.push(newEntry);
+    }
+
+    if (added.length > 0) {
+      const dataPath = path.join(rootDir, 'src', 'data.ts');
+      let content = fs.readFileSync(dataPath, 'utf-8');
+
+      const formatted = added.map(entry => '  ' + JSON.stringify(entry, null, 4).replace(/\n/g, '\n  ')).join(',\n');
+      const target = /(\r?\n\];\s*\r?\nexport const typeFilters)/;
+
+      if (target.test(content)) {
+        content = content.replace(target, `,\n${formatted}$1`);
+        fs.writeFileSync(dataPath, content, 'utf-8');
+        console.log(`[Ingest] ✨ Automatically added ${added.length} new model(s) to src/data.ts: ${added.map(a => a.name).join(', ')}`);
+        
+        fs.writeFileSync(path.join(publicDataDir, 'latest_added_model.txt'), added[0].name, 'utf-8');
+
+        const historyPath = path.join(publicDataDir, 'newly_added_models.json');
+        let history = [];
+        if (fs.existsSync(historyPath)) {
+          try { history = JSON.parse(fs.readFileSync(historyPath, 'utf-8')); } catch {}
+        }
+        history.unshift({
+          date: new Date().toISOString().split('T')[0],
+          models: added
+        });
+        fs.writeFileSync(historyPath, JSON.stringify(history.slice(0, 50), null, 2));
+      }
+    }
+  } catch (err) {
+    console.warn('[Ingest] Model ingestion check error:', err.message);
+  }
+  return added;
+}
+
 // 1. Parse catalog data from src/data.ts
 function getCatalogStats() {
   try {
-    const dataPath = path.join(rootDir, 'src', 'data.ts');
-    const content = fs.readFileSync(dataPath, 'utf-8');
-    const jsContent = content
-      .replace(/import type .*?;/g, '')
-      .replace(/export const entries: Entry\[\] =/g, 'const entries =')
-      .replace(/export const /g, 'const ') + '\nreturn entries;';
-
-    const getEntries = new Function(jsContent);
-    const entries = getEntries();
+    const entries = readRawEntries();
 
     const byType = {};
     const byTask = {};
@@ -226,10 +351,26 @@ function getSecurityAudit() {
 }
 
 // 5. Generate Markdown Daily Pulse & Update README
-function generatePulseDocs(stats, trending, health, security, toolOfTheDay) {
+function generatePulseDocs(stats, trending, health, security, toolOfTheDay, newlyIngested = []) {
   const today = new Date().toISOString().split('T')[0];
   const timeUtc = new Date().toUTCString();
   const tool = toolOfTheDay || stats?.toolOfTheDay;
+
+  // Newly Ingested Model Section
+  let newModelSection = '';
+  if (newlyIngested && newlyIngested.length > 0) {
+    const nm = newlyIngested[0];
+    newModelSection = `## 🆕 Newly Ingested AI Model Today
+### **${nm.name}** (\`${nm.type}\` • *${nm.org}*)
+> ${nm.summary}
+
+- 🏷️ **Domain & License**: \`${nm.task}\` • \`${nm.license}\` (${nm.year})
+- ⚡ **Metrics**: \`${nm.benchmarks}\`
+- 🔗 **Resource Link**: [${nm.url || nm.name}](${nm.url || '#'})
+
+---
+`;
+  }
 
   // AI Tool of the Day spotlight markdown
   let toolSpotlight = '';
@@ -279,6 +420,7 @@ function generatePulseDocs(stats, trending, health, security, toolOfTheDay) {
 
 ---
 
+${newModelSection}
 ${toolSpotlight}
 ## 🔥 Today's Top Trending Open AI Models
 *Live from Hugging Face Community Trending Scores*
@@ -318,11 +460,16 @@ ${papersTable}
     const readmePath = path.join(rootDir, 'README.md');
     let readme = fs.readFileSync(readmePath, 'utf-8');
 
+    let newModelRow = '';
+    if (newlyIngested && newlyIngested.length > 0) {
+      newModelRow = `| 🆕 **New Model Added** | **${newlyIngested[0].name}** (${newlyIngested[0].org}) — [Explore](${newlyIngested[0].url}) |\n`;
+    }
+
     const pulseSnippet = `<!-- DAILY_PULSE:START -->
 ### ⚡ Daily AI Pulse (${today})
 | Metric | Status / Count |
 | :--- | :--- |
-| 🌟 **Tool of the Day** | **${tool ? tool.name : 'N/A'}** (${tool ? tool.org : ''}) — [Explore](${tool?.url || '#'}) |
+${newModelRow}| 🌟 **Tool of the Day** | **${tool ? tool.name : 'N/A'}** (${tool ? tool.org : ''}) — [Explore](${tool?.url || '#'}) |
 | 🗄️ **Catalog Entries** | **${stats ? stats.totalEntries : 'N/A'}** AI assets tracked (${stats ? stats.popularEntries : 'N/A'} featured) |
 | 🔥 **Top Trending Model** | [${trending.models[0]?.id || 'N/A'}](${trending.models[0]?.url || '#'}) |
 | 📜 **Top Daily Paper** | [${trending.papers[0]?.title?.slice(0, 50) || 'N/A'}...](${trending.papers[0]?.url || '#'}) |
@@ -355,11 +502,15 @@ ${papersTable}
 
 async function run() {
   console.log('🚀 Running AiVerse Daily Pulse...');
+  
+  // Auto-ingest 1 new trending model per day
+  const newlyIngested = await ingestNewModels(1);
+
   const { stats, urls, toolOfTheDay } = getCatalogStats();
   const trending = await fetchTrendingAI();
   const health = await checkLinksHealth(urls, 25);
   const security = getSecurityAudit();
-  generatePulseDocs(stats, trending, health, security, toolOfTheDay);
+  generatePulseDocs(stats, trending, health, security, toolOfTheDay, newlyIngested);
   console.log('✨ Daily Pulse completed successfully!');
 }
 

@@ -5030,6 +5030,28 @@ export const entries: Entry[] = [
         "url": "https://replika.com"
       }
     ]
+  },
+  {
+      "name": "DeepSeek-V4-Flash-Vision-Exp",
+      "type": "Model",
+      "summary": "High-performance Multimodal open-weights model by DeepSeek, trending with over 631 community likes and 184,542 downloads on Hugging Face.",
+      "task": "Multimodal",
+      "license": "MIT",
+      "year": 2026,
+      "org": "DeepSeek",
+      "size": "Open Weights",
+      "architecture": "DeepSeek image text to text architecture with community-tuned weights.",
+      "usage": "from transformers import AutoModelForCausalLM, AutoTokenizer\n\nmodel = AutoModelForCausalLM.from_pretrained(\"deepseek-ai/DeepSeek-V4-Flash-Vision-Exp\", device_map=\"auto\")\ntokenizer = AutoTokenizer.from_pretrained(\"deepseek-ai/DeepSeek-V4-Flash-Vision-Exp\")",
+      "benchmarks": "Trending Score: 582, Likes: 631, Downloads: 184,542",
+      "limitations": "Requires GPU VRAM or quantization for efficient local deployment.",
+      "popular": true,
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
+      "citations": [
+          {
+              "text": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp on Hugging Face",
+              "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp"
+          }
+      ]
   }
 ];
 

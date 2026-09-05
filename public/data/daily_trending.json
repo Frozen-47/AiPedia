@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-09-05T10:31:38.748Z",
+  "timestamp": "2026-09-05T10:39:21.222Z",
   "models": [
     {
       "id": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
       "author": "deepseek-ai",
-      "likes": 630,
+      "likes": 631,
       "downloads": 184542,
       "pipeline_tag": "image-text-to-text",
       "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp"
@@ -36,7 +36,7 @@
     {
       "id": "XHToken/Spark-X2.5-4B",
       "author": "XHToken",
-      "likes": 496,
+      "likes": 497,
       "downloads": 4755,
       "pipeline_tag": "text-generation",
       "url": "https://huggingface.co/XHToken/Spark-X2.5-4B"
