@@ -82,13 +82,16 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
 
         {/* Glowing Search Bar */}
         <div className="w-full max-w-2xl relative mb-8 group">
-          <div className="absolute -inset-0.5 bg-linear-to-r from-sky-500 to-indigo-500 rounded-2xl blur-sm opacity-20 group-hover:opacity-40 transition duration-300" />
-          <div className={`relative flex items-center rounded-2xl border px-4 py-3.5 shadow-lg backdrop-blur-xl ${
-            t.isDark ? "bg-black/60 border-white/10" : "bg-white/90 border-slate-200"
+          <div className="absolute -inset-0.5 bg-linear-to-r from-sky-500/30 to-indigo-500/30 rounded-2xl blur-md opacity-40 group-hover:opacity-75 transition duration-300 pointer-events-none" />
+          <div className={`relative flex items-center rounded-2xl border px-4 py-3.5 shadow-xl backdrop-blur-xl transition-all ${
+            resolvedTheme === "amoled"
+              ? "bg-neutral-900/90 border-white/12 focus-within:border-sky-500/60"
+              : "bg-white/95 border-slate-200 focus-within:border-sky-500/60"
           }`}>
             <Search size={19} className="text-sky-400 mr-3 shrink-0" />
             <input
               type="text"
+              data-search="true"
               value={searchQuery}
               onChange={(e) => {
                 onSearchChange(e.target.value);
@@ -96,10 +99,14 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
                   onScrollToCatalog();
                 }
               }}
-              placeholder="Search across models, frameworks, datasets, tasks, or orgs (e.g. DeepSeek, Qwen, NLP)..."
-              className={`w-full bg-transparent border-none outline-none text-sm md:text-base font-normal placeholder:font-light ${t.textPrimary} placeholder:${t.textMuted}`}
+              placeholder="Search 228+ models, frameworks, datasets, or tasks..."
+              className={`w-full bg-transparent border-none outline-none text-sm md:text-base font-normal pr-3 ${t.textPrimary} placeholder:${t.textMuted}`}
             />
-            <div className="hidden sm:flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-100 dark:bg-white/10 text-[10px] font-bold text-slate-500 dark:text-slate-400 shrink-0 border border-slate-200/50 dark:border-white/5">
+            <div className={`hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold shrink-0 border ${
+              resolvedTheme === "amoled"
+                ? "bg-white/8 text-white/50 border-white/10"
+                : "bg-slate-100 text-slate-500 border-slate-200"
+            }`}>
               <Command size={10} /> K
             </div>
           </div>
