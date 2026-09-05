@@ -1,7 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Send, Minimize2, Maximize2, RefreshCw, Copy, Check, AlertCircle, RotateCcw, ExternalLink } from 'lucide-react';
+import {
+  X,
+  Send,
+  Minimize2,
+  Maximize2,
+  RefreshCw,
+  Copy,
+  Check,
+  AlertCircle,
+  RotateCcw,
+  ExternalLink,
+} from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
-import { useTokens, useTheme } from '../lib/theme';
+import { useTokens } from '../lib/theme';
 import { useAuth } from './AuthContext';
 import { VoxLogo } from './VoxLogo';
 
@@ -35,20 +46,30 @@ const PREBUILT_QUESTIONS = [
 ];
 
 const markdownComponents = {
-  h1: ({node, ...props}: any) => <h1 className="font-bold text-lg mt-2 mb-1 text-gray-900 dark:text-white" {...props} />,
-  h2: ({node, ...props}: any) => <h2 className="font-bold text-base mt-2 mb-1 text-gray-900 dark:text-white" {...props} />,
-  h3: ({node, ...props}: any) => <h3 className="font-bold text-[14px] mt-2 mb-1 text-gray-900 dark:text-white" {...props} />,
-  p: ({node, ...props}: any) => <p className="mb-2 last:mb-0" {...props} />,
-  ul: ({node, ...props}: any) => <ul className="list-disc pl-4 mb-2 space-y-1" {...props} />,
-  ol: ({node, ...props}: any) => <ol className="list-decimal pl-4 mb-2 space-y-1" {...props} />,
-  li: ({node, ...props}: any) => <li className="" {...props} />,
-  strong: ({node, ...props}: any) => <strong className="font-bold text-sky-600 dark:text-sky-400" {...props} />,
-  code: ({node, ...props}: any) => <code className="bg-black/10 dark:bg-white/10 text-gray-900 dark:text-white rounded px-1.5 py-0.5 font-mono text-[12px]" {...props} />,
-  pre: ({node, ...props}: any) => <pre className="bg-black/5 dark:bg-black/50 text-gray-900 dark:text-white rounded-xl p-3 overflow-x-auto my-2 font-mono text-[12px] border border-black/5 dark:border-white/5 shadow-inner" {...props} />,
+  h1: ({node, ...props}: any) => (
+    <h1 className="font-bold text-base mt-2 mb-1 text-white" {...props} />
+  ),
+  h2: ({node, ...props}: any) => (
+    <h2 className="font-bold text-sm mt-2 mb-1 text-neutral-200" {...props} />
+  ),
+  h3: ({node, ...props}: any) => (
+    <h3 className="font-bold text-[13px] mt-1.5 mb-1 text-neutral-300" {...props} />
+  ),
+  p: ({node, ...props}: any) => <p className="mb-2 last:mb-0 leading-relaxed text-neutral-200" {...props} />,
+  ul: ({node, ...props}: any) => <ul className="list-disc pl-4 mb-2 space-y-1 marker:text-neutral-400" {...props} />,
+  ol: ({node, ...props}: any) => <ol className="list-decimal pl-4 mb-2 space-y-1 marker:text-neutral-400" {...props} />,
+  li: ({node, ...props}: any) => <li className="text-neutral-200" {...props} />,
+  strong: ({node, ...props}: any) => <strong className="font-bold text-white" {...props} />,
+  code: ({node, ...props}: any) => (
+    <code className="bg-white/10 text-neutral-200 border border-white/15 rounded px-1.5 py-0.5 font-mono text-[12px]" {...props} />
+  ),
+  pre: ({node, ...props}: any) => (
+    <pre className="bg-black/60 text-neutral-200 rounded-xl p-3 overflow-x-auto my-2.5 font-mono text-[12px] border border-white/10 shadow-inner" {...props} />
+  ),
   a: ({node, children, ...props}: any) => (
-    <a className="inline-flex items-baseline gap-1 text-sky-600 dark:text-sky-400 hover:text-sky-500 dark:hover:text-sky-300 transition-colors font-medium underline underline-offset-2" target="_blank" rel="noopener noreferrer" {...props}>
+    <a className="inline-flex items-baseline gap-1 text-white underline underline-offset-2 hover:opacity-80 transition-opacity font-medium" target="_blank" rel="noopener noreferrer" {...props}>
       {children}
-      <ExternalLink size={12} className="shrink-0 self-center" />
+      <ExternalLink size={12} className="shrink-0 self-center opacity-70" />
     </a>
   ),
 };
@@ -69,19 +90,19 @@ function buildMarkdownComponents(
           <button
             type="button"
             onClick={() => onEntrySelect(match)}
-            className="font-bold text-sky-600 dark:text-sky-400 hover:text-sky-500 dark:hover:text-sky-300 underline underline-offset-2 transition-colors cursor-pointer"
+            className="font-bold text-white underline underline-offset-2 hover:opacity-80 transition-opacity cursor-pointer"
           >
             {match}
           </button>
         );
       }
-      return <strong className="font-bold text-sky-600 dark:text-sky-400">{children}</strong>;
+      return <strong className="font-bold text-white">{children}</strong>;
     },
   };
 }
 
 const getInitialMessages = (name?: string | null): Message[] => [
-  { role: 'assistant', content: name ? `Hi ${name}! I am Vox. How can I help you navigate the world of AI today?` : 'Hi there! I am Vox. How can I help you navigate the world of AI today?' }
+  { role: 'assistant', content: name ? `Hi ${name}! I am Vox, your AI research and discovery copilot. How can I help you navigate the world of AI today?` : 'Hi there! I am Vox, your AI research and discovery copilot. How can I help you navigate the world of AI today?' }
 ];
 
 interface ChatWidgetProps {
@@ -279,41 +300,24 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
     }
   };
 
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === "amoled";
-  const border = isDark ? 'border-white/7' : 'border-black/8';
-  const textPrimary = isDark ? 'text-white' : 'text-gray-900';
-  const textMuted = isDark ? 'text-white/30' : 'text-gray-400';
-
   if (!isOpen) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className={`group fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex items-center p-2 sm:p-2.5 rounded-full shadow-2xl ${t.btnPrimary}`}
+        className="group fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex items-center p-2.5 sm:p-3 rounded-full shadow-2xl bg-neutral-900 dark:bg-white text-white dark:text-black border border-white/15 dark:border-black/10 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer shadow-black/50"
+        aria-label="Open Vox AI Assistant"
       >
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-6 h-6 sm:w-9 sm:h-9"
-          aria-hidden="true"
-        >
-          <path
-            d="M6.25 4.75h11.5a2.25 2.25 0 0 1 2.25 2.25v6.25a2.25 2.25 0 0 1-2.25 2.25H11.5l-3.75 3.25V15.5H6.25a2.25 2.25 0 0 1-2.25-2.25V7a2.25 2.25 0 0 1 2.25-2.25Z"
-            stroke="currentColor"
-            strokeWidth="1.75"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M12 8.25l.85 1.7 1.9.75-1.9.75-.85 1.7-.85-1.7-1.9-.75 1.9-.75.85-1.7Z"
-            fill="currentColor"
-          />
-        </svg>
+        <div className="relative flex items-center justify-center">
+          <VoxLogo size={20} variant="current" />
+          <span className="absolute -top-1 -right-1 flex h-2 w-2">
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+          </span>
+        </div>
         <div className="grid grid-cols-[0fr] group-hover:grid-cols-[1fr] opacity-0 group-hover:opacity-100 transition-all duration-300">
           <div className="overflow-hidden whitespace-nowrap">
-            <span className="pl-2 pr-1 font-medium text-[13px] sm:text-[15px] block">Ask Vox</span>
+            <span className="pl-2.5 pr-1.5 font-bold text-[13px] sm:text-[14px] tracking-wide block">
+              Ask Vox
+            </span>
           </div>
         </div>
       </button>
@@ -323,72 +327,86 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
   return (
     <div
       ref={widgetRef}
-      className={`fixed z-50 flex flex-col shadow-2xl transition-all duration-300 ease-in-out overflow-hidden ${t.modal} ${
+      className={`fixed z-50 flex flex-col shadow-2xl transition-all duration-300 ease-in-out overflow-hidden border ${t.border} backdrop-blur-xl ${t.modal} ${
         isMaximized
           ? 'bottom-4 right-4 left-4 top-4 rounded-2xl md:left-auto md:w-175'
           : 'bottom-6 right-6 w-95 h-137.5 rounded-2xl sm:w-105 sm:h-150'
       }`}
     >
-      <div className={`flex items-center justify-between px-4 py-3 border-b ${t.border}`}>
-        <div className="flex items-center gap-2">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${isDark ? 'bg-white text-black' : 'bg-black text-white'}`}>
-            <VoxLogo size={18} variant="current" />
+      {/* ── Sleek Minimalist Header ── */}
+      <div className={`flex items-center justify-between px-4 py-3.5 border-b ${t.border} bg-white/[0.02]`}>
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 bg-neutral-800 dark:bg-white text-white dark:text-black border border-white/10">
+              <VoxLogo size={18} variant="current" />
+            </div>
+            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-neutral-900" title="Online" />
           </div>
           <div>
-            <h3 className={`font-semibold text-sm ${textPrimary}`}>Vox</h3>
-            <p className={`text-[10px] ${textMuted}`}>Powered by Groq</p>
+            <div className="flex items-center gap-2">
+              <h3 className={`font-bold text-sm tracking-tight ${t.textPrimary}`}>
+                Vox
+              </h3>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white/5 border border-white/10 text-neutral-400">
+                Groq LPU
+              </span>
+            </div>
+            <p className={`text-[11px] ${t.textMuted}`}>
+              AI Discovery & Research Assistant
+            </p>
           </div>
         </div>
-        <div className={`flex items-center gap-1 ${isDark ? 'text-white/55' : 'text-gray-400'}`}>
+        <div className={`flex items-center gap-1 ${t.textMuted}`}>
           <button
             onClick={clearChat}
-            className="p-1.5 rounded hover:bg-red-500/10 hover:text-red-400 transition-colors"
-            title="Restart chat"
+            className="p-1.5 rounded-lg hover:bg-white/5 hover:text-white transition-colors cursor-pointer"
+            title="Restart conversation"
           >
             <RotateCcw size={14} />
           </button>
           <button
             onClick={() => setIsMaximized(!isMaximized)}
-            className={`p-1.5 rounded transition-colors ${isDark ? 'hover:bg-white/4' : 'hover:bg-black/5'}`}
+            className="p-1.5 rounded-lg hover:bg-white/5 hover:text-white transition-colors cursor-pointer"
+            title={isMaximized ? "Restore window" : "Maximize window"}
           >
-            {isMaximized ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+            {isMaximized ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
           </button>
           <button
             onClick={() => setIsOpen(false)}
-            className={`p-1.5 rounded transition-colors ${isDark ? 'hover:bg-white/4' : 'hover:bg-black/5'}`}
+            className="p-1.5 rounded-lg hover:bg-white/5 hover:text-white transition-colors cursor-pointer"
+            title="Close Vox"
           >
-            <X size={18} />
+            <X size={17} />
           </button>
         </div>
       </div>
 
-      {/* ── Messages ── */}
+      {/* ── Messages Stream ── */}
       <div className="flex-1 overflow-y-auto overscroll-contain no-scrollbar p-4 flex flex-col gap-4 text-sm">
         {messages.map((msg, idx) =>
           msg.role !== 'system' && (
-            <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start items-start gap-2.5'}`}>
+              {msg.role !== 'user' && (
+                <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 bg-neutral-800 dark:bg-white text-white dark:text-black mt-0.5 border border-white/10">
+                  <VoxLogo size={14} variant="current" />
+                </div>
+              )}
               <div
-                className={`group relative max-w-[85%] rounded-2xl px-4 py-2 text-[13px] leading-relaxed ${
+                className={`group relative max-w-[85%] rounded-2xl px-4 py-2.5 text-[13px] leading-relaxed ${
                   msg.role === 'user'
-                    ? isDark
-                      ? 'bg-white/10 border border-white/20 text-white font-medium rounded-br-sm'
-                      : 'bg-black/5 text-black border border-black/10 font-medium rounded-br-sm'
+                    ? 'bg-neutral-800 dark:bg-white/15 text-white font-medium border border-white/15 rounded-br-xs'
                     : msg.role === 'error'
-                    ? isDark
-                      ? 'border border-rose-500/40 bg-rose-950/20 text-rose-300 rounded-bl-sm'
-                      : 'border border-rose-200 bg-rose-50 text-rose-600 rounded-bl-sm'
-                    : isDark
-                      ? `hover:bg-white/4 ${textPrimary} border ${border} rounded-bl-sm`
-                      : `hover:bg-black/2 ${textPrimary} border ${border} rounded-bl-sm`
+                    ? 'border border-red-500/30 bg-red-950/20 text-red-300 rounded-tl-xs'
+                    : `${t.surface} ${t.border} ${t.textPrimary} rounded-tl-xs`
                 }`}
               >
                 {msg.role === 'user' ? (
                   <div>{msg.content}</div>
                 ) : msg.role === 'error' ? (
                   <div className="flex items-start gap-2">
-                    <AlertCircle size={14} className="mt-0.5 shrink-0" />
+                    <AlertCircle size={14} className="mt-0.5 shrink-0 text-red-400" />
                     <div>
-                      <p className="font-bold text-[11px] uppercase tracking-wide mb-0.5 opacity-80">Error</p>
+                      <p className="font-bold text-[11px] uppercase tracking-wide mb-0.5 text-red-400">Error</p>
                       <p className="leading-snug">{msg.content}</p>
                     </div>
                   </div>
@@ -404,10 +422,10 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
                   <div className="mt-2 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
                       onClick={() => handleCopy(msg.content, idx)}
-                      className={`p-1 rounded transition-colors ${textMuted} hover:${textPrimary}`}
+                      className={`p-1 rounded transition-colors ${t.textMuted} hover:${t.textPrimary} cursor-pointer`}
                       title="Copy response"
                     >
-                      {copiedIndex === idx ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} />}
+                      {copiedIndex === idx ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
                     </button>
                   </div>
                 )}
@@ -416,12 +434,19 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
           )
         )}
 
+        {/* ── Typing Indicator ── */}
         {isLoading && (
-          <div className="flex justify-start">
-            <div className={`px-4 py-3 rounded-2xl rounded-bl-sm border ${border} ${isDark ? 'bg-white/3' : 'bg-black/2'} flex items-center gap-1.5 ${isDark ? 'text-white/40' : 'text-gray-400'}`}>
-              <div className="w-1.5 h-1.5 rounded-full bg-current animate-typing-dot [animation-delay:-0.32s]" />
-              <div className="w-1.5 h-1.5 rounded-full bg-current animate-typing-dot [animation-delay:-0.16s]" />
-              <div className="w-1.5 h-1.5 rounded-full bg-current animate-typing-dot" />
+          <div className="flex justify-start items-start gap-2.5">
+            <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 bg-neutral-800 dark:bg-white text-white dark:text-black mt-0.5 border border-white/10 animate-pulse">
+              <VoxLogo size={14} variant="current" />
+            </div>
+            <div className={`px-4 py-2.5 rounded-2xl rounded-tl-xs border ${t.border} ${t.surface} flex items-center gap-2`}>
+              <div className="flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-typing-dot [animation-delay:-0.32s]" />
+                <div className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-typing-dot [animation-delay:-0.16s]" />
+                <div className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-typing-dot" />
+              </div>
+              <span className={`text-[11px] font-medium ${t.textMuted}`}>Vox is thinking...</span>
             </div>
           </div>
         )}
@@ -431,15 +456,15 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
 
       {/* ── Suggestions ── */}
       {!isLoading && messages.length > 0 && (
-        <div className={`shrink-0 px-4 pb-3 pt-3 border-t ${t.border} bg-transparent`}>
+        <div className={`shrink-0 px-4 pb-3 pt-3 border-t ${t.border} bg-white/[0.01]`}>
           <div className="flex items-center justify-between mb-2">
-            <p className={`text-xs font-medium ${textMuted}`}>Suggested questions:</p>
+            <p className={`text-xs font-medium ${t.textMuted}`}>Suggested questions:</p>
             <button
               onClick={refreshSuggestions}
-              className={`flex items-center gap-1 text-[10px] uppercase tracking-wider ${textMuted} hover:${textPrimary} transition-colors`}
+              className={`flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider ${t.textMuted} hover:${t.textPrimary} transition-colors cursor-pointer`}
               title="Refresh suggestions"
             >
-              <RefreshCw size={12} />
+              <RefreshCw size={11} />
               Refresh
             </button>
           </div>
@@ -448,11 +473,7 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
               <button
                 key={idx}
                 onClick={() => handleSuggestionClick(prompt, idx)}
-                className={`whitespace-nowrap shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium border ${border} transition-colors shadow-sm active:scale-95 ${
-                  isDark
-                    ? 'text-white/30 hover:bg-white/4 hover:text-white hover:border-white/30'
-                    : 'text-gray-400 hover:bg-black/5 hover:text-black hover:border-black/30'
-                }`}
+                className={`whitespace-nowrap shrink-0 px-3 py-1.5 rounded-xl text-xs font-medium border ${t.border} ${t.surface} ${t.textSecondary} hover:${t.textPrimary} hover:border-white/25 transition-all active:scale-95 cursor-pointer`}
               >
                 {prompt}
               </button>
@@ -461,28 +482,29 @@ export const ChatWidget: React.FC<ChatWidgetProps> = ({
         </div>
       )}
 
-      {/* ── Input ── */}
-      <div className={`shrink-0 p-3 border-t ${t.border}`}>
-        <div className={`flex items-center gap-2 rounded-full border px-4 py-2 ${t.surface} ${t.border} focus-within:border-white/20 transition-colors`}>
+      {/* ── Input Bar ── */}
+      <div className={`shrink-0 p-3 border-t ${t.border} bg-white/[0.01]`}>
+        <div className={`flex items-center gap-2 rounded-2xl border ${t.border} px-4 py-2 ${t.surface} focus-within:border-white/30 transition-all`}>
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask about AI models..."
-            className={`flex-1 bg-transparent outline-none text-sm ${textPrimary} ${isDark ? 'placeholder:text-white/30' : 'placeholder:text-gray-400'}`}
+            placeholder="Ask Vox about AI models, architectures, benchmarks..."
+            className={`flex-1 bg-transparent outline-none text-[13px] ${t.textPrimary} placeholder:text-neutral-500 font-medium`}
             disabled={isLoading}
           />
           <button
             onClick={() => handleSend()}
             disabled={!input.trim() || isLoading}
-            className={`p-1.5 rounded-full transition-colors ${
+            className={`p-2 rounded-xl transition-all flex items-center justify-center cursor-pointer ${
               input.trim() && !isLoading
-                ? `${textPrimary} hover:opacity-80`
-                : textMuted
+                ? "bg-white text-black hover:bg-neutral-200 shadow-sm"
+                : "text-neutral-600 opacity-40 cursor-not-allowed"
             }`}
+            title="Send prompt"
           >
-            <Send size={16} />
+            <Send size={15} />
           </button>
         </div>
       </div>
