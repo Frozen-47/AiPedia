@@ -671,7 +671,6 @@ const Inner: React.FC = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-    window.scrollTo({ top: 0 });
   }, [typeFilter, taskFilter, popularOnly, debouncedSearch, savedOnly]);
 
   // ⌘K shortcut
