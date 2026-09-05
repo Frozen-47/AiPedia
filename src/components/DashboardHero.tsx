@@ -1,5 +1,19 @@
 import React from "react";
-import { Search, Command } from "lucide-react";
+import { 
+  Search, 
+  Command, 
+  Globe, 
+  Cpu, 
+  Zap, 
+  Database, 
+  Cloud, 
+  Sparkles,
+  MessageSquare,
+  Eye,
+  Layers,
+  Code2,
+  Volume2
+} from "lucide-react";
 import { useTokens, useTheme } from "../lib/theme";
 
 interface DashboardHeroProps {
@@ -14,21 +28,21 @@ interface DashboardHeroProps {
 }
 
 const CATEGORY_CHIPS = [
-  { id: "All", label: "All Assets", icon: "🌐" },
-  { id: "Model", label: "Models & LLMs", icon: "🧠" },
-  { id: "Framework", label: "Frameworks", icon: "⚡" },
-  { id: "Dataset", label: "Datasets", icon: "📊" },
-  { id: "Platform", label: "Platforms", icon: "☁️" },
-  { id: "AI", label: "AI Applications", icon: "✨" },
+  { id: "All", label: "All Assets", icon: Globe, color: "text-neutral-300", activeBg: "bg-white text-black border-white" },
+  { id: "Model", label: "Models & LLMs", icon: Cpu, color: "text-purple-400", activeBg: "bg-purple-500 text-white border-purple-400" },
+  { id: "Framework", label: "Frameworks", icon: Zap, color: "text-amber-400", activeBg: "bg-amber-500 text-black border-amber-400" },
+  { id: "Dataset", label: "Datasets", icon: Database, color: "text-emerald-400", activeBg: "bg-emerald-500 text-black border-emerald-400" },
+  { id: "Platform", label: "Platforms", icon: Cloud, color: "text-sky-400", activeBg: "bg-sky-500 text-black border-sky-400" },
+  { id: "AI", label: "AI Applications", icon: Sparkles, color: "text-rose-400", activeBg: "bg-rose-500 text-white border-rose-400" },
 ];
 
 const TASK_CHIPS = [
-  { id: "All Tasks", label: "All Tasks" },
-  { id: "NLP", label: "NLP & Reasoning" },
-  { id: "Computer Vision", label: "Vision & Imaging" },
-  { id: "Multimodal", label: "Multimodal" },
-  { id: "AI Coding", label: "Coding & Dev" },
-  { id: "Audio", label: "Audio & Speech" },
+  { id: "All Tasks", label: "All Tasks", icon: Sparkles },
+  { id: "NLP", label: "NLP & Reasoning", icon: MessageSquare },
+  { id: "Computer Vision", label: "Vision & Imaging", icon: Eye },
+  { id: "Multimodal", label: "Multimodal", icon: Layers },
+  { id: "AI Coding", label: "Coding & Dev", icon: Code2 },
+  { id: "Audio", label: "Audio & Speech", icon: Volume2 },
 ];
 
 export const DashboardHero: React.FC<DashboardHeroProps> = ({
@@ -116,6 +130,7 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
           <div className="flex flex-wrap items-center justify-center gap-2">
             {CATEGORY_CHIPS.map((chip) => {
               const isActive = activeType === chip.id;
+              const Icon = chip.icon;
               return (
                 <button
                   key={chip.id}
@@ -123,13 +138,13 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
                     onSelectType(chip.id);
                     onScrollToCatalog();
                   }}
-                  className={`px-3.5 py-1.5 rounded-xl text-[12px] font-bold transition-all duration-200 flex items-center gap-1.5 cursor-pointer border ${
+                  className={`px-3.5 py-1.5 rounded-xl text-[12px] font-bold transition-all duration-200 flex items-center gap-2 cursor-pointer border ${
                     isActive
-                      ? "bg-white text-black border-white shadow-md shadow-white/5 scale-105"
+                      ? `${chip.activeBg} shadow-md scale-105`
                       : `${t.card} ${t.textSecondary} hover:${t.textPrimary} hover:border-white/30`
                   }`}
                 >
-                  <span>{chip.icon}</span>
+                  <Icon size={13} className={`shrink-0 ${isActive ? "" : chip.color}`} />
                   <span>{chip.label}</span>
                 </button>
               );
@@ -140,6 +155,7 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
           <div className="flex flex-wrap items-center justify-center gap-1.5 mt-1">
             {TASK_CHIPS.map((task) => {
               const isActive = activeTask === task.id;
+              const Icon = task.icon;
               return (
                 <button
                   key={task.id}
@@ -147,13 +163,14 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
                     onSelectTask(task.id);
                     onScrollToCatalog();
                   }}
-                  className={`px-3 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
+                  className={`px-3 py-1 rounded-lg text-[11px] font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
                     isActive
                       ? "bg-white/15 text-white border border-white/25 font-bold"
                       : `text-neutral-400 hover:text-white`
                   }`}
                 >
-                  {task.label}
+                  <Icon size={11} className="shrink-0" />
+                  <span>{task.label}</span>
                 </button>
               );
             })}

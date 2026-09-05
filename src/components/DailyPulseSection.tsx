@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Sparkles, Flame, FileText, ExternalLink, ArrowRight, Cpu, Layers } from "lucide-react";
+import { Sparkles, Flame, FileText, ExternalLink, ArrowRight, Cpu, Layers, Heart, Download, ThumbsUp } from "lucide-react";
 import { useTokens } from "../lib/theme";
 import type { Entry } from "../types";
 
@@ -237,8 +237,14 @@ export const DailyPulseSection: React.FC<DailyPulseSectionProps> = ({ onSelectEn
                 </div>
                 <div className={`mt-4 pt-3 border-t border-slate-200 dark:border-white/5 flex items-center justify-between text-[11px] ${t.textMuted}`}>
                   <div className="flex items-center gap-3 text-white/70">
-                    <span>❤️ {m.likes.toLocaleString()}</span>
-                    <span>📥 {m.downloads.toLocaleString()}</span>
+                    <span className="flex items-center gap-1">
+                      <Heart size={11} className="fill-current text-white/70" />
+                      {m.likes.toLocaleString()}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Download size={11} className="text-white/70" />
+                      {m.downloads.toLocaleString()}
+                    </span>
                   </div>
                   <span className="flex items-center gap-1 text-white font-extrabold group-hover:translate-x-0.5 transition-transform">
                     HF <ExternalLink size={11} />
@@ -272,7 +278,7 @@ export const DailyPulseSection: React.FC<DailyPulseSectionProps> = ({ onSelectEn
                       Research Paper
                     </span>
                     <span className="text-[11px] font-bold text-white/90 flex items-center gap-1">
-                      👍 {p.upvotes}
+                      <ThumbsUp size={11} className="text-white/80" /> {p.upvotes}
                     </span>
                   </div>
                   <h4 className={`text-sm font-bold mb-2 group-hover:text-white transition-colors ${t.textPrimary} line-clamp-2`}>

@@ -142,8 +142,9 @@ export const PrivacyPolicy: React.FC<PrivacyPolicyProps> = ({ onBackToHome }) =>
 
         {/* Right Column: Complete Immersive content */}
         <div className={`flex-1 min-w-0 border rounded-3xl p-6 sm:p-10 backdrop-blur-xl ${t.surface} ${t.border} shadow-2xl space-y-12`}>
-          <div className={`p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 text-amber-500 leading-normal text-[12px] font-semibold`}>
-            🛡️ Your builder metrics, search queries, and selected onboarding interests are always hosted securely. We will never monetize your contribution indexes.
+          <div className={`p-4 rounded-xl border leading-normal text-[12px] font-semibold flex items-center gap-2.5 ${isDark ? "border-white/10 bg-white/5 text-white" : "border-black/10 bg-black/5 text-neutral-900"}`}>
+            <Shield size={16} className="shrink-0" />
+            <span>Your builder metrics, search queries, and selected onboarding interests are always hosted securely. We will never monetize your contribution indexes.</span>
           </div>
 
           {/* Intro Section */}

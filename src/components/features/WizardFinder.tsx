@@ -1,5 +1,28 @@
 import React from "react";
-import { ArrowLeft, ArrowRight, HelpCircle, RefreshCw, Lock, Check, Bookmark, Sparkles, GitCompare } from "lucide-react";
+import { 
+  ArrowLeft, 
+  ArrowRight, 
+  HelpCircle, 
+  RefreshCw, 
+  Lock, 
+  Check, 
+  Bookmark, 
+  Sparkles, 
+  GitCompare,
+  Globe,
+  Cpu,
+  Zap,
+  Palette,
+  Target,
+  Bot,
+  Code2,
+  Database,
+  Cloud,
+  Sliders,
+  ShieldCheck,
+  Unlock,
+  FileText
+} from "lucide-react";
 import { useTokens, useTheme } from "../../lib/theme";
 import type { Entry } from "../../types";
 import { useAuth } from "../AuthContext";
@@ -268,28 +291,33 @@ export const WizardFinder: React.FC<WizardFinderProps> = ({
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
               {[
-                { key: "web",      icon: "🌐", title: "Build Web Apps",           desc: "Chat clients, vector searches, runtime engines." },
-                { key: "train",    icon: "🧠", title: "Model Tuning",             desc: "Fine-tune foundational weights, optimize params." },
-                { key: "scale",    icon: "⚡", title: "Scale API Serving",         desc: "GPU inference runtimes, scaling benchmarks." },
-                { key: "creative", icon: "🎨", title: "Creative Media",           desc: "Image/video synthesis, audio generation." },
-                { key: "other",    icon: "🎯", title: "Other Goal",               desc: "Enter a custom objective or keyword search." },
-              ].map((opt) => (
-                <button
-                  key={opt.key}
-                  onClick={() => { 
-                    setWizardGoal(opt.key); 
-                    if (opt.key !== "other") {
-                      setWizardCustomGoal("");
-                      setWizardStep(2);
-                    }
-                  }}
-                  className={wizardGoal === opt.key ? cardSelected : cardBase}
-                >
-                  <span className="text-2xl mb-2.5 block">{opt.icon}</span>
-                  <h5 className="font-bold text-[13px] mb-1 transition-colors">{opt.title}</h5>
-                  <p className={`text-[11px] leading-normal font-light ${t.textMuted}`}>{opt.desc}</p>
-                </button>
-              ))}
+                { key: "web",      icon: Globe, title: "Build Web Apps",           desc: "Chat clients, vector searches, runtime engines." },
+                { key: "train",    icon: Cpu, title: "Model Tuning",             desc: "Fine-tune foundational weights, optimize params." },
+                { key: "scale",    icon: Zap, title: "Scale API Serving",         desc: "GPU inference runtimes, scaling benchmarks." },
+                { key: "creative", icon: Palette, title: "Creative Media",           desc: "Image/video synthesis, audio generation." },
+                { key: "other",    icon: Target, title: "Other Goal",               desc: "Enter a custom objective or keyword search." },
+              ].map((opt) => {
+                const Icon = opt.icon;
+                return (
+                  <button
+                    key={opt.key}
+                    onClick={() => { 
+                      setWizardGoal(opt.key); 
+                      if (opt.key !== "other") {
+                        setWizardCustomGoal("");
+                        setWizardStep(2);
+                      }
+                    }}
+                    className={wizardGoal === opt.key ? cardSelected : cardBase}
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center mb-3">
+                      <Icon size={18} className="text-white" />
+                    </div>
+                    <h5 className="font-bold text-[13px] mb-1 transition-colors">{opt.title}</h5>
+                    <p className={`text-[11px] leading-normal font-light ${t.textMuted}`}>{opt.desc}</p>
+                  </button>
+                );
+              })}
             </div>
 
             {wizardGoal === "other" && (
@@ -339,23 +367,28 @@ export const WizardFinder: React.FC<WizardFinderProps> = ({
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
-                { key: "AI",        icon: "🤖", title: "AI Assistants & Agents",     desc: "Chatbots, coding copilots, and client application layers." },
-                { key: "Model",     icon: "🔮", title: "Neural Weights & Models",     desc: "Raw base weights, foundational LLMs, and checkpoints." },
-                { key: "Framework", icon: "⚙️", title: "ML Frameworks & Libraries",  desc: "Developer toolkits, ML pipelines, and local SDKs." },
-                { key: "Dataset",   icon: "📊", title: "Curated Datasets",           desc: "Training corpora, academic datasets, and eval suites." },
-                { key: "Platform",  icon: "☁️", title: "Platforms & GPU Runtimes",    desc: "Inference scaling engines, serverless hosting and MLOps." },
-                { key: "other",     icon: "🎛️", title: "Other / Any Layer",          desc: "Search across all categories without restricting to one." },
-              ].map((opt) => (
-                <button
-                  key={opt.key}
-                  onClick={() => { setWizardType(opt.key); setWizardStep(3); }}
-                  className={wizardType === opt.key ? cardSelected : cardBase}
-                >
-                  <span className="text-2xl mb-2.5 block">{opt.icon}</span>
-                  <h5 className={`font-bold text-[13px] mb-1 transition-colors ${t.textPrimary}`}>{opt.title}</h5>
-                  <p className={`text-[11px] leading-normal font-light ${t.textMuted}`}>{opt.desc}</p>
-                </button>
-              ))}
+                { key: "AI",        icon: Bot, title: "AI Assistants & Agents",     desc: "Chatbots, coding copilots, and client application layers." },
+                { key: "Model",     icon: Cpu, title: "Neural Weights & Models",     desc: "Raw base weights, foundational LLMs, and checkpoints." },
+                { key: "Framework", icon: Code2, title: "ML Frameworks & Libraries",  desc: "Developer toolkits, ML pipelines, and local SDKs." },
+                { key: "Dataset",   icon: Database, title: "Curated Datasets",           desc: "Training corpora, academic datasets, and eval suites." },
+                { key: "Platform",  icon: Cloud, title: "Platforms & GPU Runtimes",    desc: "Inference scaling engines, serverless hosting and MLOps." },
+                { key: "other",     icon: Sliders, title: "Other / Any Layer",          desc: "Search across all categories without restricting to one." },
+              ].map((opt) => {
+                const Icon = opt.icon;
+                return (
+                  <button
+                    key={opt.key}
+                    onClick={() => { setWizardType(opt.key); setWizardStep(3); }}
+                    className={wizardType === opt.key ? cardSelected : cardBase}
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center mb-3">
+                      <Icon size={18} className="text-white" />
+                    </div>
+                    <h5 className={`font-bold text-[13px] mb-1 transition-colors ${t.textPrimary}`}>{opt.title}</h5>
+                    <p className={`text-[11px] leading-normal font-light ${t.textMuted}`}>{opt.desc}</p>
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
@@ -374,26 +407,31 @@ export const WizardFinder: React.FC<WizardFinderProps> = ({
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {[
-                { key: "permissive", icon: "🛡️", title: "Permissive Open-Source Only", desc: "MIT, Apache 2.0, or BSD licenses that are low-risk for commercial codebases." },
-                { key: "any",        icon: "🔓", title: "Any License / Proprietary API", desc: "No restrictions. Allows commercial usage clauses, SaaS developer APIs, or closed source weights." },
-                { key: "other",      icon: "📝", title: "Other / Custom Policy",         desc: "Specify exact license keywords (e.g. GPL, proprietary) to query." },
-              ].map((opt) => (
-                <button
-                  key={opt.key}
-                  onClick={() => { 
-                    setWizardLicense(opt.key); 
-                    if (opt.key !== "other") {
-                      setWizardCustomLicense("");
-                      setWizardStep(4);
-                    }
-                  }}
-                  className={wizardLicense === opt.key ? cardSelected : cardBase}
-                >
-                  <span className="text-2xl mb-2.5 block">{opt.icon}</span>
-                  <h5 className={`font-bold text-[13px] mb-1 transition-colors ${t.textPrimary}`}>{opt.title}</h5>
-                  <p className={`text-[11px] leading-normal font-light ${t.textMuted}`}>{opt.desc}</p>
-                </button>
-              ))}
+                { key: "permissive", icon: ShieldCheck, title: "Permissive Open-Source Only", desc: "MIT, Apache 2.0, or BSD licenses that are low-risk for commercial codebases." },
+                { key: "any",        icon: Unlock, title: "Any License / Proprietary API", desc: "No restrictions. Allows commercial usage clauses, SaaS developer APIs, or closed source weights." },
+                { key: "other",      icon: FileText, title: "Other / Custom Policy",         desc: "Specify exact license keywords (e.g. GPL, proprietary) to query." },
+              ].map((opt) => {
+                const Icon = opt.icon;
+                return (
+                  <button
+                    key={opt.key}
+                    onClick={() => { 
+                      setWizardLicense(opt.key); 
+                      if (opt.key !== "other") {
+                        setWizardCustomLicense("");
+                        setWizardStep(4);
+                      }
+                    }}
+                    className={wizardLicense === opt.key ? cardSelected : cardBase}
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center mb-3">
+                      <Icon size={18} className="text-white" />
+                    </div>
+                    <h5 className={`font-bold text-[13px] mb-1 transition-colors ${t.textPrimary}`}>{opt.title}</h5>
+                    <p className={`text-[11px] leading-normal font-light ${t.textMuted}`}>{opt.desc}</p>
+                  </button>
+                );
+              })}
             </div>
 
             {wizardLicense === "other" && (

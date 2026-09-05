@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useTokens, useTheme } from "../../lib/theme";
 import type { Entry, EntryRatingSummary } from "../../types";
 import { useAuth } from "../AuthContext";
-import { Lock, ArrowLeftRight, ChevronDown, Star, Bookmark, Shield, AlertTriangle, Check } from "lucide-react";
+import { Lock, ArrowLeftRight, ChevronDown, Star, Bookmark, Shield, AlertTriangle, Check, Bot, Cpu, Zap, Database, Cloud } from "lucide-react";
 
 interface CompareArenaProps {
   entries: Entry[];
@@ -42,9 +42,9 @@ export const CompareArena: React.FC<CompareArenaProps> = ({
   const entryB = entries.find((e) => e.name === compareToolB) || entries[1] || entries[0];
 
   const presets = [
-    { label: "GPT-4o ⚔️ Claude 3.5", a: "GPT-4o", b: "Claude 3.5 Sonnet" },
-    { label: "Llama 3 ⚔️ Mistral 7B", a: "Llama 3 (70B)", b: "Mistral 7B" },
-    { label: "PyTorch ⚔️ TensorFlow", a: "PyTorch", b: "TensorFlow" },
+    { label: "GPT-4o vs Claude 3.5", a: "GPT-4o", b: "Claude 3.5 Sonnet" },
+    { label: "Llama 3 vs Mistral 7B", a: "Llama 3 (70B)", b: "Mistral 7B" },
+    { label: "PyTorch vs TensorFlow", a: "PyTorch", b: "TensorFlow" },
   ];
 
   const ratingA = ratingSummaries[entryA.name]?.average || 0;
@@ -70,6 +70,16 @@ export const CompareArena: React.FC<CompareArenaProps> = ({
         ))}
       </div>
     );
+  };
+
+  const renderTypeIcon = (type: string) => {
+    switch (type) {
+      case "AI": return <Bot size={20} className="text-white" />;
+      case "Model": return <Cpu size={20} className="text-white" />;
+      case "Framework": return <Zap size={20} className="text-white" />;
+      case "Dataset": return <Database size={20} className="text-white" />;
+      default: return <Cloud size={20} className="text-white" />;
+    }
   };
 
   return (
@@ -265,9 +275,9 @@ export const CompareArena: React.FC<CompareArenaProps> = ({
             {/* Card A */}
             <div className={`p-5 rounded-2xl border flex items-center justify-between gap-4 transition-all hover:shadow-md ${t.card}`}>
               <div className="flex items-center gap-3">
-                <span className="text-3xl shrink-0 p-2.5 rounded-xl bg-slate-500/5 select-none">
-                  {entryA.type === "AI" ? "🤖" : entryA.type === "Model" ? "🔮" : entryA.type === "Framework" ? "⚙️" : entryA.type === "Dataset" ? "📊" : "☁️"}
-                </span>
+                <div className="w-11 h-11 shrink-0 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center">
+                  {renderTypeIcon(entryA.type)}
+                </div>
                 <div>
                   <h4 className={`text-base font-bold flex items-center gap-1.5 ${t.textPrimary}`}>
                     {entryA.name}
@@ -294,9 +304,9 @@ export const CompareArena: React.FC<CompareArenaProps> = ({
             {/* Card B */}
             <div className={`p-5 rounded-2xl border flex items-center justify-between gap-4 transition-all hover:shadow-md ${t.card}`}>
               <div className="flex items-center gap-3">
-                <span className="text-3xl shrink-0 p-2.5 rounded-xl bg-slate-500/5 select-none">
-                  {entryB.type === "AI" ? "🤖" : entryB.type === "Model" ? "🔮" : entryB.type === "Framework" ? "⚙️" : entryB.type === "Dataset" ? "📊" : "☁️"}
-                </span>
+                <div className="w-11 h-11 shrink-0 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center">
+                  {renderTypeIcon(entryB.type)}
+                </div>
                 <div>
                   <h4 className={`text-base font-bold flex items-center gap-1.5 ${t.textPrimary}`}>
                     {entryB.name}

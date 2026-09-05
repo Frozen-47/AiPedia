@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { X, Star, ExternalLink, Copy, Check, Lock, Link2, Bookmark, ChevronDown } from "lucide-react";
+import { X, Star, ExternalLink, Copy, Check, Lock, Link2, Bookmark, ChevronDown, AlertTriangle } from "lucide-react";
 import { shareUrlForEntry } from "../lib/entryUrl";
 import { useAuth } from "./AuthContext";
 import { useTokens, useTheme, typeBadge, taskBadge, TYPE_GLYPH, typeIcon } from "../lib/theme";
@@ -250,7 +250,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
             <button
               onClick={onToggleBookmark}
               title={isBookmarked ? "Remove bookmark" : "Bookmark"}
-              className={`w-8 h-8 flex items-center justify-center rounded-full border transition-all ${t.surface} ${t.border} ${isBookmarked ? "text-white border-white/30 bg-white/10" : t.textMuted}`}
+              className={`w-8 h-8 flex items-center justify-center rounded-full border transition-all ${t.surface} ${t.border} ${isBookmarked ? "text-amber-400 border-amber-500/30 bg-amber-500/10" : t.textMuted}`}
             >
               <Bookmark size={13} className={isBookmarked ? "fill-current" : ""} />
             </button>
@@ -273,7 +273,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
               <div className="flex items-center gap-2 flex-wrap mb-1">
                 <h2 className={`text-xl font-black tracking-tight ${t.textPrimary}`}>{entry.name}</h2>
                 {isNew && (
-                  <span className="inline-flex items-center text-[9px] font-black uppercase px-2 py-0.5 rounded bg-white/15 text-white border border-white/25 animate-pulse">
+                  <span className="inline-flex items-center text-[9px] font-black uppercase px-2 py-0.5 rounded bg-purple-500/15 text-purple-400 border border-purple-500/25 animate-pulse">
                     NEW
                   </span>
                 )}
@@ -434,8 +434,9 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                   <p className={t.sectionLabel}>Limitations</p>
                   <div className="flex flex-wrap gap-2">
                     {entry.limitations.split(",").map((l, i) => (
-                      <span key={i} className={`text-[11px] px-3 py-1 rounded-xl border ${t.limitTag}`}>
-                        ⚠ {l.trim()}
+                      <span key={i} className={`text-[11px] px-3 py-1 rounded-xl border flex items-center gap-1.5 ${t.limitTag}`}>
+                        <AlertTriangle size={11} className="shrink-0 text-red-400" />
+                        <span>{l.trim()}</span>
                       </span>
                     ))}
                   </div>
@@ -475,7 +476,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                             <div className="flex items-center justify-between gap-2">
                               <p className={`text-[13px] font-semibold truncate ${t.textPrimary}`}>{related.name}</p>
                               {isRelatedNew && (
-                                <span className="inline-flex items-center text-[7.5px] font-black uppercase px-1.5 py-0.5 rounded bg-white/15 text-white border border-white/25 animate-pulse shrink-0">
+                                <span className="inline-flex items-center text-[7.5px] font-black uppercase px-1.5 py-0.5 rounded bg-purple-500/15 text-purple-400 border border-purple-500/25 animate-pulse shrink-0">
                                   NEW
                                 </span>
                               )}

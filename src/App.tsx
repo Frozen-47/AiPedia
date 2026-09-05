@@ -1102,22 +1102,43 @@ const Inner: React.FC = () => {
                   <div className="flex flex-wrap items-center gap-2.5">
                     {/* Category pills */}
                     <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10">
-                      {(["All", "Model", "Framework", "Dataset", "Platform", "AI"] as const).map((type) => (
-                        <button
-                          key={type}
-                          onClick={() => {
-                            setTypeFilter(type);
-                            setCurrentPage(1);
-                          }}
-                          className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
-                            typeFilter === type
-                              ? "bg-white text-black font-extrabold shadow-sm"
-                              : `${t.textSecondary} hover:${t.textPrimary}`
-                          }`}
-                        >
-                          {type === "All" ? "All Types" : type}
-                        </button>
-                      ))}
+                      {(["All", "Model", "Framework", "Dataset", "Platform", "AI"] as const).map((type) => {
+                        const activeStyles: Record<string, string> = {
+                          All: "bg-white text-black font-extrabold shadow-sm",
+                          Model: "bg-purple-500 text-white font-extrabold shadow-sm",
+                          Framework: "bg-amber-500 text-black font-extrabold shadow-sm",
+                          Dataset: "bg-emerald-500 text-black font-extrabold shadow-sm",
+                          Platform: "bg-sky-500 text-black font-extrabold shadow-sm",
+                          AI: "bg-rose-500 text-white font-extrabold shadow-sm",
+                        };
+                        const dots: Record<string, string> = {
+                          Model: "bg-purple-400",
+                          Framework: "bg-amber-400",
+                          Dataset: "bg-emerald-400",
+                          Platform: "bg-sky-400",
+                          AI: "bg-rose-400",
+                        };
+                        const isSelected = typeFilter === type;
+                        return (
+                          <button
+                            key={type}
+                            onClick={() => {
+                              setTypeFilter(type);
+                              setCurrentPage(1);
+                            }}
+                            className={`px-3 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                              isSelected
+                                ? activeStyles[type]
+                                : `${t.textSecondary} hover:${t.textPrimary}`
+                            }`}
+                          >
+                            {dots[type] && !isSelected && (
+                              <span className={`w-1.5 h-1.5 rounded-full ${dots[type]}`} />
+                            )}
+                            <span>{type === "All" ? "All Types" : type}</span>
+                          </button>
+                        );
+                      })}
                     </div>
 
                     {/* Starred toggle */}

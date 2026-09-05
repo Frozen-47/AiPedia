@@ -17,6 +17,7 @@ import {
   Briefcase,
   Globe,
   Edit,
+  User,
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { useTokens, useTheme, typeBadge, taskBadge, typeIcon, TYPE_GLYPH } from "../lib/theme";
@@ -504,7 +505,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <>
               {pendingEntries.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-20 gap-3 text-center border border-dashed rounded-2xl border-neutral-200 dark:border-white/10 bg-neutral-50/50 dark:bg-white/[0.005]">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center text-xl bg-emerald-500/10 text-emerald-500 mb-2">✓</div>
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center bg-white/10 text-white border border-white/15 mb-2">
+                    <Check size={20} />
+                  </div>
                   <p className={`text-sm font-semibold ${t.textPrimary}`}>Submissions inbox is clean</p>
                   <p className={`text-xs max-w-[320px] leading-relaxed font-light ${t.textMuted}`}>
                     All user-submitted frameworks, datasets, models, and platforms have been fully audited and published.
@@ -592,9 +595,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                                 {entry.limitations.split(",").map((l, idx) => (
                                   <span
                                     key={idx}
-                                    className={`text-[9px] font-medium px-2 py-0.5 rounded-lg border ${t.limitTag}`}
+                                    className={`text-[9px] font-medium px-2 py-0.5 rounded-lg border flex items-center gap-1 ${t.limitTag}`}
                                   >
-                                    ⚠ {l.trim()}
+                                    <AlertTriangle size={9} className="shrink-0 text-red-400" />
+                                    <span>{l.trim()}</span>
                                   </span>
                                 ))}
                               </div>
@@ -815,7 +819,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             <>
               {users.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-20 gap-3 text-center border border-dashed rounded-2xl border-neutral-200 dark:border-white/10">
-                  <div className="text-4xl opacity-25 text-neutral-400">👤</div>
+                  <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-neutral-400 mb-1">
+                    <User size={22} />
+                  </div>
                   <p className={`text-sm font-semibold ${t.textPrimary}`}>No registered users</p>
                   <p className={`text-xs max-w-[280px] leading-relaxed ${t.textMuted}`}>
                     No builder profiles have synced metadata to `user_preferences` database tables.

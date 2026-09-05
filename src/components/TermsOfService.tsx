@@ -142,8 +142,9 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
 
         {/* Right Column: Complete Immersive content */}
         <div className={`flex-1 min-w-0 border rounded-3xl p-6 sm:p-10 backdrop-blur-xl ${t.surface} ${t.border} shadow-2xl space-y-12`}>
-          <div className={`p-4 rounded-xl border leading-normal text-[12px] font-semibold ${isDark ? "border-white/10 bg-white/5 text-white" : "border-black/10 bg-black/5 text-neutral-900"}`}>
-            ⚖️ By interacting with the AiVerse catalog, you agree to prioritize data accuracy and respect intellectual property rights across the directory.
+          <div className={`p-4 rounded-xl border leading-normal text-[12px] font-semibold flex items-center gap-2.5 ${isDark ? "border-white/10 bg-white/5 text-white" : "border-black/10 bg-black/5 text-neutral-900"}`}>
+            <Scale size={16} className="shrink-0" />
+            <span>By interacting with the AiVerse catalog, you agree to prioritize data accuracy and respect intellectual property rights across the directory.</span>
           </div>
 
           {/* Acceptance Section */}

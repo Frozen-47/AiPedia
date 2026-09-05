@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from "react";
-import { Star, Layers, Box, Database, Server, LayoutGrid, Bot } from "lucide-react";
+import { Star, Layers, Box, Database, Server, LayoutGrid, Bot, Bookmark } from "lucide-react";
 import { useTokens, taskColor, taskActiveColor, typeActiveColor, typeColorClass } from "../lib/theme";
 import type { Entry, TypeFilter, TaskFilter } from "../types";
 
@@ -156,7 +156,7 @@ export const Sidebar = memo(function Sidebar({
               ${savedOnly ? t.sidebarActive : t.sidebarItem}
             `}
           >
-            <span className="text-sm">★</span>
+            <Bookmark size={14} className="shrink-0" />
             <span className="flex-1 text-left">Saved only</span>
             <span className={`text-[11px] tabular-nums font-semibold ${savedOnly ? "" : t.textMuted}`}>
               {savedCount}
