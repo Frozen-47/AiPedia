@@ -1,24 +1,24 @@
 {
   "date": "2026-09-06",
   "tool": {
-    "name": "Claude 3 Opus",
-    "type": "Model",
-    "summary": "Anthropic's most powerful model for complex analysis, long documents, and nuanced reasoning tasks requiring deep comprehension.",
-    "task": "NLP",
+    "name": "Phind",
+    "type": "AI",
+    "summary": "AI search engine and pair programmer tailored specifically for developers, providing cited code snippets, documentation references, and terminal debugging.",
+    "task": "AI Coding",
     "license": "Proprietary",
-    "year": 2024,
-    "org": "Anthropic",
-    "size": "Unknown",
-    "architecture": "Transformer-based LLM with Constitutional AI and RLHF training.",
-    "usage": "import anthropic\nclient = anthropic.Anthropic()\nmessage = client.messages.create(\n  model=\"claude-3-opus-20240229\",\n  max_tokens=2048,\n  messages=[{\"role\": \"user\", \"content\": \"Analyze this research paper.\"}]\n)",
-    "benchmarks": "MMLU: 86.8%, GPQA: 50.4%",
-    "limitations": "Slower and more expensive than Sonnet, proprietary API.",
+    "year": 2023,
+    "org": "Phind",
+    "size": "N/A",
+    "architecture": "Custom 70B MoE search model paired with live web and documentation scraping index.",
+    "usage": "Visit phind.com and query \"How to configure SSL in NGINX reverse proxy with Certbot in Docker\".",
+    "benchmarks": "High developer satisfaction for complex programming queries and library documentation search.",
+    "limitations": "Focused on technical and developer search queries.",
     "popular": true,
-    "url": "https://www.anthropic.com/claude",
+    "url": "https://www.phind.com",
     "citations": [
       {
-        "text": "Claude 3 Model Card",
-        "url": "https://www.anthropic.com/news/claude-3-family"
+        "text": "Phind",
+        "url": "https://www.phind.com"
       }
     ]
   }

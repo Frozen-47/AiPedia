@@ -1,4 +1,4 @@
--- Seed / Upsert all 238 AiVerse entries into Supabase
+-- Seed / Upsert all 242 AiVerse entries into Supabase
 -- Generated automatically by daily pulse
 
 INSERT INTO entries (name, org, type, task, license, year, size, summary, architecture, usage, benchmarks, limitations, url, citations, popular, approved)
@@ -5025,6 +5025,89 @@ INSERT INTO entries (name, org, type, task, license, year, size, summary, archit
 VALUES ('imdb', 'stanfordnlp', 'Dataset', 'NLP', 'OTHER', 2026, '100K<n<1M', 'Dataset Card for "imdb" 	 	 		 		Dataset Summary 	 Large Movie Review Dataset. This is a dataset for binary sentiment classification containing substantially more data than (698 likes, 189,340 downloads).', 'Parquet / Arrow structured tabular & tokenized dataset.', 'from datasets import load_dataset
 
 dataset = load_dataset("stanfordnlp/imdb")', 'Trending Score: 216, Likes: 698, Downloads: 189,340', 'Subject to licensing compliance and dataset-specific terms of use.', 'https://huggingface.co/datasets/stanfordnlp/imdb', '[{"text":"stanfordnlp/imdb on Hugging Face Datasets","url":"https://huggingface.co/datasets/stanfordnlp/imdb"}]'::jsonb, true, true)
+ON CONFLICT (name) DO UPDATE SET
+  org = EXCLUDED.org,
+  type = EXCLUDED.type,
+  task = EXCLUDED.task,
+  license = EXCLUDED.license,
+  year = EXCLUDED.year,
+  size = EXCLUDED.size,
+  summary = EXCLUDED.summary,
+  architecture = EXCLUDED.architecture,
+  usage = EXCLUDED.usage,
+  benchmarks = EXCLUDED.benchmarks,
+  limitations = EXCLUDED.limitations,
+  url = EXCLUDED.url,
+  citations = EXCLUDED.citations,
+  popular = EXCLUDED.popular,
+  approved = true;
+
+INSERT INTO entries (name, org, type, task, license, year, size, summary, architecture, usage, benchmarks, limitations, url, citations, popular, approved)
+VALUES ('Qwen3.8-27B-GSQ-RCO-GGUF', 'ISTA-DASLab', 'Model', 'Multimodal', 'APACHE-2.0', 2026, '27B params', 'High-performance Multimodal open-weights model by ISTA-DASLab, trending with over 436 community likes and 348,389 downloads on Hugging Face.', 'ISTA-DASLab image text to text architecture with community-tuned weights.', 'from transformers import AutoModelForCausalLM, AutoTokenizer
+
+model = AutoModelForCausalLM.from_pretrained("ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF", device_map="auto")
+tokenizer = AutoTokenizer.from_pretrained("ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF")', 'Trending Score: 363, Likes: 436, Downloads: 348,389', 'Requires GPU VRAM or quantization for efficient local deployment.', 'https://huggingface.co/ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF', '[{"text":"ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF on Hugging Face","url":"https://huggingface.co/ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF"}]'::jsonb, true, true)
+ON CONFLICT (name) DO UPDATE SET
+  org = EXCLUDED.org,
+  type = EXCLUDED.type,
+  task = EXCLUDED.task,
+  license = EXCLUDED.license,
+  year = EXCLUDED.year,
+  size = EXCLUDED.size,
+  summary = EXCLUDED.summary,
+  architecture = EXCLUDED.architecture,
+  usage = EXCLUDED.usage,
+  benchmarks = EXCLUDED.benchmarks,
+  limitations = EXCLUDED.limitations,
+  url = EXCLUDED.url,
+  citations = EXCLUDED.citations,
+  popular = EXCLUDED.popular,
+  approved = true;
+
+INSERT INTO entries (name, org, type, task, license, year, size, summary, architecture, usage, benchmarks, limitations, url, citations, popular, approved)
+VALUES ('QWEN_EDIT_IMAGE', 'kulkas2pintu', 'Platform', 'Multimodal', 'Community Hosted', 2026, 'GRADIO Platform', 'Interactive AI web platform and demonstration hosted on Hugging Face Spaces by kulkas2pintu. Trending with 174 community stars.', 'GRADIO cloud runtime container with interactive browser interface.', 'Launch and explore the platform directly in your browser: https://huggingface.co/spaces/kulkas2pintu/QWEN_EDIT_IMAGE', 'Trending Score: 90, Community Likes: 174', 'Cloud container subject to community traffic quotas and queue times.', 'https://huggingface.co/spaces/kulkas2pintu/QWEN_EDIT_IMAGE', '[{"text":"kulkas2pintu/QWEN_EDIT_IMAGE on Hugging Face Spaces","url":"https://huggingface.co/spaces/kulkas2pintu/QWEN_EDIT_IMAGE"}]'::jsonb, true, true)
+ON CONFLICT (name) DO UPDATE SET
+  org = EXCLUDED.org,
+  type = EXCLUDED.type,
+  task = EXCLUDED.task,
+  license = EXCLUDED.license,
+  year = EXCLUDED.year,
+  size = EXCLUDED.size,
+  summary = EXCLUDED.summary,
+  architecture = EXCLUDED.architecture,
+  usage = EXCLUDED.usage,
+  benchmarks = EXCLUDED.benchmarks,
+  limitations = EXCLUDED.limitations,
+  url = EXCLUDED.url,
+  citations = EXCLUDED.citations,
+  popular = EXCLUDED.popular,
+  approved = true;
+
+INSERT INTO entries (name, org, type, task, license, year, size, summary, architecture, usage, benchmarks, limitations, url, citations, popular, approved)
+VALUES ('SerpentAI', 'SerpentAI', 'Framework', 'Computer Vision', 'MIT', 2026, '4MB Repo', 'Game Agent Framework. Helping you create AIs / Bots that learn to play any game you own!', 'Modular AI codebase with native Python/C++ bindings and distributed workflow support.', 'git clone https://github.com/SerpentAI/SerpentAI
+cd SerpentAI
+pip install -e .', 'GitHub Stars: 6,990, Forks: 798', 'Requires local Python environment and dependency configuration.', 'https://github.com/SerpentAI/SerpentAI', '[{"text":"SerpentAI/SerpentAI on GitHub","url":"https://github.com/SerpentAI/SerpentAI"}]'::jsonb, true, true)
+ON CONFLICT (name) DO UPDATE SET
+  org = EXCLUDED.org,
+  type = EXCLUDED.type,
+  task = EXCLUDED.task,
+  license = EXCLUDED.license,
+  year = EXCLUDED.year,
+  size = EXCLUDED.size,
+  summary = EXCLUDED.summary,
+  architecture = EXCLUDED.architecture,
+  usage = EXCLUDED.usage,
+  benchmarks = EXCLUDED.benchmarks,
+  limitations = EXCLUDED.limitations,
+  url = EXCLUDED.url,
+  citations = EXCLUDED.citations,
+  popular = EXCLUDED.popular,
+  approved = true;
+
+INSERT INTO entries (name, org, type, task, license, year, size, summary, architecture, usage, benchmarks, limitations, url, citations, popular, approved)
+VALUES ('glue', 'nyu-mll', 'Dataset', 'NLP', 'OTHER', 2026, '1M<n<10M', 'Dataset Card for GLUE 	 	 		 	 	 		Dataset Summary 	 GLUE, the General Language Understanding Evaluation benchmark (https://gluebenchmark.com/) is a collection of resou (730 likes, 784,661 downloads).', 'Parquet / Arrow structured tabular & tokenized dataset.', 'from datasets import load_dataset
+
+dataset = load_dataset("nyu-mll/glue")', 'Trending Score: 199, Likes: 730, Downloads: 784,661', 'Subject to licensing compliance and dataset-specific terms of use.', 'https://huggingface.co/datasets/nyu-mll/glue', '[{"text":"nyu-mll/glue on Hugging Face Datasets","url":"https://huggingface.co/datasets/nyu-mll/glue"}]'::jsonb, true, true)
 ON CONFLICT (name) DO UPDATE SET
   org = EXCLUDED.org,
   type = EXCLUDED.type,

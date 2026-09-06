@@ -5272,6 +5272,94 @@ export const entries: Entry[] = [
               "url": "https://huggingface.co/datasets/stanfordnlp/imdb"
           }
       ]
+  },
+  {
+      "name": "Qwen3.8-27B-GSQ-RCO-GGUF",
+      "type": "Model",
+      "summary": "High-performance Multimodal open-weights model by ISTA-DASLab, trending with over 436 community likes and 348,389 downloads on Hugging Face.",
+      "task": "Multimodal",
+      "license": "APACHE-2.0",
+      "year": 2026,
+      "org": "ISTA-DASLab",
+      "size": "27B params",
+      "architecture": "ISTA-DASLab image text to text architecture with community-tuned weights.",
+      "usage": "from transformers import AutoModelForCausalLM, AutoTokenizer\n\nmodel = AutoModelForCausalLM.from_pretrained(\"ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF\", device_map=\"auto\")\ntokenizer = AutoTokenizer.from_pretrained(\"ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF\")",
+      "benchmarks": "Trending Score: 363, Likes: 436, Downloads: 348,389",
+      "limitations": "Requires GPU VRAM or quantization for efficient local deployment.",
+      "popular": true,
+      "url": "https://huggingface.co/ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF",
+      "citations": [
+          {
+              "text": "ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF on Hugging Face",
+              "url": "https://huggingface.co/ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF"
+          }
+      ]
+  },
+  {
+      "name": "QWEN_EDIT_IMAGE",
+      "type": "Platform",
+      "summary": "Interactive AI web platform and demonstration hosted on Hugging Face Spaces by kulkas2pintu. Trending with 174 community stars.",
+      "task": "Multimodal",
+      "license": "Community Hosted",
+      "year": 2026,
+      "org": "kulkas2pintu",
+      "size": "GRADIO Platform",
+      "architecture": "GRADIO cloud runtime container with interactive browser interface.",
+      "usage": "Launch and explore the platform directly in your browser: https://huggingface.co/spaces/kulkas2pintu/QWEN_EDIT_IMAGE",
+      "benchmarks": "Trending Score: 90, Community Likes: 174",
+      "limitations": "Cloud container subject to community traffic quotas and queue times.",
+      "popular": true,
+      "url": "https://huggingface.co/spaces/kulkas2pintu/QWEN_EDIT_IMAGE",
+      "citations": [
+          {
+              "text": "kulkas2pintu/QWEN_EDIT_IMAGE on Hugging Face Spaces",
+              "url": "https://huggingface.co/spaces/kulkas2pintu/QWEN_EDIT_IMAGE"
+          }
+      ]
+  },
+  {
+      "name": "SerpentAI",
+      "type": "Framework",
+      "summary": "Game Agent Framework. Helping you create AIs / Bots that learn to play any game you own!",
+      "task": "Computer Vision",
+      "license": "MIT",
+      "year": 2026,
+      "org": "SerpentAI",
+      "size": "4MB Repo",
+      "architecture": "Modular AI codebase with native Python/C++ bindings and distributed workflow support.",
+      "usage": "git clone https://github.com/SerpentAI/SerpentAI\ncd SerpentAI\npip install -e .",
+      "benchmarks": "GitHub Stars: 6,990, Forks: 798",
+      "limitations": "Requires local Python environment and dependency configuration.",
+      "popular": true,
+      "url": "https://github.com/SerpentAI/SerpentAI",
+      "citations": [
+          {
+              "text": "SerpentAI/SerpentAI on GitHub",
+              "url": "https://github.com/SerpentAI/SerpentAI"
+          }
+      ]
+  },
+  {
+      "name": "glue",
+      "type": "Dataset",
+      "summary": "Dataset Card for GLUE \t \t \t\t \t \t \t\tDataset Summary \t GLUE, the General Language Understanding Evaluation benchmark (https://gluebenchmark.com/) is a collection of resou (730 likes, 784,661 downloads).",
+      "task": "NLP",
+      "license": "OTHER",
+      "year": 2026,
+      "org": "nyu-mll",
+      "size": "1M<n<10M",
+      "architecture": "Parquet / Arrow structured tabular & tokenized dataset.",
+      "usage": "from datasets import load_dataset\n\ndataset = load_dataset(\"nyu-mll/glue\")",
+      "benchmarks": "Trending Score: 199, Likes: 730, Downloads: 784,661",
+      "limitations": "Subject to licensing compliance and dataset-specific terms of use.",
+      "popular": true,
+      "url": "https://huggingface.co/datasets/nyu-mll/glue",
+      "citations": [
+          {
+              "text": "nyu-mll/glue on Hugging Face Datasets",
+              "url": "https://huggingface.co/datasets/nyu-mll/glue"
+          }
+      ]
   }
 ];
 

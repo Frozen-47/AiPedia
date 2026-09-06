@@ -2,50 +2,50 @@
 
 > Automatically generated daily intelligence report syncing top trending AI models, platforms, frameworks, research papers, catalog metrics, and repository health.
 
-*Last Synchronized: `Sun, 06 Sep 2026 10:14:39 GMT`*
+*Last Synchronized: `Sun, 06 Sep 2026 10:17:40 GMT`*
 
 ---
 
 ## 🆕 Newly Ingested Assets Today (4)
 
-### **timesfm-3.0-pytorch** (`Model` • *Google*)
-> High-performance NLP open-weights model by Google, trending with over 473 community likes and 144,455 downloads on Hugging Face.
+### **Qwen3.8-27B-GSQ-RCO-GGUF** (`Model` • *ISTA-DASLab*)
+> High-performance Multimodal open-weights model by ISTA-DASLab, trending with over 436 community likes and 348,389 downloads on Hugging Face.
 
-- 🏷️ **Domain & License**: `NLP` • `OTHER` (2026)
-- ⚡ **Metrics**: `Trending Score: 415, Likes: 473, Downloads: 144,455`
-- 🔗 **Resource Link**: [https://huggingface.co/google/timesfm-3.0-pytorch](https://huggingface.co/google/timesfm-3.0-pytorch)
+- 🏷️ **Domain & License**: `Multimodal` • `APACHE-2.0` (2026)
+- ⚡ **Metrics**: `Trending Score: 363, Likes: 436, Downloads: 348,389`
+- 🔗 **Resource Link**: [https://huggingface.co/ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF](https://huggingface.co/ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF)
 
-### **wan555** (`Platform` • *kulkas2pintu*)
-> Interactive AI web platform and demonstration hosted on Hugging Face Spaces by kulkas2pintu. Trending with 1,801 community stars.
+### **QWEN_EDIT_IMAGE** (`Platform` • *kulkas2pintu*)
+> Interactive AI web platform and demonstration hosted on Hugging Face Spaces by kulkas2pintu. Trending with 174 community stars.
 
 - 🏷️ **Domain & License**: `Multimodal` • `Community Hosted` (2026)
-- ⚡ **Metrics**: `Trending Score: 143, Community Likes: 1,801`
-- 🔗 **Resource Link**: [https://huggingface.co/spaces/kulkas2pintu/wan555](https://huggingface.co/spaces/kulkas2pintu/wan555)
+- ⚡ **Metrics**: `Trending Score: 90, Community Likes: 174`
+- 🔗 **Resource Link**: [https://huggingface.co/spaces/kulkas2pintu/QWEN_EDIT_IMAGE](https://huggingface.co/spaces/kulkas2pintu/QWEN_EDIT_IMAGE)
 
-### **flower** (`Framework` • *flwrlabs*)
-> Flower: A Friendly Federated AI Framework
+### **SerpentAI** (`Framework` • *SerpentAI*)
+> Game Agent Framework. Helping you create AIs / Bots that learn to play any game you own!
 
-- 🏷️ **Domain & License**: `MLOps` • `Apache-2.0` (2026)
-- ⚡ **Metrics**: `GitHub Stars: 7,112, Forks: 1,226`
-- 🔗 **Resource Link**: [https://github.com/flwrlabs/flower](https://github.com/flwrlabs/flower)
+- 🏷️ **Domain & License**: `Computer Vision` • `MIT` (2026)
+- ⚡ **Metrics**: `GitHub Stars: 6,990, Forks: 798`
+- 🔗 **Resource Link**: [https://github.com/SerpentAI/SerpentAI](https://github.com/SerpentAI/SerpentAI)
 
-### **imdb** (`Dataset` • *stanfordnlp*)
-> Dataset Card for "imdb" 	 	 		 		Dataset Summary 	 Large Movie Review Dataset. This is a dataset for binary sentiment classification containing substantially more data than (698 likes, 189,340 downloads).
+### **glue** (`Dataset` • *nyu-mll*)
+> Dataset Card for GLUE 	 	 		 	 	 		Dataset Summary 	 GLUE, the General Language Understanding Evaluation benchmark (https://gluebenchmark.com/) is a collection of resou (730 likes, 784,661 downloads).
 
 - 🏷️ **Domain & License**: `NLP` • `OTHER` (2026)
-- ⚡ **Metrics**: `Trending Score: 216, Likes: 698, Downloads: 189,340`
-- 🔗 **Resource Link**: [https://huggingface.co/datasets/stanfordnlp/imdb](https://huggingface.co/datasets/stanfordnlp/imdb)
+- ⚡ **Metrics**: `Trending Score: 199, Likes: 730, Downloads: 784,661`
+- 🔗 **Resource Link**: [https://huggingface.co/datasets/nyu-mll/glue](https://huggingface.co/datasets/nyu-mll/glue)
 
 ---
 
 ## 🌟 Featured AI Tool of the Day
-### **Claude 3 Opus** (`Model` • *Anthropic*)
-> Anthropic's most powerful model for complex analysis, long documents, and nuanced reasoning tasks requiring deep comprehension.
+### **Phind** (`AI` • *Phind*)
+> AI search engine and pair programmer tailored specifically for developers, providing cited code snippets, documentation references, and terminal debugging.
 
-- 🏛️ **Architecture**: Transformer-based LLM with Constitutional AI and RLHF training.
-- ⚡ **Benchmarks**: `MMLU: 86.8%, GPQA: 50.4%`
-- 🏷️ **Domain & License**: `NLP` • `Proprietary` (Released: 2024)
-- 🔗 **Resource Link**: [https://www.anthropic.com/claude](https://www.anthropic.com/claude)
+- 🏛️ **Architecture**: Custom 70B MoE search model paired with live web and documentation scraping index.
+- ⚡ **Benchmarks**: `High developer satisfaction for complex programming queries and library documentation search.`
+- 🏷️ **Domain & License**: `AI Coding` • `Proprietary` (Released: 2023)
+- 🔗 **Resource Link**: [https://www.phind.com](https://www.phind.com)
 
 ---
 ## 🔥 Today's Top Trending Open AI Models
@@ -54,7 +54,7 @@
 | Model | Pipeline | Likes | Downloads | Link |
 | :--- | :--- | :--- | :--- | :--- |
 | `deepseek-ai/DeepSeek-V4-Flash-Vision-Exp` | image-text-to-text | ❤️ 701 | 📥 209,191 | [View](https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp) |
-| `Qwen/Qwen3.8-27B` | image-text-to-text | ❤️ 14,066 | 📥 6,190,807 | [View](https://huggingface.co/Qwen/Qwen3.8-27B) |
+| `Qwen/Qwen3.8-27B` | image-text-to-text | ❤️ 14,067 | 📥 6,190,807 | [View](https://huggingface.co/Qwen/Qwen3.8-27B) |
 | `XHToken/Spark-X2.5-4B` | text-generation | ❤️ 570 | 📥 5,477 | [View](https://huggingface.co/XHToken/Spark-X2.5-4B) |
 | `Qwen/Qwen3.8-Flash-Next` | image-text-to-text | ❤️ 4,929 | 📥 432,966 | [View](https://huggingface.co/Qwen/Qwen3.8-Flash-Next) |
 | `google/timesfm-3.0-pytorch` | time-series-forecasting | ❤️ 473 | 📥 144,455 | [View](https://huggingface.co/google/timesfm-3.0-pytorch) |
@@ -78,14 +78,14 @@
 ---
 
 ## 📊 AiVerse Catalog Overview
-- **Total Registered Assets**: `238`
-- **Featured / Starred Tools**: `192`
-- **Asset Breakdown**: **Models**: 90 • **Frameworks**: 24 • **Platforms**: 27 • **Datasets**: 26 • **AIs**: 71
+- **Total Registered Assets**: `242`
+- **Featured / Starred Tools**: `196`
+- **Asset Breakdown**: **Models**: 91 • **Frameworks**: 25 • **Platforms**: 28 • **Datasets**: 27 • **AIs**: 71
 
 ---
 
 ## 🛡️ Daily System & Ecosystem Health
-- **Sample Link Health Check**: `20/25` healthy verified (`5` flagged / timed out)
+- **Sample Link Health Check**: `22/25` healthy verified (`3` flagged / timed out)
 - **Dependency Security**: `20` advisories flagged across `539` dependencies (`1` critical, `16` high)
 
 ---

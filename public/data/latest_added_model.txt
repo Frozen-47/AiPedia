@@ -1,1 +1,1 @@
-timesfm-3.0-pytorch
+Qwen3.8-27B-GSQ-RCO-GGUF

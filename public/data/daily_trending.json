@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-06T10:14:32.457Z",
+  "timestamp": "2026-09-06T10:17:37.371Z",
   "models": [
     {
       "id": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
@@ -12,7 +12,7 @@
     {
       "id": "Qwen/Qwen3.8-27B",
       "author": "Qwen",
-      "likes": 14066,
+      "likes": 14067,
       "downloads": 6190807,
       "pipeline_tag": "image-text-to-text",
       "url": "https://huggingface.co/Qwen/Qwen3.8-27B"

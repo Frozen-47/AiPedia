@@ -1,33 +1,23 @@
 {
-  "timestamp": "2026-09-06T10:14:33.059Z",
+  "timestamp": "2026-09-06T10:17:37.413Z",
   "checked": 25,
-  "healthy": 20,
-  "broken": 5,
+  "healthy": 22,
+  "broken": 3,
   "issues": [
     {
-      "name": "LMSYS Chatbot Arena Conversations",
-      "url": "https://chat.lmsys.org",
-      "status": "Network Error"
-    },
-    {
-      "name": "Lovable.dev",
-      "url": "https://lovable.dev",
+      "name": "GPT-4",
+      "url": "https://openai.com/gpt-4",
       "status": 403
     },
     {
-      "name": "Grok-2",
-      "url": "https://x.ai/",
+      "name": "Sora",
+      "url": "https://openai.com/sora",
       "status": 403
     },
     {
-      "name": "Whisper",
-      "url": "https://openai.com/research/whisper",
-      "status": 403
-    },
-    {
-      "name": "o3-mini",
-      "url": "https://openai.com",
-      "status": 403
+      "name": "GPT-3.5 Turbo",
+      "url": "https://platform.openai.com/docs/models/gpt-3-5-turbo",
+      "status": 404
     }
   ]
 }
