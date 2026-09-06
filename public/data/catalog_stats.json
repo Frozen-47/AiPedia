@@ -1,23 +1,23 @@
 {
-  "timestamp": "2026-09-06T10:08:01.883Z",
-  "totalEntries": 234,
-  "popularEntries": 188,
+  "timestamp": "2026-09-06T10:14:30.710Z",
+  "totalEntries": 238,
+  "popularEntries": 192,
   "byType": {
-    "Model": 89,
-    "Framework": 23,
-    "Platform": 26,
-    "Dataset": 25,
+    "Model": 90,
+    "Framework": 24,
+    "Platform": 27,
+    "Dataset": 26,
     "AI": 71
   },
   "byTask": {
-    "NLP": 88,
+    "NLP": 90,
     "AI Coding": 18,
-    "Multimodal": 11,
+    "Multimodal": 12,
     "Research": 11,
     "Image Generation": 9,
     "Video Generation": 10,
     "Audio": 13,
-    "MLOps": 39,
+    "MLOps": 40,
     "Productivity": 14,
     "Computer Vision": 17,
     "Education": 4
@@ -26,7 +26,7 @@
     "MIT": 34,
     "Llama 3.3 Community License": 1,
     "Llama 3.2 Community License": 3,
-    "Apache-2.0": 32,
+    "Apache-2.0": 33,
     "Proprietary": 115,
     "Mistral Research License / Commercial": 1,
     "Mistral Non-Production License": 1,
@@ -63,30 +63,30 @@
     "Open Source UI / Various model licenses": 1,
     "Free": 1,
     "APACHE-2.0": 2,
-    "OTHER": 1,
-    "Community Hosted": 1,
+    "OTHER": 3,
+    "Community Hosted": 2,
     "NOASSERTION": 1,
     "CC-BY-SA-4.0": 1
   },
   "toolOfTheDay": {
-    "name": "Llama 3 (8B)",
+    "name": "Claude 3 Opus",
     "type": "Model",
-    "summary": "Meta's compact open-weights model designed to run efficiently on consumer hardware while retaining strong instruction-following capabilities.",
+    "summary": "Anthropic's most powerful model for complex analysis, long documents, and nuanced reasoning tasks requiring deep comprehension.",
     "task": "NLP",
-    "license": "Meta Llama 3 License",
+    "license": "Proprietary",
     "year": 2024,
-    "org": "Meta AI",
-    "size": "8B params",
-    "architecture": "Transformer decoder with grouped query attention trained on 15T tokens.",
-    "usage": "from transformers import AutoTokenizer, AutoModelForCausalLM\ntokenizer = AutoTokenizer.from_pretrained(\"meta-llama/Meta-Llama-3-8B-Instruct\")\nmodel = AutoModelForCausalLM.from_pretrained(\"meta-llama/Meta-Llama-3-8B-Instruct\")",
-    "benchmarks": "MMLU: 66.6%, HumanEval: 62.2%",
-    "limitations": "Less capable than larger models, struggles with complex multi-step reasoning.",
+    "org": "Anthropic",
+    "size": "Unknown",
+    "architecture": "Transformer-based LLM with Constitutional AI and RLHF training.",
+    "usage": "import anthropic\nclient = anthropic.Anthropic()\nmessage = client.messages.create(\n  model=\"claude-3-opus-20240229\",\n  max_tokens=2048,\n  messages=[{\"role\": \"user\", \"content\": \"Analyze this research paper.\"}]\n)",
+    "benchmarks": "MMLU: 86.8%, GPQA: 50.4%",
+    "limitations": "Slower and more expensive than Sonnet, proprietary API.",
     "popular": true,
-    "url": "https://llama.meta.com/",
+    "url": "https://www.anthropic.com/claude",
     "citations": [
       {
-        "text": "Introducing Meta Llama 3",
-        "url": "https://ai.meta.com/blog/meta-llama-3/"
+        "text": "Claude 3 Model Card",
+        "url": "https://www.anthropic.com/news/claude-3-family"
       }
     ]
   }

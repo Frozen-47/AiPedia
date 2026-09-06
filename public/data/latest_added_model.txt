@@ -1,1 +1,1 @@
-Qwen3.8-Flash-Next
+timesfm-3.0-pytorch

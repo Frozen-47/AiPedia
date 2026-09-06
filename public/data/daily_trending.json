@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-09-06T10:08:03.736Z",
+  "timestamp": "2026-09-06T10:14:32.457Z",
   "models": [
     {
       "id": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
@@ -12,7 +12,7 @@
     {
       "id": "Qwen/Qwen3.8-27B",
       "author": "Qwen",
-      "likes": 14065,
+      "likes": 14066,
       "downloads": 6190807,
       "pipeline_tag": "image-text-to-text",
       "url": "https://huggingface.co/Qwen/Qwen3.8-27B"
@@ -44,7 +44,7 @@
     {
       "id": "ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF",
       "author": "ISTA-DASLab",
-      "likes": 435,
+      "likes": 436,
       "downloads": 348389,
       "pipeline_tag": "image-text-to-text",
       "url": "https://huggingface.co/ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF"

@@ -2,7 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
-import { createClient } from '@supabase/supabase-js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -116,22 +115,28 @@ async function syncToSupabase(entriesToSync) {
 
   const keyToUse = serviceRoleKey || anonKey;
   const isServiceRole = Boolean(serviceRoleKey);
-  const supabase = createClient(supabaseUrl, keyToUse);
+  const cleanUrl = supabaseUrl.replace(/\/+$/, '');
 
-  console.log(`[Supabase Sync] Connecting to ${supabaseUrl} (${isServiceRole ? 'Service Role Key' : 'Anon Key'})...`);
+  console.log(`[Supabase Sync] Connecting to ${cleanUrl} (${isServiceRole ? 'Service Role Key' : 'Anon Key'})...`);
 
   // Try 1: If service role key is available, directly upsert approved entries
   if (isServiceRole) {
     try {
       const payload = entriesToSync.map(e => ({ ...e, approved: true }));
-      const chunkSize = 50;
-      for (let i = 0; i < payload.length; i += chunkSize) {
-        const chunk = payload.slice(i, i + chunkSize);
-        const { error } = await supabase.from('entries').upsert(chunk, { onConflict: 'name' });
-        if (error) throw error;
+      const res = await fetch(`${cleanUrl}/rest/v1/entries`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': keyToUse,
+          'Authorization': `Bearer ${keyToUse}`,
+          'Prefer': 'resolution=merge-duplicates'
+        },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        console.log(`[Supabase Sync] ✅ Successfully upserted ${entriesToSync.length} approved entry/entries using Service Role.`);
+        return;
       }
-      console.log(`[Supabase Sync] ✅ Successfully upserted ${entriesToSync.length} approved entry/entries using Service Role.`);
-      return;
     } catch (err) {
       console.warn('[Supabase Sync] Direct service role upsert error:', err.message);
     }
@@ -141,8 +146,16 @@ async function syncToSupabase(entriesToSync) {
   let rpcSuccessCount = 0;
   for (const entry of entriesToSync) {
     try {
-      const { error } = await supabase.rpc('sync_catalog_entry', { entry_data: entry });
-      if (!error) {
+      const res = await fetch(`${cleanUrl}/rest/v1/rpc/sync_catalog_entry`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': keyToUse,
+          'Authorization': `Bearer ${keyToUse}`
+        },
+        body: JSON.stringify({ entry_data: entry })
+      });
+      if (res.ok) {
         rpcSuccessCount++;
       }
     } catch {
@@ -178,8 +191,17 @@ async function syncToSupabase(entriesToSync) {
         approved: false,
         submitted_by: 'pulse-sync-bot'
       };
-      const { error } = await supabase.from('entries').insert([payload]);
-      if (!error) pendingCount++;
+      const res = await fetch(`${cleanUrl}/rest/v1/entries`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': keyToUse,
+          'Authorization': `Bearer ${keyToUse}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify([payload])
+      });
+      if (res.ok) pendingCount++;
     }
     if (pendingCount > 0) {
       console.log(`[Supabase Sync] 📥 Added ${pendingCount} entry/entries to Supabase queue (pending admin approval).`);

@@ -1,4 +1,4 @@
--- Seed / Upsert all 234 AiVerse entries into Supabase
+-- Seed / Upsert all 238 AiVerse entries into Supabase
 -- Generated automatically by daily pulse
 
 INSERT INTO entries (name, org, type, task, license, year, size, summary, architecture, usage, benchmarks, limitations, url, citations, popular, approved)
@@ -4942,6 +4942,89 @@ INSERT INTO entries (name, org, type, task, license, year, size, summary, archit
 VALUES ('squad', 'rajpurkar', 'Dataset', 'NLP', 'CC-BY-SA-4.0', 2026, '10K<n<100K', 'Dataset Card for SQuAD 	 	 		 	 	 		Dataset Summary 	 Stanford Question Answering Dataset (SQuAD) is a reading comprehension dataset, consisting of questions posed by c (709 likes, 265,395 downloads).', 'Parquet / Arrow structured tabular & tokenized dataset.', 'from datasets import load_dataset
 
 dataset = load_dataset("rajpurkar/squad")', 'Trending Score: 230, Likes: 709, Downloads: 265,395', 'Subject to licensing compliance and dataset-specific terms of use.', 'https://huggingface.co/datasets/rajpurkar/squad', '[{"text":"rajpurkar/squad on Hugging Face Datasets","url":"https://huggingface.co/datasets/rajpurkar/squad"}]'::jsonb, true, true)
+ON CONFLICT (name) DO UPDATE SET
+  org = EXCLUDED.org,
+  type = EXCLUDED.type,
+  task = EXCLUDED.task,
+  license = EXCLUDED.license,
+  year = EXCLUDED.year,
+  size = EXCLUDED.size,
+  summary = EXCLUDED.summary,
+  architecture = EXCLUDED.architecture,
+  usage = EXCLUDED.usage,
+  benchmarks = EXCLUDED.benchmarks,
+  limitations = EXCLUDED.limitations,
+  url = EXCLUDED.url,
+  citations = EXCLUDED.citations,
+  popular = EXCLUDED.popular,
+  approved = true;
+
+INSERT INTO entries (name, org, type, task, license, year, size, summary, architecture, usage, benchmarks, limitations, url, citations, popular, approved)
+VALUES ('timesfm-3.0-pytorch', 'Google', 'Model', 'NLP', 'OTHER', 2026, 'Open Weights', 'High-performance NLP open-weights model by Google, trending with over 473 community likes and 144,455 downloads on Hugging Face.', 'Google time series forecasting architecture with community-tuned weights.', 'from transformers import AutoModelForCausalLM, AutoTokenizer
+
+model = AutoModelForCausalLM.from_pretrained("google/timesfm-3.0-pytorch", device_map="auto")
+tokenizer = AutoTokenizer.from_pretrained("google/timesfm-3.0-pytorch")', 'Trending Score: 415, Likes: 473, Downloads: 144,455', 'Requires GPU VRAM or quantization for efficient local deployment.', 'https://huggingface.co/google/timesfm-3.0-pytorch', '[{"text":"google/timesfm-3.0-pytorch on Hugging Face","url":"https://huggingface.co/google/timesfm-3.0-pytorch"}]'::jsonb, true, true)
+ON CONFLICT (name) DO UPDATE SET
+  org = EXCLUDED.org,
+  type = EXCLUDED.type,
+  task = EXCLUDED.task,
+  license = EXCLUDED.license,
+  year = EXCLUDED.year,
+  size = EXCLUDED.size,
+  summary = EXCLUDED.summary,
+  architecture = EXCLUDED.architecture,
+  usage = EXCLUDED.usage,
+  benchmarks = EXCLUDED.benchmarks,
+  limitations = EXCLUDED.limitations,
+  url = EXCLUDED.url,
+  citations = EXCLUDED.citations,
+  popular = EXCLUDED.popular,
+  approved = true;
+
+INSERT INTO entries (name, org, type, task, license, year, size, summary, architecture, usage, benchmarks, limitations, url, citations, popular, approved)
+VALUES ('wan555', 'kulkas2pintu', 'Platform', 'Multimodal', 'Community Hosted', 2026, 'GRADIO Platform', 'Interactive AI web platform and demonstration hosted on Hugging Face Spaces by kulkas2pintu. Trending with 1,801 community stars.', 'GRADIO cloud runtime container with interactive browser interface.', 'Launch and explore the platform directly in your browser: https://huggingface.co/spaces/kulkas2pintu/wan555', 'Trending Score: 143, Community Likes: 1,801', 'Cloud container subject to community traffic quotas and queue times.', 'https://huggingface.co/spaces/kulkas2pintu/wan555', '[{"text":"kulkas2pintu/wan555 on Hugging Face Spaces","url":"https://huggingface.co/spaces/kulkas2pintu/wan555"}]'::jsonb, true, true)
+ON CONFLICT (name) DO UPDATE SET
+  org = EXCLUDED.org,
+  type = EXCLUDED.type,
+  task = EXCLUDED.task,
+  license = EXCLUDED.license,
+  year = EXCLUDED.year,
+  size = EXCLUDED.size,
+  summary = EXCLUDED.summary,
+  architecture = EXCLUDED.architecture,
+  usage = EXCLUDED.usage,
+  benchmarks = EXCLUDED.benchmarks,
+  limitations = EXCLUDED.limitations,
+  url = EXCLUDED.url,
+  citations = EXCLUDED.citations,
+  popular = EXCLUDED.popular,
+  approved = true;
+
+INSERT INTO entries (name, org, type, task, license, year, size, summary, architecture, usage, benchmarks, limitations, url, citations, popular, approved)
+VALUES ('flower', 'flwrlabs', 'Framework', 'MLOps', 'Apache-2.0', 2026, '347MB Repo', 'Flower: A Friendly Federated AI Framework', 'Modular AI codebase with native Python/C++ bindings and distributed workflow support.', 'git clone https://github.com/flwrlabs/flower
+cd flower
+pip install -e .', 'GitHub Stars: 7,112, Forks: 1,226', 'Requires local Python environment and dependency configuration.', 'https://github.com/flwrlabs/flower', '[{"text":"flwrlabs/flower on GitHub","url":"https://github.com/flwrlabs/flower"}]'::jsonb, true, true)
+ON CONFLICT (name) DO UPDATE SET
+  org = EXCLUDED.org,
+  type = EXCLUDED.type,
+  task = EXCLUDED.task,
+  license = EXCLUDED.license,
+  year = EXCLUDED.year,
+  size = EXCLUDED.size,
+  summary = EXCLUDED.summary,
+  architecture = EXCLUDED.architecture,
+  usage = EXCLUDED.usage,
+  benchmarks = EXCLUDED.benchmarks,
+  limitations = EXCLUDED.limitations,
+  url = EXCLUDED.url,
+  citations = EXCLUDED.citations,
+  popular = EXCLUDED.popular,
+  approved = true;
+
+INSERT INTO entries (name, org, type, task, license, year, size, summary, architecture, usage, benchmarks, limitations, url, citations, popular, approved)
+VALUES ('imdb', 'stanfordnlp', 'Dataset', 'NLP', 'OTHER', 2026, '100K<n<1M', 'Dataset Card for "imdb" 	 	 		 		Dataset Summary 	 Large Movie Review Dataset. This is a dataset for binary sentiment classification containing substantially more data than (698 likes, 189,340 downloads).', 'Parquet / Arrow structured tabular & tokenized dataset.', 'from datasets import load_dataset
+
+dataset = load_dataset("stanfordnlp/imdb")', 'Trending Score: 216, Likes: 698, Downloads: 189,340', 'Subject to licensing compliance and dataset-specific terms of use.', 'https://huggingface.co/datasets/stanfordnlp/imdb', '[{"text":"stanfordnlp/imdb on Hugging Face Datasets","url":"https://huggingface.co/datasets/stanfordnlp/imdb"}]'::jsonb, true, true)
 ON CONFLICT (name) DO UPDATE SET
   org = EXCLUDED.org,
   type = EXCLUDED.type,

@@ -1,24 +1,24 @@
 {
   "date": "2026-09-06",
   "tool": {
-    "name": "Llama 3 (8B)",
+    "name": "Claude 3 Opus",
     "type": "Model",
-    "summary": "Meta's compact open-weights model designed to run efficiently on consumer hardware while retaining strong instruction-following capabilities.",
+    "summary": "Anthropic's most powerful model for complex analysis, long documents, and nuanced reasoning tasks requiring deep comprehension.",
     "task": "NLP",
-    "license": "Meta Llama 3 License",
+    "license": "Proprietary",
     "year": 2024,
-    "org": "Meta AI",
-    "size": "8B params",
-    "architecture": "Transformer decoder with grouped query attention trained on 15T tokens.",
-    "usage": "from transformers import AutoTokenizer, AutoModelForCausalLM\ntokenizer = AutoTokenizer.from_pretrained(\"meta-llama/Meta-Llama-3-8B-Instruct\")\nmodel = AutoModelForCausalLM.from_pretrained(\"meta-llama/Meta-Llama-3-8B-Instruct\")",
-    "benchmarks": "MMLU: 66.6%, HumanEval: 62.2%",
-    "limitations": "Less capable than larger models, struggles with complex multi-step reasoning.",
+    "org": "Anthropic",
+    "size": "Unknown",
+    "architecture": "Transformer-based LLM with Constitutional AI and RLHF training.",
+    "usage": "import anthropic\nclient = anthropic.Anthropic()\nmessage = client.messages.create(\n  model=\"claude-3-opus-20240229\",\n  max_tokens=2048,\n  messages=[{\"role\": \"user\", \"content\": \"Analyze this research paper.\"}]\n)",
+    "benchmarks": "MMLU: 86.8%, GPQA: 50.4%",
+    "limitations": "Slower and more expensive than Sonnet, proprietary API.",
     "popular": true,
-    "url": "https://llama.meta.com/",
+    "url": "https://www.anthropic.com/claude",
     "citations": [
       {
-        "text": "Introducing Meta Llama 3",
-        "url": "https://ai.meta.com/blog/meta-llama-3/"
+        "text": "Claude 3 Model Card",
+        "url": "https://www.anthropic.com/news/claude-3-family"
       }
     ]
   }

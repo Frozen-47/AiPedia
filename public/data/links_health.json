@@ -1,12 +1,32 @@
 {
-  "timestamp": "2026-09-06T10:08:04.289Z",
+  "timestamp": "2026-09-06T10:14:33.059Z",
   "checked": 25,
-  "healthy": 24,
-  "broken": 1,
+  "healthy": 20,
+  "broken": 5,
   "issues": [
     {
-      "name": "DALL-E 2",
-      "url": "https://openai.com/dall-e-2",
+      "name": "LMSYS Chatbot Arena Conversations",
+      "url": "https://chat.lmsys.org",
+      "status": "Network Error"
+    },
+    {
+      "name": "Lovable.dev",
+      "url": "https://lovable.dev",
+      "status": 403
+    },
+    {
+      "name": "Grok-2",
+      "url": "https://x.ai/",
+      "status": 403
+    },
+    {
+      "name": "Whisper",
+      "url": "https://openai.com/research/whisper",
+      "status": 403
+    },
+    {
+      "name": "o3-mini",
+      "url": "https://openai.com",
       "status": 403
     }
   ]
