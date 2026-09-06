@@ -1,1 +1,1 @@
-Qwen3.8-27B
+Qwen3.8-Flash-Next

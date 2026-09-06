@@ -1,5 +1,5 @@
--- Seed / Upsert all 227 AiVerse entries into Supabase
--- Run this script in the Supabase Dashboard -> SQL Editor
+-- Seed / Upsert all 234 AiVerse entries into Supabase
+-- Generated automatically by daily pulse
 
 INSERT INTO entries (name, org, type, task, license, year, size, summary, architecture, usage, benchmarks, limitations, url, citations, popular, approved)
 VALUES ('DeepSeek-V3', 'DeepSeek', 'Model', 'NLP', 'MIT', 2024, '671B (37B active)', 'DeepSeek''s flagship 671B Mixture-of-Experts (MoE) model with Multi-head Latent Attention (MLA), activating 37B params per token with industry-leading efficiency.', 'Multi-head Latent Attention (MLA) + DeepSeekMoE + FP8 Mixed Precision Training.', 'from openai import OpenAI
@@ -4793,6 +4793,155 @@ ON CONFLICT (name) DO UPDATE SET
 
 INSERT INTO entries (name, org, type, task, license, year, size, summary, architecture, usage, benchmarks, limitations, url, citations, popular, approved)
 VALUES ('Replika', 'Luka Inc.', 'AI', 'NLP', 'Proprietary', 2017, 'N/A', 'An AI companion app designed for emotional support and personal conversation, allowing users to build a relationship with a customizable AI persona.', 'Mobile / Web Application (Powered by custom fine-tuned LLMs)', 'Download the Replika app on iOS or Android, or visit replika.com to chat with your AI companion.', 'N/A', 'Some features require a paid subscription; content policies changed significantly in 2023.', 'https://replika.com', '[{"text":"Replika","url":"https://replika.com"}]'::jsonb, true, true)
+ON CONFLICT (name) DO UPDATE SET
+  org = EXCLUDED.org,
+  type = EXCLUDED.type,
+  task = EXCLUDED.task,
+  license = EXCLUDED.license,
+  year = EXCLUDED.year,
+  size = EXCLUDED.size,
+  summary = EXCLUDED.summary,
+  architecture = EXCLUDED.architecture,
+  usage = EXCLUDED.usage,
+  benchmarks = EXCLUDED.benchmarks,
+  limitations = EXCLUDED.limitations,
+  url = EXCLUDED.url,
+  citations = EXCLUDED.citations,
+  popular = EXCLUDED.popular,
+  approved = true;
+
+INSERT INTO entries (name, org, type, task, license, year, size, summary, architecture, usage, benchmarks, limitations, url, citations, popular, approved)
+VALUES ('DeepSeek-V4-Flash-Vision-Exp', 'DeepSeek', 'Model', 'Multimodal', 'MIT', 2026, 'Open Weights', 'High-performance Multimodal open-weights model by DeepSeek, trending with over 631 community likes and 184,542 downloads on Hugging Face.', 'DeepSeek image text to text architecture with community-tuned weights.', 'from transformers import AutoModelForCausalLM, AutoTokenizer
+
+model = AutoModelForCausalLM.from_pretrained("deepseek-ai/DeepSeek-V4-Flash-Vision-Exp", device_map="auto")
+tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/DeepSeek-V4-Flash-Vision-Exp")', 'Trending Score: 582, Likes: 631, Downloads: 184,542', 'Requires GPU VRAM or quantization for efficient local deployment.', 'https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp', '[{"text":"deepseek-ai/DeepSeek-V4-Flash-Vision-Exp on Hugging Face","url":"https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp"}]'::jsonb, true, true)
+ON CONFLICT (name) DO UPDATE SET
+  org = EXCLUDED.org,
+  type = EXCLUDED.type,
+  task = EXCLUDED.task,
+  license = EXCLUDED.license,
+  year = EXCLUDED.year,
+  size = EXCLUDED.size,
+  summary = EXCLUDED.summary,
+  architecture = EXCLUDED.architecture,
+  usage = EXCLUDED.usage,
+  benchmarks = EXCLUDED.benchmarks,
+  limitations = EXCLUDED.limitations,
+  url = EXCLUDED.url,
+  citations = EXCLUDED.citations,
+  popular = EXCLUDED.popular,
+  approved = true;
+
+INSERT INTO entries (name, org, type, task, license, year, size, summary, architecture, usage, benchmarks, limitations, url, citations, popular, approved)
+VALUES ('Qwen3.8-27B', 'Alibaba (Qwen)', 'Model', 'Multimodal', 'APACHE-2.0', 2026, '27B params', 'High-performance Multimodal open-weights model by Alibaba (Qwen), trending with over 14,038 community likes and 6,024,467 downloads on Hugging Face.', 'Alibaba (Qwen) image text to text architecture with community-tuned weights.', 'from transformers import AutoModelForCausalLM, AutoTokenizer
+
+model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen3.8-27B", device_map="auto")
+tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen3.8-27B")', 'Trending Score: 536, Likes: 14,038, Downloads: 6,024,467', 'Requires GPU VRAM or quantization for efficient local deployment.', 'https://huggingface.co/Qwen/Qwen3.8-27B', '[{"text":"Qwen/Qwen3.8-27B on Hugging Face","url":"https://huggingface.co/Qwen/Qwen3.8-27B"}]'::jsonb, true, true)
+ON CONFLICT (name) DO UPDATE SET
+  org = EXCLUDED.org,
+  type = EXCLUDED.type,
+  task = EXCLUDED.task,
+  license = EXCLUDED.license,
+  year = EXCLUDED.year,
+  size = EXCLUDED.size,
+  summary = EXCLUDED.summary,
+  architecture = EXCLUDED.architecture,
+  usage = EXCLUDED.usage,
+  benchmarks = EXCLUDED.benchmarks,
+  limitations = EXCLUDED.limitations,
+  url = EXCLUDED.url,
+  citations = EXCLUDED.citations,
+  popular = EXCLUDED.popular,
+  approved = true;
+
+INSERT INTO entries (name, org, type, task, license, year, size, summary, architecture, usage, benchmarks, limitations, url, citations, popular, approved)
+VALUES ('Spark-X2.5-4B', 'XHToken', 'Model', 'NLP', 'APACHE-2.0', 2026, '4B params', 'High-performance NLP open-weights model by XHToken, trending with over 570 community likes and 5,477 downloads on Hugging Face.', 'XHToken text generation architecture with community-tuned weights.', 'from transformers import AutoModelForCausalLM, AutoTokenizer
+
+model = AutoModelForCausalLM.from_pretrained("XHToken/Spark-X2.5-4B", device_map="auto")
+tokenizer = AutoTokenizer.from_pretrained("XHToken/Spark-X2.5-4B")', 'Trending Score: 474, Likes: 570, Downloads: 5,477', 'Requires GPU VRAM or quantization for efficient local deployment.', 'https://huggingface.co/XHToken/Spark-X2.5-4B', '[{"text":"XHToken/Spark-X2.5-4B on Hugging Face","url":"https://huggingface.co/XHToken/Spark-X2.5-4B"}]'::jsonb, true, true)
+ON CONFLICT (name) DO UPDATE SET
+  org = EXCLUDED.org,
+  type = EXCLUDED.type,
+  task = EXCLUDED.task,
+  license = EXCLUDED.license,
+  year = EXCLUDED.year,
+  size = EXCLUDED.size,
+  summary = EXCLUDED.summary,
+  architecture = EXCLUDED.architecture,
+  usage = EXCLUDED.usage,
+  benchmarks = EXCLUDED.benchmarks,
+  limitations = EXCLUDED.limitations,
+  url = EXCLUDED.url,
+  citations = EXCLUDED.citations,
+  popular = EXCLUDED.popular,
+  approved = true;
+
+INSERT INTO entries (name, org, type, task, license, year, size, summary, architecture, usage, benchmarks, limitations, url, citations, popular, approved)
+VALUES ('Qwen3.8-Flash-Next', 'Alibaba (Qwen)', 'Model', 'Multimodal', 'OTHER', 2026, 'Open Weights', 'High-performance Multimodal open-weights model by Alibaba (Qwen), trending with over 4,929 community likes and 432,966 downloads on Hugging Face.', 'Alibaba (Qwen) image text to text architecture with community-tuned weights.', 'from transformers import AutoModelForCausalLM, AutoTokenizer
+
+model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen3.8-Flash-Next", device_map="auto")
+tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen3.8-Flash-Next")', 'Trending Score: 449, Likes: 4,929, Downloads: 432,966', 'Requires GPU VRAM or quantization for efficient local deployment.', 'https://huggingface.co/Qwen/Qwen3.8-Flash-Next', '[{"text":"Qwen/Qwen3.8-Flash-Next on Hugging Face","url":"https://huggingface.co/Qwen/Qwen3.8-Flash-Next"}]'::jsonb, true, true)
+ON CONFLICT (name) DO UPDATE SET
+  org = EXCLUDED.org,
+  type = EXCLUDED.type,
+  task = EXCLUDED.task,
+  license = EXCLUDED.license,
+  year = EXCLUDED.year,
+  size = EXCLUDED.size,
+  summary = EXCLUDED.summary,
+  architecture = EXCLUDED.architecture,
+  usage = EXCLUDED.usage,
+  benchmarks = EXCLUDED.benchmarks,
+  limitations = EXCLUDED.limitations,
+  url = EXCLUDED.url,
+  citations = EXCLUDED.citations,
+  popular = EXCLUDED.popular,
+  approved = true;
+
+INSERT INTO entries (name, org, type, task, license, year, size, summary, architecture, usage, benchmarks, limitations, url, citations, popular, approved)
+VALUES ('microduck-simulator', 'pollen-robotics', 'Platform', 'Multimodal', 'Community Hosted', 2026, 'DOCKER Platform', 'Interactive AI web platform and demonstration hosted on Hugging Face Spaces by pollen-robotics. Trending with 435 community stars.', 'DOCKER cloud runtime container with interactive browser interface.', 'Launch and explore the platform directly in your browser: https://huggingface.co/spaces/pollen-robotics/microduck-simulator', 'Trending Score: 225, Community Likes: 435', 'Cloud container subject to community traffic quotas and queue times.', 'https://huggingface.co/spaces/pollen-robotics/microduck-simulator', '[{"text":"pollen-robotics/microduck-simulator on Hugging Face Spaces","url":"https://huggingface.co/spaces/pollen-robotics/microduck-simulator"}]'::jsonb, true, true)
+ON CONFLICT (name) DO UPDATE SET
+  org = EXCLUDED.org,
+  type = EXCLUDED.type,
+  task = EXCLUDED.task,
+  license = EXCLUDED.license,
+  year = EXCLUDED.year,
+  size = EXCLUDED.size,
+  summary = EXCLUDED.summary,
+  architecture = EXCLUDED.architecture,
+  usage = EXCLUDED.usage,
+  benchmarks = EXCLUDED.benchmarks,
+  limitations = EXCLUDED.limitations,
+  url = EXCLUDED.url,
+  citations = EXCLUDED.citations,
+  popular = EXCLUDED.popular,
+  approved = true;
+
+INSERT INTO entries (name, org, type, task, license, year, size, summary, architecture, usage, benchmarks, limitations, url, citations, popular, approved)
+VALUES ('cai', 'aliasrobotics', 'Framework', 'NLP', 'NOASSERTION', 2026, '153MB Repo', 'Cybersecurity AI (CAI), the framework for AI Security', 'Modular AI codebase with native Python/C++ bindings and distributed workflow support.', 'git clone https://github.com/aliasrobotics/cai
+cd cai
+pip install -e .', 'GitHub Stars: 9,822, Forks: 1,451', 'Requires local Python environment and dependency configuration.', 'https://github.com/aliasrobotics/cai', '[{"text":"aliasrobotics/cai on GitHub","url":"https://github.com/aliasrobotics/cai"}]'::jsonb, true, true)
+ON CONFLICT (name) DO UPDATE SET
+  org = EXCLUDED.org,
+  type = EXCLUDED.type,
+  task = EXCLUDED.task,
+  license = EXCLUDED.license,
+  year = EXCLUDED.year,
+  size = EXCLUDED.size,
+  summary = EXCLUDED.summary,
+  architecture = EXCLUDED.architecture,
+  usage = EXCLUDED.usage,
+  benchmarks = EXCLUDED.benchmarks,
+  limitations = EXCLUDED.limitations,
+  url = EXCLUDED.url,
+  citations = EXCLUDED.citations,
+  popular = EXCLUDED.popular,
+  approved = true;
+
+INSERT INTO entries (name, org, type, task, license, year, size, summary, architecture, usage, benchmarks, limitations, url, citations, popular, approved)
+VALUES ('squad', 'rajpurkar', 'Dataset', 'NLP', 'CC-BY-SA-4.0', 2026, '10K<n<100K', 'Dataset Card for SQuAD 	 	 		 	 	 		Dataset Summary 	 Stanford Question Answering Dataset (SQuAD) is a reading comprehension dataset, consisting of questions posed by c (709 likes, 265,395 downloads).', 'Parquet / Arrow structured tabular & tokenized dataset.', 'from datasets import load_dataset
+
+dataset = load_dataset("rajpurkar/squad")', 'Trending Score: 230, Likes: 709, Downloads: 265,395', 'Subject to licensing compliance and dataset-specific terms of use.', 'https://huggingface.co/datasets/rajpurkar/squad', '[{"text":"rajpurkar/squad on Hugging Face Datasets","url":"https://huggingface.co/datasets/rajpurkar/squad"}]'::jsonb, true, true)
 ON CONFLICT (name) DO UPDATE SET
   org = EXCLUDED.org,
   type = EXCLUDED.type,

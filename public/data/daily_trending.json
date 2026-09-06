@@ -1,60 +1,60 @@
 {
-  "timestamp": "2026-09-06T02:06:45.197Z",
+  "timestamp": "2026-09-06T10:08:03.736Z",
   "models": [
     {
       "id": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
       "author": "deepseek-ai",
-      "likes": 680,
-      "downloads": 184542,
+      "likes": 701,
+      "downloads": 209191,
       "pipeline_tag": "image-text-to-text",
       "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp"
     },
     {
       "id": "Qwen/Qwen3.8-27B",
       "author": "Qwen",
-      "likes": 14038,
-      "downloads": 6024467,
+      "likes": 14065,
+      "downloads": 6190807,
       "pipeline_tag": "image-text-to-text",
       "url": "https://huggingface.co/Qwen/Qwen3.8-27B"
     },
     {
-      "id": "Qwen/Qwen3.8-Flash-Next",
-      "author": "Qwen",
-      "likes": 4914,
-      "downloads": 401327,
-      "pipeline_tag": "image-text-to-text",
-      "url": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next"
-    },
-    {
       "id": "XHToken/Spark-X2.5-4B",
       "author": "XHToken",
-      "likes": 541,
-      "downloads": 4755,
+      "likes": 570,
+      "downloads": 5477,
       "pipeline_tag": "text-generation",
       "url": "https://huggingface.co/XHToken/Spark-X2.5-4B"
     },
     {
+      "id": "Qwen/Qwen3.8-Flash-Next",
+      "author": "Qwen",
+      "likes": 4929,
+      "downloads": 432966,
+      "pipeline_tag": "image-text-to-text",
+      "url": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next"
+    },
+    {
       "id": "google/timesfm-3.0-pytorch",
       "author": "google",
-      "likes": 457,
-      "downloads": 123025,
+      "likes": 473,
+      "downloads": 144455,
       "pipeline_tag": "time-series-forecasting",
       "url": "https://huggingface.co/google/timesfm-3.0-pytorch"
     },
     {
-      "id": "zai-org/GLM-5.3-Flash",
-      "author": "zai-org",
-      "likes": 2079,
-      "downloads": 727610,
+      "id": "ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF",
+      "author": "ISTA-DASLab",
+      "likes": 435,
+      "downloads": 348389,
       "pipeline_tag": "image-text-to-text",
-      "url": "https://huggingface.co/zai-org/GLM-5.3-Flash"
+      "url": "https://huggingface.co/ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF"
     }
   ],
   "papers": [
     {
       "title": "RoboTok: An Internet-Scale Data Engine for Human Demonstration Retrieval and Dexterous Manipulation Learning",
       "summary": "RoboTok retrieves relevant human manipulation videos from the web using a latent motion space derived from 3D hand trajectories to improve robot policy training.",
-      "upvotes": 82,
+      "upvotes": 108,
       "arxiv_id": "2609.03199",
       "url": "https://huggingface.co/papers/2609.03199",
       "githubRepo": "https://github.com/Rice-RobotPI-Lab/RoboTok-Code"

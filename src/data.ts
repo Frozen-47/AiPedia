@@ -5074,6 +5074,116 @@ export const entries: Entry[] = [
               "url": "https://huggingface.co/Qwen/Qwen3.8-27B"
           }
       ]
+  },
+  {
+      "name": "Spark-X2.5-4B",
+      "type": "Model",
+      "summary": "High-performance NLP open-weights model by XHToken, trending with over 570 community likes and 5,477 downloads on Hugging Face.",
+      "task": "NLP",
+      "license": "APACHE-2.0",
+      "year": 2026,
+      "org": "XHToken",
+      "size": "4B params",
+      "architecture": "XHToken text generation architecture with community-tuned weights.",
+      "usage": "from transformers import AutoModelForCausalLM, AutoTokenizer\n\nmodel = AutoModelForCausalLM.from_pretrained(\"XHToken/Spark-X2.5-4B\", device_map=\"auto\")\ntokenizer = AutoTokenizer.from_pretrained(\"XHToken/Spark-X2.5-4B\")",
+      "benchmarks": "Trending Score: 474, Likes: 570, Downloads: 5,477",
+      "limitations": "Requires GPU VRAM or quantization for efficient local deployment.",
+      "popular": true,
+      "url": "https://huggingface.co/XHToken/Spark-X2.5-4B",
+      "citations": [
+          {
+              "text": "XHToken/Spark-X2.5-4B on Hugging Face",
+              "url": "https://huggingface.co/XHToken/Spark-X2.5-4B"
+          }
+      ]
+  },
+  {
+      "name": "Qwen3.8-Flash-Next",
+      "type": "Model",
+      "summary": "High-performance Multimodal open-weights model by Alibaba (Qwen), trending with over 4,929 community likes and 432,966 downloads on Hugging Face.",
+      "task": "Multimodal",
+      "license": "OTHER",
+      "year": 2026,
+      "org": "Alibaba (Qwen)",
+      "size": "Open Weights",
+      "architecture": "Alibaba (Qwen) image text to text architecture with community-tuned weights.",
+      "usage": "from transformers import AutoModelForCausalLM, AutoTokenizer\n\nmodel = AutoModelForCausalLM.from_pretrained(\"Qwen/Qwen3.8-Flash-Next\", device_map=\"auto\")\ntokenizer = AutoTokenizer.from_pretrained(\"Qwen/Qwen3.8-Flash-Next\")",
+      "benchmarks": "Trending Score: 449, Likes: 4,929, Downloads: 432,966",
+      "limitations": "Requires GPU VRAM or quantization for efficient local deployment.",
+      "popular": true,
+      "url": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "citations": [
+          {
+              "text": "Qwen/Qwen3.8-Flash-Next on Hugging Face",
+              "url": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next"
+          }
+      ]
+  },
+  {
+      "name": "microduck-simulator",
+      "type": "Platform",
+      "summary": "Interactive AI web platform and demonstration hosted on Hugging Face Spaces by pollen-robotics. Trending with 435 community stars.",
+      "task": "Multimodal",
+      "license": "Community Hosted",
+      "year": 2026,
+      "org": "pollen-robotics",
+      "size": "DOCKER Platform",
+      "architecture": "DOCKER cloud runtime container with interactive browser interface.",
+      "usage": "Launch and explore the platform directly in your browser: https://huggingface.co/spaces/pollen-robotics/microduck-simulator",
+      "benchmarks": "Trending Score: 225, Community Likes: 435",
+      "limitations": "Cloud container subject to community traffic quotas and queue times.",
+      "popular": true,
+      "url": "https://huggingface.co/spaces/pollen-robotics/microduck-simulator",
+      "citations": [
+          {
+              "text": "pollen-robotics/microduck-simulator on Hugging Face Spaces",
+              "url": "https://huggingface.co/spaces/pollen-robotics/microduck-simulator"
+          }
+      ]
+  },
+  {
+      "name": "cai",
+      "type": "Framework",
+      "summary": "Cybersecurity AI (CAI), the framework for AI Security",
+      "task": "NLP",
+      "license": "NOASSERTION",
+      "year": 2026,
+      "org": "aliasrobotics",
+      "size": "153MB Repo",
+      "architecture": "Modular AI codebase with native Python/C++ bindings and distributed workflow support.",
+      "usage": "git clone https://github.com/aliasrobotics/cai\ncd cai\npip install -e .",
+      "benchmarks": "GitHub Stars: 9,822, Forks: 1,451",
+      "limitations": "Requires local Python environment and dependency configuration.",
+      "popular": true,
+      "url": "https://github.com/aliasrobotics/cai",
+      "citations": [
+          {
+              "text": "aliasrobotics/cai on GitHub",
+              "url": "https://github.com/aliasrobotics/cai"
+          }
+      ]
+  },
+  {
+      "name": "squad",
+      "type": "Dataset",
+      "summary": "Dataset Card for SQuAD \t \t \t\t \t \t \t\tDataset Summary \t Stanford Question Answering Dataset (SQuAD) is a reading comprehension dataset, consisting of questions posed by c (709 likes, 265,395 downloads).",
+      "task": "NLP",
+      "license": "CC-BY-SA-4.0",
+      "year": 2026,
+      "org": "rajpurkar",
+      "size": "10K<n<100K",
+      "architecture": "Parquet / Arrow structured tabular & tokenized dataset.",
+      "usage": "from datasets import load_dataset\n\ndataset = load_dataset(\"rajpurkar/squad\")",
+      "benchmarks": "Trending Score: 230, Likes: 709, Downloads: 265,395",
+      "limitations": "Subject to licensing compliance and dataset-specific terms of use.",
+      "popular": true,
+      "url": "https://huggingface.co/datasets/rajpurkar/squad",
+      "citations": [
+          {
+              "text": "rajpurkar/squad on Hugging Face Datasets",
+              "url": "https://huggingface.co/datasets/rajpurkar/squad"
+          }
+      ]
   }
 ];
 

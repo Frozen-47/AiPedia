@@ -230,12 +230,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       if (approvedErr) throw approvedErr;
       
       const loadedApproved = (approvedData as Entry[]) || [];
-      if (loadedApproved.length > 0) {
-        setApprovedEntries(loadedApproved);
-      } else {
-        // Fallback to static catalog if DB entries table is not yet populated
-        setApprovedEntries(defaultEntries.map((e) => ({ ...e, approved: true })));
-      }
+      const mergedMap = new Map<string, Entry>();
+      defaultEntries.forEach((e) => {
+        if (e && e.name) mergedMap.set(e.name.toLowerCase().trim(), { ...e, approved: true });
+      });
+      loadedApproved.forEach((e) => {
+        if (e && e.name) mergedMap.set(e.name.toLowerCase().trim(), e);
+      });
+      setApprovedEntries(Array.from(mergedMap.values()));
 
       // 3. Fetch user preferences (for users tab)
       const { data: usersData, error: usersErr } = await supabase

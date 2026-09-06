@@ -1,24 +1,24 @@
 {
   "date": "2026-09-06",
   "tool": {
-    "name": "Qwen2 (72B)",
+    "name": "Llama 3 (8B)",
     "type": "Model",
-    "summary": "Alibaba's powerful open-weights model series competitive with leading frontier models, with strong multilingual and coding capabilities.",
+    "summary": "Meta's compact open-weights model designed to run efficiently on consumer hardware while retaining strong instruction-following capabilities.",
     "task": "NLP",
-    "license": "Qwen License",
+    "license": "Meta Llama 3 License",
     "year": 2024,
-    "org": "Alibaba Cloud",
-    "size": "72B params",
-    "architecture": "Transformer with GQA, long-context support up to 128K tokens.",
-    "usage": "from transformers import AutoModelForCausalLM, AutoTokenizer\nmodel = AutoModelForCausalLM.from_pretrained(\"Qwen/Qwen2-72B-Instruct\")\ntokenizer = AutoTokenizer.from_pretrained(\"Qwen/Qwen2-72B-Instruct\")",
-    "benchmarks": "MMLU: 84.2%, HumanEval: 86.0%",
-    "limitations": "Large VRAM requirement for local inference, license restrictions for commercial use.",
+    "org": "Meta AI",
+    "size": "8B params",
+    "architecture": "Transformer decoder with grouped query attention trained on 15T tokens.",
+    "usage": "from transformers import AutoTokenizer, AutoModelForCausalLM\ntokenizer = AutoTokenizer.from_pretrained(\"meta-llama/Meta-Llama-3-8B-Instruct\")\nmodel = AutoModelForCausalLM.from_pretrained(\"meta-llama/Meta-Llama-3-8B-Instruct\")",
+    "benchmarks": "MMLU: 66.6%, HumanEval: 62.2%",
+    "limitations": "Less capable than larger models, struggles with complex multi-step reasoning.",
     "popular": true,
-    "url": "https://qwenlm.github.io/",
+    "url": "https://llama.meta.com/",
     "citations": [
       {
-        "text": "Qwen2 Technical Report",
-        "url": "https://arxiv.org/abs/2407.10671"
+        "text": "Introducing Meta Llama 3",
+        "url": "https://ai.meta.com/blog/meta-llama-3/"
       }
     ]
   }

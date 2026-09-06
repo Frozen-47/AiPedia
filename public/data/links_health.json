@@ -1,28 +1,13 @@
 {
-  "timestamp": "2026-09-06T02:06:45.340Z",
+  "timestamp": "2026-09-06T10:08:04.289Z",
   "checked": 25,
-  "healthy": 21,
-  "broken": 4,
+  "healthy": 24,
+  "broken": 1,
   "issues": [
     {
-      "name": "Quizlet AI",
-      "url": "https://quizlet.com/features/quizlet-ai",
+      "name": "DALL-E 2",
+      "url": "https://openai.com/dall-e-2",
       "status": 403
-    },
-    {
-      "name": "Grammarly",
-      "url": "https://www.grammarly.com",
-      "status": 405
-    },
-    {
-      "name": "Ideogram",
-      "url": "https://ideogram.ai",
-      "status": 403
-    },
-    {
-      "name": "GPT-4o",
-      "url": "https://openai.com/chatgpt",
-      "status": 404
     }
   ]
 }

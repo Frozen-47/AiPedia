@@ -431,12 +431,18 @@ const Inner: React.FC = () => {
   useEffect(() => {
     fetchEntries()
       .then(data => {
-        if (!data || data.length === 0) {
-          console.warn("No data returned from Supabase, falling back to static entries.");
-          setEntries(staticEntries || []);
-        } else {
-          setEntries(data);
-        }
+        const remoteEntries = data || [];
+        const mergedMap = new Map<string, Entry>();
+        // 1. Static entries first (ensures newly ingested models/platforms in data.ts are immediately present)
+        (staticEntries || []).forEach(e => {
+          if (e && e.name) mergedMap.set(e.name.toLowerCase().trim(), e);
+        });
+        // 2. Supabase approved entries take precedence / add new community submissions
+        remoteEntries.forEach(e => {
+          if (e && e.name) mergedMap.set(e.name.toLowerCase().trim(), e);
+        });
+        const combined = Array.from(mergedMap.values());
+        setEntries(combined);
         setTypeFilters(staticTypeFilters || ["All"]);
         setTaskFilters(staticTaskFilters || ["All Tasks"]);
         setIsLoading(false);
