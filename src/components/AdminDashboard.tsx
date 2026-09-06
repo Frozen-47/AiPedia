@@ -101,7 +101,7 @@ const isNewSubmission = (createdAt?: string): boolean => {
 
 const DEFAULT_ANNOUNCEMENT: SiteAnnouncement = {
   enabled: false,
-  message: "🚀 Welcome to AiVerse — Discover and compare 228+ open & commercial AI technologies.",
+  message: "🚀 Welcome to AiVerse — Discover and compare 242+ open & commercial AI technologies.",
   type: "special",
   linkText: "Explore Models",
   linkUrl: "#catalog",
@@ -1509,7 +1509,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   >
                     <FileJson size={18} className="text-sky-400 mb-2" />
                     <p className="text-xs font-bold">Catalog Assets</p>
-                    <p className="text-[10px] text-neutral-400 mt-0.5">Export all 228+ approved AI tools</p>
+                    <p className="text-[10px] text-neutral-400 mt-0.5">Export all {approvedEntries.length > 0 ? approvedEntries.length : 238}+ approved AI tools</p>
                   </button>
 
                   <button

@@ -257,7 +257,7 @@ export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBackToHome }) 
               </h2>
             </div>
             <p className={`text-[13px] leading-relaxed font-light ${t.textSecondary}`}>
-              AiVerse operates as a modern open-source index, benchmark comparison engine, and educational compendium covering over 228+ artificial intelligence technologies across five primary domains:
+              AiVerse operates as a modern open-source index, benchmark comparison engine, and educational compendium covering over 242+ artificial intelligence technologies across five primary domains:
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-1">
               {[

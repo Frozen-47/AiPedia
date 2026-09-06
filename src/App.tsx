@@ -1139,7 +1139,11 @@ const Inner: React.FC = () => {
 
               {/* Live Intelligence Stats */}
               <div>
-                <OverviewCards totalEntriesCount={entries.length} />
+                <OverviewCards
+                  totalEntriesCount={entries.length}
+                  entries={entries}
+                  ratingSummaries={ratingSummaries}
+                />
               </div>
 
               {/* Live Daily AI Pulse & Tool of the Day */}

@@ -74,7 +74,7 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
           <span className={t.textSecondary}>AiVerse Intelligence Compendium</span>
           <span className="text-white/20">•</span>
           <span className="text-white font-black tracking-wide">
-            {totalEntries > 0 ? `${totalEntries} AI Assets Indexed` : "228+ Assets Indexed"}
+            {totalEntries > 0 ? `${totalEntries} AI Assets Indexed` : "242+ Assets Indexed"}
           </span>
         </div>
 
@@ -113,7 +113,7 @@ export const DashboardHero: React.FC<DashboardHeroProps> = ({
                   onScrollToCatalog();
                 }
               }}
-              placeholder="Search 228+ models, frameworks, datasets, or tasks..."
+              placeholder={`Search ${totalEntries > 0 ? totalEntries : 242}+ models, frameworks, datasets, or tasks...`}
               className={`w-full bg-transparent border-none outline-none text-sm md:text-base font-normal pr-3 ${t.textPrimary} placeholder:${t.textMuted}`}
             />
             <div className={`hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold shrink-0 border ${

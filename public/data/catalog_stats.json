@@ -2,6 +2,10 @@
   "timestamp": "2026-09-06T10:17:31.575Z",
   "totalEntries": 242,
   "popularEntries": 196,
+  "totalUsers": 10,
+  "averageRating": 4.38,
+  "totalRatings": 8,
+  "newEntriesCount": 15,
   "byType": {
     "Model": 91,
     "Framework": 25,
