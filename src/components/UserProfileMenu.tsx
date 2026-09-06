@@ -25,6 +25,8 @@ import {
   Lock,
   ChevronDown,
   ChevronUp,
+  Trash2,
+  AlertTriangle,
 } from "lucide-react";
 import { useAuth } from "./AuthContext";
 import { shareUrlForProfile } from "../lib/entryUrl";
@@ -37,7 +39,7 @@ import {
   type UserRole,
 } from "../lib/onboarding";
 import { useTokens, useTheme } from "../lib/theme";
-import { getOAuthAvatarUrl } from "../lib/supabase";
+import { getOAuthAvatarUrl, supabase } from "../lib/supabase";
 
 // Custom SVG Logos for platforms not in standard Lucide version
 const GithubLogo = ({ className }: { className?: string }) => (
@@ -234,6 +236,40 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
     : (email ? email[0] : "U").toUpperCase();
 
   const [socialsExpanded, setSocialsExpanded] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+
+  const handleExecuteDeleteOwnAccount = async () => {
+    setIsDeletingAccount(true);
+    try {
+      const { error: rpcErr } = await supabase.rpc("delete_own_account");
+
+      if (user?.id) {
+        const userKey = `supabase_${user.id}`;
+        await Promise.allSettled([
+          supabase.from("user_preferences").delete().in("user_key", [userKey, user.id]),
+          supabase.from("user_bookmarks").delete().in("user_key", [userKey, user.id]),
+          supabase.from("entry_ratings").delete().in("user_key", [userKey, user.id]),
+          supabase.from("entry_comments").delete().in("user_key", [userKey, user.id]),
+        ]);
+      }
+
+      if (rpcErr) {
+        console.warn("delete_own_account RPC response:", rpcErr);
+      }
+
+      localStorage.removeItem("aiverse_bookmarks");
+      localStorage.removeItem("aiverse_onboarding");
+
+      await signOut();
+      setShowDeleteConfirm(false);
+      onClose?.();
+    } catch (err: any) {
+      console.error("Account self-deletion error:", err);
+    } finally {
+      setIsDeletingAccount(false);
+    }
+  };
 
   const wrapperCls = (readOnly: boolean) => [
     "relative flex items-center rounded-xl border transition-all duration-300 w-full",
@@ -880,8 +916,8 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
       {/* ── Gradient separator ── */}
       <div className={separatorCls} />
 
-      {/* ══════════ Sign Out ══════════ */}
-      <div className="px-0.5">
+      {/* ══════════ Sign Out & Danger Zone ══════════ */}
+      <div className="px-0.5 space-y-1">
         <button
           type="button"
           onClick={() => {
@@ -899,7 +935,61 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
           </div>
           Sign out
         </button>
+
+        <button
+          type="button"
+          onClick={() => setShowDeleteConfirm(true)}
+          className={[
+            "w-full flex items-center gap-3 px-2.5 py-2 rounded-xl text-xs font-semibold text-left cursor-pointer transition-all duration-200",
+            "text-neutral-500 hover:text-red-400",
+            isDark ? "hover:bg-red-500/5" : "hover:bg-red-500/5",
+          ].join(" ")}
+        >
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 bg-neutral-500/10 text-neutral-400 border border-neutral-500/20 transition-colors duration-200 group-hover:bg-red-500/20 group-hover:text-red-400">
+            <Trash2 size={13} />
+          </div>
+          Delete account
+        </button>
       </div>
+
+      {/* ══════════ Self-Account Deletion Modal ══════════ */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-[fadeIn_0.15s_ease-out]">
+          <div className={`relative w-full max-w-sm p-6 rounded-2xl overflow-hidden shadow-2xl space-y-4 border ${
+            isDark ? "bg-[#111116] border-white/10 text-white" : "bg-white border-neutral-200 text-neutral-900"
+          }`}>
+            <div className="flex items-center gap-3 text-red-500">
+              <div className="p-2 rounded-xl bg-red-500/10 border border-red-500/20">
+                <AlertTriangle size={20} className="stroke-[2.5px]" />
+              </div>
+              <h3 className="text-base font-black tracking-tight">Delete Account Permanently</h3>
+            </div>
+            <p className="text-xs leading-relaxed font-light opacity-80">
+              Are you sure you want to delete your account?
+              <br /><br />
+              This will permanently remove your login credentials from <strong className="text-red-400">auth.users</strong> and erase all bookmarks, profile details, and preferences from everywhere. This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                type="button"
+                disabled={isDeletingAccount}
+                onClick={() => setShowDeleteConfirm(false)}
+                className="px-4 py-2 rounded-xl text-xs font-semibold hover:bg-neutral-500/10 transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={isDeletingAccount}
+                onClick={handleExecuteDeleteOwnAccount}
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-red-600 hover:bg-red-500 text-white cursor-pointer disabled:opacity-50 transition-colors"
+              >
+                {isDeletingAccount ? "Deleting..." : "Permanently Delete"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

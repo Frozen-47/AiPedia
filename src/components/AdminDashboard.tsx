@@ -140,6 +140,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [editingUser, setEditingUser] = useState<UserProfile | null>(null);
   const [blockingUser, setBlockingUser] = useState<UserProfile | null>(null);
   const [deleteConfirmUser, setDeleteConfirmUser] = useState<UserProfile | null>(null);
+  const [directDeleteModalOpen, setDirectDeleteModalOpen] = useState(false);
+  const [directDeleteUidInput, setDirectDeleteUidInput] = useState("");
 
   // Site Announcements state
   const [announcement, setAnnouncement] = useState<SiteAnnouncement>(() => {
@@ -241,15 +243,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       });
       setApprovedEntries(Array.from(mergedMap.values()));
 
-      // 3. Fetch user preferences (for users tab)
-      const { data: usersData, error: usersErr } = await supabase
-        .from("user_preferences")
-        .select("*")
-        .order("updated_at", { ascending: false });
+      // 3. Fetch user accounts (try get_admin_users to capture all auth.users, fallback to user_preferences)
+      let usersRows: any[] = [];
+      try {
+        const { data: rpcUsers, error: rpcErr } = await supabase.rpc("get_admin_users");
+        if (!rpcErr && Array.isArray(rpcUsers) && rpcUsers.length > 0) {
+          usersRows = rpcUsers;
+        }
+      } catch {}
 
-      if (usersErr) throw usersErr;
+      if (usersRows.length === 0) {
+        const { data: usersData, error: usersErr } = await supabase
+          .from("user_preferences")
+          .select("*")
+          .order("updated_at", { ascending: false });
 
-      const parsedUsers: UserProfile[] = (usersData || []).map((row: any) => {
+        if (usersErr) throw usersErr;
+        usersRows = usersData || [];
+      }
+
+      const parsedUsers: UserProfile[] = usersRows.map((row: any) => {
         let meta: any = {};
         try {
           if (row.referral_source) {
@@ -271,7 +284,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           blockedUntilDate = "9999-12-31T23:59:59.999Z";
         }
 
-        let userAvatar = meta.avatarUrl || meta.avatar_url || undefined;
+        let userAvatar = meta.avatarUrl || meta.avatar_url || row.avatar_url || undefined;
         if (userAvatar && userAvatar.includes("dicebear.com")) {
           userAvatar = undefined;
         }
@@ -280,11 +293,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           if (realOAuth) userAvatar = realOAuth;
         }
 
+        const fallbackName = row.email ? row.email.split("@")[0] : `User_${String(row.user_key).slice(-6)}`;
+
         return {
-          userKey: row.user_key,
-          displayName: meta.displayName || "Unknown User",
-          username: meta.username || `@user_${row.user_key.slice(-6)}`,
-          description: meta.description || "",
+          userKey: row.user_key || (row.user_id ? `supabase_${row.user_id}` : `user_${Math.random()}`),
+          displayName: meta.displayName || meta.full_name || fallbackName,
+          username: meta.username || `@${fallbackName}`,
+          description: meta.description || (row.email ? `Email: ${row.email}` : ""),
           github: meta.github || "",
           linkedin: meta.linkedin || "",
           medium: meta.medium || "",
@@ -293,7 +308,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           avatarUrl: userAvatar,
           role: row.role || "developer",
           interests: row.interests || [],
-          updatedAt: row.updated_at || new Date().toISOString(),
+          updatedAt: row.updated_at || row.created_at || new Date().toISOString(),
           isBlocked: isUserBlocked,
           blockedUntil: blockedUntilDate,
         };
@@ -649,29 +664,112 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   };
 
   const handleExecuteDeleteUser = async (profile: UserProfile) => {
-    if (profile.userKey === currentUserKey) {
+    if (
+      profile.userKey === currentUserKey ||
+      (user && (profile.userKey === user.id || profile.userKey === `supabase_${user.id}`))
+    ) {
       showToast("error", "Security violation: You cannot delete your own admin account.");
       return;
     }
 
     setActioningId(profile.userKey);
     try {
-      const { error: err } = await supabase
-        .from("user_preferences")
-        .delete()
-        .eq("user_key", profile.userKey);
+      const rawUuid = profile.userKey.startsWith("supabase_")
+        ? profile.userKey.slice(9)
+        : profile.userKey;
+      const formattedKey = profile.userKey.startsWith("supabase_")
+        ? profile.userKey
+        : `supabase_${profile.userKey}`;
 
-      if (err) throw err;
+      // 1. Call database RPC delete_user_by_admin to delete from auth.users AND all database tables
+      const { error: rpcErr } = await supabase.rpc("delete_user_by_admin", {
+        target_user_key: formattedKey,
+      });
 
-      setUsers((prev) => prev.filter((u) => u.userKey !== profile.userKey));
-      showToast("success", `User profile for "${profile.displayName}" deleted.`);
-      logAudit("Delete User", `Deleted profile for "${profile.displayName}" (${profile.username})`);
+      // 2. Also perform cleanup across all application tables for both key variants
+      await Promise.allSettled([
+        supabase.from("user_preferences").delete().in("user_key", [profile.userKey, formattedKey, rawUuid]),
+        supabase.from("user_bookmarks").delete().in("user_key", [profile.userKey, formattedKey, rawUuid]),
+        supabase.from("entry_ratings").delete().in("user_key", [profile.userKey, formattedKey, rawUuid]),
+        supabase.from("entry_comments").delete().in("user_key", [profile.userKey, formattedKey, rawUuid]),
+      ]);
+
+      if (rpcErr) {
+        console.error("delete_user_by_admin RPC error:", rpcErr);
+        throw new Error(rpcErr.message || "Failed to purge account from auth.users");
+      }
+
+      setUsers((prev) =>
+        prev.filter(
+          (u) =>
+            u.userKey !== profile.userKey &&
+            u.userKey !== formattedKey &&
+            u.userKey !== rawUuid
+        )
+      );
+      showToast("success", `Account "${profile.displayName}" permanently deleted everywhere (Auth & Database).`);
+      logAudit("Delete User", `Permanently deleted account and auth credentials for "${profile.displayName}" (${profile.username})`);
     } catch (err: any) {
       showToast("error", `Failed to delete user: ${err.message}`);
     } finally {
       setActioningId(null);
     }
   };
+
+  const handleExecuteDirectDeleteUid = async (uidToPurge: string) => {
+    const trimmed = uidToPurge.trim();
+    if (!trimmed) {
+      showToast("error", "Please enter a valid User UID or key.");
+      return;
+    }
+    if (
+      trimmed === currentUserKey ||
+      (user && (trimmed === user.id || trimmed === `supabase_${user.id}`)) ||
+      trimmed.includes("20f48b0a-737d-4b78-9098-847a8ba450e8")
+    ) {
+      showToast("error", "Security violation: You cannot delete the primary admin account.");
+      return;
+    }
+
+    const formattedKey = trimmed.startsWith("supabase_") ? trimmed : `supabase_${trimmed}`;
+    const rawUuid = trimmed.startsWith("supabase_") ? trimmed.slice(9) : trimmed;
+
+    setActioningId(formattedKey);
+    try {
+      const { error: rpcErr } = await supabase.rpc("delete_user_by_admin", {
+        target_user_key: formattedKey,
+      });
+
+      await Promise.allSettled([
+        supabase.from("user_preferences").delete().in("user_key", [trimmed, formattedKey, rawUuid]),
+        supabase.from("user_bookmarks").delete().in("user_key", [trimmed, formattedKey, rawUuid]),
+        supabase.from("entry_ratings").delete().in("user_key", [trimmed, formattedKey, rawUuid]),
+        supabase.from("entry_comments").delete().in("user_key", [trimmed, formattedKey, rawUuid]),
+      ]);
+
+      if (rpcErr) {
+        throw new Error(rpcErr.message || "Failed to delete from auth.users");
+      }
+
+      setUsers((prev) =>
+        prev.filter(
+          (u) =>
+            u.userKey !== trimmed &&
+            u.userKey !== formattedKey &&
+            u.userKey !== rawUuid
+        )
+      );
+      showToast("success", `Account ${rawUuid} permanently deleted from auth.users and all tables.`);
+      logAudit("Purge User UID", `Deleted account with UID ${rawUuid} directly from auth.users`);
+      setDirectDeleteModalOpen(false);
+      setDirectDeleteUidInput("");
+    } catch (err: any) {
+      showToast("error", `Failed to purge user: ${err.message}`);
+    } finally {
+      setActioningId(null);
+    }
+  };
+
 
   // ── Actions: Data Exports ─────────────────────────────────────────────────
 
@@ -1348,6 +1446,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   >
                     <Download size={13} />
                     Export Users
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setDirectDeleteModalOpen(true)}
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-red-500/30 text-red-400 hover:bg-red-500/10 cursor-pointer transition-all"
+                    title="Delete any user directly by Auth UID from auth.users"
+                  >
+                    <Trash2 size={13} />
+                    Delete by UID
                   </button>
                 </div>
               </div>
@@ -2288,10 +2396,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <div className="p-2 rounded-xl bg-red-500/10">
                 <Trash2 size={22} className="stroke-[2.5px]" />
               </div>
-              <h3 className={`text-base font-black tracking-tight ${t.textPrimary}`}>Permanently Delete User</h3>
+              <h3 className={`text-base font-black tracking-tight ${t.textPrimary}`}>Permanently Delete Account</h3>
             </div>
             <p className={`text-xs leading-relaxed font-light ${t.textSecondary}`}>
-              Permanently delete builder profile for <strong className={t.textPrimary}>{deleteConfirmUser.displayName} ({deleteConfirmUser.username})</strong>? This action cannot be undone.
+              Permanently delete user <strong className={t.textPrimary}>{deleteConfirmUser.displayName} ({deleteConfirmUser.username})</strong>?
+              <br />
+              This will completely remove their account from <strong className="text-red-400">auth.users</strong> (Supabase Auth credentials, sessions, OAuth) and erase all bookmarks, comments, and profile data everywhere.
             </p>
             <div className="flex justify-end gap-2 pt-2">
               <button
@@ -2310,7 +2420,64 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 }}
                 className="px-5 py-2 rounded-xl text-xs font-bold bg-red-600 hover:bg-red-500 text-white cursor-pointer"
               >
-                Delete Profile
+                Delete Account Everywhere
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Direct Delete by UID Modal */}
+      {directDeleteModalOpen && (
+        <div className={t.modalOverlay}>
+          <div className={`relative w-full max-w-md p-6 rounded-2xl overflow-hidden shadow-2xl space-y-4 animate-[scaleUp_0.15s_ease-out] ${t.modal}`}>
+            <button
+              onClick={() => {
+                setDirectDeleteModalOpen(false);
+                setDirectDeleteUidInput("");
+              }}
+              className={`absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full border transition-all ${t.surface} ${t.border} ${t.textMuted}`}
+            >
+              <X size={13} />
+            </button>
+            <div className="flex items-center gap-3 text-red-500 mb-2">
+              <div className="p-2 rounded-xl bg-red-500/10">
+                <Trash2 size={22} className="stroke-[2.5px]" />
+              </div>
+              <h3 className={`text-base font-black tracking-tight ${t.textPrimary}`}>Delete User by Auth UID</h3>
+            </div>
+            <p className={`text-xs leading-relaxed font-light ${t.textSecondary}`}>
+              Enter any Supabase User UID (or user_key) to completely purge their account from <strong className="text-red-400">auth.users</strong> and all application database tables:
+            </p>
+            <div>
+              <input
+                type="text"
+                placeholder="e.g. afa9a070-6961-4419-a7b1-291628f94a48"
+                value={directDeleteUidInput}
+                onChange={(e) => setDirectDeleteUidInput(e.target.value)}
+                className={`w-full px-3.5 py-2.5 rounded-xl border text-xs font-mono outline-none ${t.input}`}
+              />
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setDirectDeleteModalOpen(false);
+                  setDirectDeleteUidInput("");
+                }}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold ${t.btnGhost}`}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={!directDeleteUidInput.trim()}
+                onClick={async () => {
+                  await handleExecuteDirectDeleteUid(directDeleteUidInput);
+                }}
+                className="px-5 py-2 rounded-xl text-xs font-bold bg-red-600 hover:bg-red-500 text-white cursor-pointer disabled:opacity-50"
+              >
+                Purge Account Everywhere
               </button>
             </div>
           </div>

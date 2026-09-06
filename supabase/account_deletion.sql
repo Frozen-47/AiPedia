@@ -1,71 +1,16 @@
--- Prefer running all.sql once (tables + RLS).
--- This file is kept for reference; same tables as all.sql (part 1).
+-- =============================================================================
+-- AiVerse — Complete Account & Auth Deletion Script
+-- Run this in your Supabase Project -> SQL Editor
+-- This ensures deleting an account removes it COMPLETELY from:
+--   1. auth.users (Supabase Auth credentials, sessions, OAuth links)
+--   2. public.user_preferences
+--   3. public.user_bookmarks
+--   4. public.entry_ratings
+--   5. public.entry_comments
+--   6. public.entries (cleans up submitted_by)
+-- =============================================================================
 
-CREATE TABLE IF NOT EXISTS entries (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  created_at TIMESTAMPTZ DEFAULT now(),
-  name TEXT NOT NULL UNIQUE,
-  org TEXT,
-  type TEXT NOT NULL,
-  task TEXT NOT NULL,
-  license TEXT,
-  year INTEGER,
-  size TEXT,
-  summary TEXT NOT NULL,
-  architecture TEXT,
-  usage TEXT,
-  benchmarks TEXT,
-  limitations TEXT,
-  url TEXT,
-  citations JSONB DEFAULT '[]'::jsonb,
-  popular BOOLEAN DEFAULT false,
-  approved BOOLEAN DEFAULT false
-);
-
-ALTER TABLE entries ENABLE ROW LEVEL SECURITY;
-
--- Onboarding preferences (see user_preferences.sql)
-CREATE TABLE IF NOT EXISTS user_preferences (
-  user_key TEXT PRIMARY KEY,
-  role TEXT NOT NULL,
-  interests TEXT[] NOT NULL DEFAULT '{}',
-  referral_source TEXT NOT NULL,
-  updated_at TIMESTAMPTZ DEFAULT now()
-);
-
-ALTER TABLE user_preferences ENABLE ROW LEVEL SECURITY;
-
--- Ratings & comments (see entry_feedback.sql)
-CREATE TABLE IF NOT EXISTS entry_ratings (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  entry_name TEXT NOT NULL REFERENCES entries(name) ON DELETE CASCADE,
-  user_key TEXT NOT NULL,
-  author_name TEXT NOT NULL,
-  rating SMALLINT NOT NULL CHECK (rating >= 1 AND rating <= 5),
-  created_at TIMESTAMPTZ DEFAULT now(),
-  updated_at TIMESTAMPTZ DEFAULT now(),
-  UNIQUE (entry_name, user_key)
-);
-
-CREATE TABLE IF NOT EXISTS entry_comments (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  entry_name TEXT NOT NULL REFERENCES entries(name) ON DELETE CASCADE,
-  user_key TEXT NOT NULL,
-  author_name TEXT NOT NULL,
-  body TEXT NOT NULL CHECK (char_length(trim(body)) >= 1 AND char_length(body) <= 2000),
-  created_at TIMESTAMPTZ DEFAULT now()
-);
-
-CREATE INDEX IF NOT EXISTS entry_ratings_entry_name_idx ON entry_ratings (entry_name);
-CREATE INDEX IF NOT EXISTS entry_comments_entry_name_idx ON entry_comments (entry_name, created_at DESC);
-
-ALTER TABLE entry_ratings ENABLE ROW LEVEL SECURITY;
-ALTER TABLE entry_comments ENABLE ROW LEVEL SECURITY;
-
--- RLS policies: run rls_policies.sql after this file.
-
--- ─── Administrative RPC Functions ──────────────────────────────────────────
-
+-- ─── 1. Admin Function: Delete any user account completely ───────────────────
 CREATE OR REPLACE FUNCTION public.delete_user_by_admin(target_user_key text)
 RETURNS void
 LANGUAGE plpgsql
@@ -79,10 +24,12 @@ DECLARE
   caller_sub text;
   caller_role text;
 BEGIN
+  -- Extract calling user claims safely
   caller_email := auth.jwt() ->> 'email';
   caller_sub := auth.jwt() ->> 'sub';
   caller_role := auth.jwt() -> 'user_metadata' ->> 'role';
 
+  -- Verify caller is an administrator
   IF NOT (
     caller_email = 'frozennheart47@gmail.com' 
     OR caller_sub = '20f48b0a-737d-4b78-9098-847a8ba450e8'
@@ -91,33 +38,51 @@ BEGIN
     RAISE EXCEPTION 'Unauthorized: Only platform administrators can delete accounts.';
   END IF;
 
+  -- Normalize target key: extract raw UUID whether formatted as 'supabase_<uuid>' or '<uuid>'
   IF target_user_key LIKE 'supabase_%' THEN
     raw_uuid_text := substring(target_user_key from 10);
   ELSE
     raw_uuid_text := target_user_key;
   END IF;
 
+  -- Prevent admin from accidentally deleting the primary administrator account
   IF raw_uuid_text = '20f48b0a-737d-4b78-9098-847a8ba450e8' THEN
     RAISE EXCEPTION 'Security error: You cannot delete the primary admin account.';
   END IF;
 
+  -- 1. Delete from application tables (matching both 'supabase_<uuid>' and '<uuid>')
   DELETE FROM public.user_preferences 
-    WHERE user_key = target_user_key OR user_key = 'supabase_' || raw_uuid_text OR user_key = raw_uuid_text;
+    WHERE user_key = target_user_key 
+       OR user_key = 'supabase_' || raw_uuid_text 
+       OR user_key = raw_uuid_text;
+
   DELETE FROM public.user_bookmarks 
-    WHERE user_key = target_user_key OR user_key = 'supabase_' || raw_uuid_text OR user_key = raw_uuid_text;
+    WHERE user_key = target_user_key 
+       OR user_key = 'supabase_' || raw_uuid_text 
+       OR user_key = raw_uuid_text;
+
   DELETE FROM public.entry_ratings 
-    WHERE user_key = target_user_key OR user_key = 'supabase_' || raw_uuid_text OR user_key = raw_uuid_text;
+    WHERE user_key = target_user_key 
+       OR user_key = 'supabase_' || raw_uuid_text 
+       OR user_key = raw_uuid_text;
+
   DELETE FROM public.entry_comments 
-    WHERE user_key = target_user_key OR user_key = 'supabase_' || raw_uuid_text OR user_key = raw_uuid_text;
+    WHERE user_key = target_user_key 
+       OR user_key = 'supabase_' || raw_uuid_text 
+       OR user_key = raw_uuid_text;
 
   UPDATE public.entries 
     SET submitted_by = NULL 
-    WHERE submitted_by = target_user_key OR submitted_by = 'supabase_' || raw_uuid_text OR submitted_by = raw_uuid_text;
+    WHERE submitted_by = target_user_key 
+       OR submitted_by = 'supabase_' || raw_uuid_text 
+       OR submitted_by = raw_uuid_text;
 
+  -- 2. Delete completely from auth.users (cascades sessions, identities, OAuth tokens)
   BEGIN
     target_uuid := raw_uuid_text::uuid;
     DELETE FROM auth.users WHERE id = target_uuid;
   EXCEPTION WHEN OTHERS THEN
+    -- If target_user_key was not a valid UUID (e.g. guest ID), ignore auth.users delete
   END;
 END;
 $$;
@@ -125,6 +90,8 @@ $$;
 REVOKE ALL ON FUNCTION public.delete_user_by_admin(text) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.delete_user_by_admin(text) TO authenticated;
 
+
+-- ─── 2. User Function: Self-account deletion ─────────────────────────────────
 CREATE OR REPLACE FUNCTION public.delete_own_account()
 RETURNS void
 LANGUAGE plpgsql
@@ -140,18 +107,31 @@ BEGIN
     RAISE EXCEPTION 'Not authenticated.';
   END IF;
 
+  -- Prevent primary admin from deleting their own account via self-deletion
   IF calling_user_id = '20f48b0a-737d-4b78-9098-847a8ba450e8'::uuid THEN
     RAISE EXCEPTION 'Security error: The primary administrator account cannot be deleted.';
   END IF;
 
   calling_user_key := 'supabase_' || calling_user_id::text;
 
-  DELETE FROM public.user_preferences WHERE user_key = calling_user_key OR user_key = calling_user_id::text;
-  DELETE FROM public.user_bookmarks WHERE user_key = calling_user_key OR user_key = calling_user_id::text;
-  DELETE FROM public.entry_ratings WHERE user_key = calling_user_key OR user_key = calling_user_id::text;
-  DELETE FROM public.entry_comments WHERE user_key = calling_user_key OR user_key = calling_user_id::text;
-  UPDATE public.entries SET submitted_by = NULL WHERE submitted_by = calling_user_key OR submitted_by = calling_user_id::text;
+  -- 1. Delete application records
+  DELETE FROM public.user_preferences 
+    WHERE user_key = calling_user_key OR user_key = calling_user_id::text;
 
+  DELETE FROM public.user_bookmarks 
+    WHERE user_key = calling_user_key OR user_key = calling_user_id::text;
+
+  DELETE FROM public.entry_ratings 
+    WHERE user_key = calling_user_key OR user_key = calling_user_id::text;
+
+  DELETE FROM public.entry_comments 
+    WHERE user_key = calling_user_key OR user_key = calling_user_id::text;
+
+  UPDATE public.entries 
+    SET submitted_by = NULL 
+    WHERE submitted_by = calling_user_key OR submitted_by = calling_user_id::text;
+
+  -- 2. Delete from auth.users (cascades all authentication sessions and OAuth identities)
   DELETE FROM auth.users WHERE id = calling_user_id;
 END;
 $$;
@@ -159,6 +139,8 @@ $$;
 REVOKE ALL ON FUNCTION public.delete_own_account() FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.delete_own_account() TO authenticated;
 
+
+-- ─── 3. Admin Function: Query all auth.users merged with preferences ─────────
 CREATE OR REPLACE FUNCTION public.get_admin_users()
 RETURNS JSONB
 LANGUAGE plpgsql
@@ -214,4 +196,3 @@ $$;
 
 REVOKE ALL ON FUNCTION public.get_admin_users() FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.get_admin_users() TO authenticated;
-
