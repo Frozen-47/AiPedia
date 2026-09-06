@@ -58,6 +58,7 @@ import {
   type OnboardingProfile,
 } from "./lib/onboarding";
 import { fetchUserPreferences, supabase } from "./lib/supabase";
+import { fetchSiteAnnouncement } from "./lib/announcements";
 
 function checkBlockStatus(profile: OnboardingProfile | null) {
   if (!profile?.referralSource) return null;
@@ -197,6 +198,11 @@ const Inner: React.FC = () => {
   });
 
   useEffect(() => {
+    // Fetch live global broadcast announcement from Supabase for all visitors
+    fetchSiteAnnouncement().then((ann) => {
+      if (ann) setAnnouncement(ann);
+    });
+
     const handleAnnouncementChange = () => {
       try {
         const stored = localStorage.getItem("aiverse_site_announcement");
@@ -341,6 +347,14 @@ const Inner: React.FC = () => {
         setBlockedStatus(null);
       }
 
+      // 1. If DB has a profile record (including any admin modifications or user updates), prioritize it!
+      if (fromDb && fromDb.role && fromDb.referralSource && !cancelled) {
+        setOnboardingProfile(fromDb);
+        setShowOnboarding(false);
+        return;
+      }
+
+      // 2. Fall back to user_metadata only if DB has no record
       const fromMetadata = user.user_metadata?.onboardingComplete && user.user_metadata?.onboarding 
         ? (user.user_metadata.onboarding as OnboardingProfile) 
         : null;
@@ -350,12 +364,6 @@ const Inner: React.FC = () => {
           setOnboardingProfile(fromMetadata);
           setShowOnboarding(false);
         }
-        return;
-      }
-
-      if (fromDb && !cancelled) {
-        setOnboardingProfile(fromDb);
-        setShowOnboarding(false);
         return;
       }
 
@@ -458,9 +466,15 @@ const Inner: React.FC = () => {
         (staticEntries || []).forEach(e => {
           if (e && e.name) mergedMap.set(e.name.toLowerCase().trim(), e);
         });
-        // 2. Supabase approved entries take precedence / add new community submissions
+        // 2. Supabase approved entries take precedence / filter out deleted entries
         remoteEntries.forEach(e => {
-          if (e && e.name) mergedMap.set(e.name.toLowerCase().trim(), e);
+          if (!e || !e.name) return;
+          const key = e.name.toLowerCase().trim();
+          if (e.approved === false) {
+            mergedMap.delete(key);
+          } else {
+            mergedMap.set(key, e);
+          }
         });
         const combined = Array.from(mergedMap.values());
         setEntries(combined);

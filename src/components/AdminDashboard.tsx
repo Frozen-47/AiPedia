@@ -53,14 +53,13 @@ interface UserProfile {
   blockedUntil?: string;
 }
 
-export interface SiteAnnouncement {
-  enabled: boolean;
-  message: string;
-  type: "info" | "warning" | "success" | "special";
-  linkText?: string;
-  linkUrl?: string;
-  updatedAt?: string;
-}
+import {
+  type SiteAnnouncement,
+  DEFAULT_ANNOUNCEMENT,
+  fetchSiteAnnouncement,
+  saveSiteAnnouncement,
+} from "../lib/announcements";
+export type { SiteAnnouncement };
 
 export interface AuditLogItem {
   id: string;
@@ -97,14 +96,6 @@ const isNewSubmission = (createdAt?: string): boolean => {
   const diffMs = now.getTime() - created.getTime();
   const diffDays = diffMs / (1000 * 60 * 60 * 24);
   return diffDays <= 2;
-};
-
-const DEFAULT_ANNOUNCEMENT: SiteAnnouncement = {
-  enabled: false,
-  message: "🚀 Welcome to AiVerse — Discover and compare 242+ open & commercial AI technologies.",
-  type: "special",
-  linkText: "Explore Models",
-  linkUrl: "#catalog",
 };
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
@@ -309,6 +300,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       });
 
       setUsers(parsedUsers);
+
+      // 4. Fetch live broadcast announcement from Supabase
+      try {
+        const liveAnn = await fetchSiteAnnouncement();
+        if (liveAnn) setAnnouncement(liveAnn);
+      } catch {}
     } catch (err: any) {
       console.error("Admin dashboard load failed:", err);
       setError(err.message || "Failed to query admin records.");
@@ -403,8 +400,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     try {
       const { error: err } = await supabase
         .from("entries")
-        .delete()
-        .eq("name", entryName);
+        .upsert({
+          name: entryName,
+          type: "Model",
+          task: "NLP",
+          summary: "[Deleted from Directory]",
+          approved: false,
+        }, { onConflict: "name" });
 
       if (err) throw err;
 
@@ -482,8 +484,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       } else {
         const { error: err } = await supabase
           .from("entries")
-          .update(payload)
-          .eq("name", editingEntry.name);
+          .upsert({
+            ...payload,
+            citations: (editingEntry as any).citations || [],
+            approved: true,
+          }, { onConflict: "name" });
         if (err) throw err;
 
         setApprovedEntries((prev) =>
@@ -691,17 +696,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   // ── Actions: Site Announcements ───────────────────────────────────────────
 
-  const handleSaveAnnouncement = (ann: SiteAnnouncement) => {
+  const handleSaveAnnouncement = async (ann: SiteAnnouncement) => {
     try {
-      const updated = { ...ann, updatedAt: new Date().toISOString() };
-      localStorage.setItem("aiverse_site_announcement", JSON.stringify(updated));
-      window.dispatchEvent(new Event("announcement_updated"));
-      setAnnouncement(updated);
-      showToast("success", updated.enabled ? "Site announcement broadcasted live!" : "Announcement disabled.");
+      await saveSiteAnnouncement(ann, currentUserKey);
+      setAnnouncement({ ...ann, updatedAt: new Date().toISOString() });
+      showToast(
+        "success",
+        ann.enabled
+          ? "Site announcement broadcasted globally to all users!"
+          : "Announcement disabled."
+      );
       logAudit(
         "Site Announcement",
-        updated.enabled
-          ? `Broadcasted banner: "${updated.message.slice(0, 35)}..."`
+        ann.enabled
+          ? `Broadcasted banner globally: "${ann.message.slice(0, 35)}..."`
           : "Deactivated site-wide announcement"
       );
     } catch (err: any) {

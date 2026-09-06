@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { SignedIn, SignedOut, useAuth } from "./AuthContext";
 import { Plus, Moon, Sun, SlidersHorizontal } from "lucide-react";
 import { useTokens, useTheme } from "../lib/theme";
 import { UserProfileMenu } from "./UserProfileMenu";
-import type { OnboardingProfile } from "../lib/onboarding";
+import { parseProfileMeta, type OnboardingProfile } from "../lib/onboarding";
 import { getOAuthAvatarUrl } from "../lib/supabase";
 
 interface NavbarProps {
@@ -52,16 +52,19 @@ export const Navbar: React.FC<NavbarProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const avatarButtonRef = useRef<HTMLButtonElement>(null);
 
-  const avatarUrl = getOAuthAvatarUrl(user);
+  const parsedMeta = useMemo(
+    () => parseProfileMeta(onboardingProfile?.referralSource),
+    [onboardingProfile?.referralSource],
+  );
+
+  const effectiveAvatar = parsedMeta?.avatarUrl || getOAuthAvatarUrl(user);
   const firstName = (user?.user_metadata?.firstName as string) || "";
-  const lastName = (user?.user_metadata?.lastName as string) || "";
   const email = user?.email || "";
 
-  const initials = firstName
-    ? (firstName[0] + (lastName ? lastName[0] : "")).toUpperCase()
+  const displayName = parsedMeta?.displayName || firstName || email.split("@")[0] || "User";
+  const initials = displayName
+    ? (displayName.split(/\s+/).map((n: string) => n[0]).slice(0, 2).join("")).toUpperCase()
     : (email ? email[0] : "U").toUpperCase();
-
-  const displayName = firstName || email.split("@")[0] || "User";
   const greetingName = displayName;
 
   useEffect(() => {
@@ -166,8 +169,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 aria-label="User profile menu"
                 aria-expanded={isDropdownOpen}
               >
-                {avatarUrl ? (
-                  <img src={avatarUrl} alt="User avatar" className="w-full h-full object-cover" />
+                {effectiveAvatar ? (
+                  <img src={effectiveAvatar} alt="User avatar" className="w-full h-full object-cover" />
                 ) : (
                   <div className={`w-full h-full flex items-center justify-center font-bold text-sm ${resolvedTheme === 'amoled' ? 'bg-white text-black' : 'bg-black text-white'}`}>
                     {initials}

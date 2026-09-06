@@ -30,6 +30,7 @@ import { useAuth } from "./AuthContext";
 import { shareUrlForProfile } from "../lib/entryUrl";
 import {
   onboardingOptions,
+  parseProfileMeta,
   type OnboardingInterest,
   type OnboardingProfile,
   type ReferralSource,
@@ -190,15 +191,6 @@ interface UserProfileMenuProps {
   onViewAdminDashboard?: () => void;
 }
 
-function parseProfileMeta(referralSource: string | undefined) {
-  if (!referralSource) return null;
-  try {
-    return JSON.parse(referralSource) as Record<string, string>;
-  } catch {
-    return null;
-  }
-}
-
 export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
   onboardingProfile,
   onSave,
@@ -232,15 +224,14 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
   const [role, setRole] = useState<UserRole | null>(null);
   const [interests, setInterests] = useState<OnboardingInterest[]>([]);
 
-  const username = (user?.user_metadata?.username as string) || parsedMeta?.username || "";
+  const username = parsedMeta?.username || (user?.user_metadata?.username as string) || "";
   const email = user?.email || "";
-  const avatarUrl = getOAuthAvatarUrl(user);
-  const firstName = (user?.user_metadata?.firstName as string) || "";
-  const lastName = (user?.user_metadata?.lastName as string) || "";
-  const initials = firstName
-    ? (firstName[0] + (lastName ? lastName[0] : "")).toUpperCase()
-    : (email ? email[0] : "U").toUpperCase();
+  const avatarUrl = parsedMeta?.avatarUrl || getOAuthAvatarUrl(user);
+  const firstName = parsedMeta?.displayName || (user?.user_metadata?.firstName as string) || "";
   const displayName = firstName || email.split("@")[0] || "User";
+  const initials = displayName
+    ? (displayName.split(/\s+/).map((n: string) => n[0]).slice(0, 2).join("")).toUpperCase()
+    : (email ? email[0] : "U").toUpperCase();
 
   const [socialsExpanded, setSocialsExpanded] = useState(false);
 
@@ -295,13 +286,13 @@ export const UserProfileMenu: React.FC<UserProfileMenuProps> = ({
 
   useEffect(() => {
     const meta = user?.user_metadata;
-    setName((meta?.firstName as string) || parsedMeta?.displayName || "");
-    setDescription((meta?.description as string) || parsedMeta?.description || "");
-    setGithub((meta?.github as string) || parsedMeta?.github || "");
-    setLinkedin((meta?.linkedin as string) || parsedMeta?.linkedin || "");
-    setMedium((meta?.medium as string) || parsedMeta?.medium || "");
-    setDevto((meta?.devto as string) || parsedMeta?.devto || "");
-    setPortfolio((meta?.portfolio as string) || parsedMeta?.portfolio || "");
+    setName(parsedMeta?.displayName || (meta?.firstName as string) || "");
+    setDescription(parsedMeta?.description || (meta?.description as string) || "");
+    setGithub(parsedMeta?.github || (meta?.github as string) || "");
+    setLinkedin(parsedMeta?.linkedin || (meta?.linkedin as string) || "");
+    setMedium(parsedMeta?.medium || (meta?.medium as string) || "");
+    setDevto(parsedMeta?.devto || (meta?.devto as string) || "");
+    setPortfolio(parsedMeta?.portfolio || (meta?.portfolio as string) || "");
     setRole(onboardingProfile?.role ?? null);
     setInterests(onboardingProfile?.interests ?? []);
   }, [user, parsedMeta, onboardingProfile]);

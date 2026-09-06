@@ -265,3 +265,12 @@ export function roleHeadline(role: UserRole): string {
 export function roleLabel(role: UserRole): string {
   return onboardingOptions.roles.find((r) => r.id === role)?.label ?? "you";
 }
+
+export function parseProfileMeta(referralSource: string | undefined): Record<string, string> | null {
+  if (!referralSource) return null;
+  try {
+    return JSON.parse(referralSource) as Record<string, string>;
+  } catch {
+    return null;
+  }
+}
