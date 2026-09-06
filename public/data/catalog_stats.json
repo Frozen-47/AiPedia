@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-09-05T10:39:21.213Z",
-  "totalEntries": 228,
-  "popularEntries": 182,
+  "timestamp": "2026-09-06T02:06:45.197Z",
+  "totalEntries": 229,
+  "popularEntries": 183,
   "byType": {
-    "Model": 86,
+    "Model": 87,
     "Framework": 22,
     "Platform": 25,
     "Dataset": 24,
@@ -12,7 +12,7 @@
   "byTask": {
     "NLP": 85,
     "AI Coding": 18,
-    "Multimodal": 8,
+    "Multimodal": 9,
     "Research": 11,
     "Image Generation": 9,
     "Video Generation": 10,
@@ -61,7 +61,8 @@
     "CC BY NC 4.0": 1,
     "Proprietary / DeepSeek License": 1,
     "Open Source UI / Various model licenses": 1,
-    "Free": 1
+    "Free": 1,
+    "APACHE-2.0": 1
   },
   "toolOfTheDay": {
     "name": "Qwen2 (72B)",

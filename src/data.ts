@@ -5052,6 +5052,28 @@ export const entries: Entry[] = [
               "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp"
           }
       ]
+  },
+  {
+      "name": "Qwen3.8-27B",
+      "type": "Model",
+      "summary": "High-performance Multimodal open-weights model by Alibaba (Qwen), trending with over 14,038 community likes and 6,024,467 downloads on Hugging Face.",
+      "task": "Multimodal",
+      "license": "APACHE-2.0",
+      "year": 2026,
+      "org": "Alibaba (Qwen)",
+      "size": "27B params",
+      "architecture": "Alibaba (Qwen) image text to text architecture with community-tuned weights.",
+      "usage": "from transformers import AutoModelForCausalLM, AutoTokenizer\n\nmodel = AutoModelForCausalLM.from_pretrained(\"Qwen/Qwen3.8-27B\", device_map=\"auto\")\ntokenizer = AutoTokenizer.from_pretrained(\"Qwen/Qwen3.8-27B\")",
+      "benchmarks": "Trending Score: 536, Likes: 14,038, Downloads: 6,024,467",
+      "limitations": "Requires GPU VRAM or quantization for efficient local deployment.",
+      "popular": true,
+      "url": "https://huggingface.co/Qwen/Qwen3.8-27B",
+      "citations": [
+          {
+              "text": "Qwen/Qwen3.8-27B on Hugging Face",
+              "url": "https://huggingface.co/Qwen/Qwen3.8-27B"
+          }
+      ]
   }
 ];
 

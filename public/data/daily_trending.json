@@ -1,10 +1,10 @@
 {
-  "timestamp": "2026-09-05T10:39:21.222Z",
+  "timestamp": "2026-09-06T02:06:45.197Z",
   "models": [
     {
       "id": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
       "author": "deepseek-ai",
-      "likes": 631,
+      "likes": 680,
       "downloads": 184542,
       "pipeline_tag": "image-text-to-text",
       "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp"
@@ -12,7 +12,7 @@
     {
       "id": "Qwen/Qwen3.8-27B",
       "author": "Qwen",
-      "likes": 13986,
+      "likes": 14038,
       "downloads": 6024467,
       "pipeline_tag": "image-text-to-text",
       "url": "https://huggingface.co/Qwen/Qwen3.8-27B"
@@ -20,41 +20,41 @@
     {
       "id": "Qwen/Qwen3.8-Flash-Next",
       "author": "Qwen",
-      "likes": 4892,
+      "likes": 4914,
       "downloads": 401327,
       "pipeline_tag": "image-text-to-text",
       "url": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next"
     },
     {
-      "id": "zai-org/GLM-5.3-Flash",
-      "author": "zai-org",
-      "likes": 2063,
-      "downloads": 727610,
-      "pipeline_tag": "image-text-to-text",
-      "url": "https://huggingface.co/zai-org/GLM-5.3-Flash"
-    },
-    {
       "id": "XHToken/Spark-X2.5-4B",
       "author": "XHToken",
-      "likes": 497,
+      "likes": 541,
       "downloads": 4755,
       "pipeline_tag": "text-generation",
       "url": "https://huggingface.co/XHToken/Spark-X2.5-4B"
     },
     {
-      "id": "zai-org/GLM-5.3",
+      "id": "google/timesfm-3.0-pytorch",
+      "author": "google",
+      "likes": 457,
+      "downloads": 123025,
+      "pipeline_tag": "time-series-forecasting",
+      "url": "https://huggingface.co/google/timesfm-3.0-pytorch"
+    },
+    {
+      "id": "zai-org/GLM-5.3-Flash",
       "author": "zai-org",
-      "likes": 1711,
-      "downloads": 370417,
-      "pipeline_tag": "text-generation",
-      "url": "https://huggingface.co/zai-org/GLM-5.3"
+      "likes": 2079,
+      "downloads": 727610,
+      "pipeline_tag": "image-text-to-text",
+      "url": "https://huggingface.co/zai-org/GLM-5.3-Flash"
     }
   ],
   "papers": [
     {
       "title": "RoboTok: An Internet-Scale Data Engine for Human Demonstration Retrieval and Dexterous Manipulation Learning",
       "summary": "RoboTok retrieves relevant human manipulation videos from the web using a latent motion space derived from 3D hand trajectories to improve robot policy training.",
-      "upvotes": 34,
+      "upvotes": 82,
       "arxiv_id": "2609.03199",
       "url": "https://huggingface.co/papers/2609.03199",
       "githubRepo": "https://github.com/Rice-RobotPI-Lab/RoboTok-Code"
@@ -62,7 +62,7 @@
     {
       "title": "A Common Measure of Communication for Speech Brain-Computer Interfaces",
       "summary": "Open-vocabulary mutual information provides a unified metric to compare speech brain-computer interfaces across different vocabularies and conditions, revealing trade-offs between vocabulary coverage and decoding accuracy.",
-      "upvotes": 8,
+      "upvotes": 9,
       "arxiv_id": "2609.02887",
       "url": "https://huggingface.co/papers/2609.02887",
       "githubRepo": "https://github.com/neural-processing-lab/OVMI"
@@ -78,7 +78,7 @@
     {
       "title": "Locked at the Entrance, Open Inside: Where RLVR Narrows the Solution Space",
       "summary": "Reinforcement learning with verifiable rewards narrows reasoning diversity primarily at the initial solution step rather than during execution, and targeted interventions can restore coverage without sacrificing accuracy.",
-      "upvotes": 8,
+      "upvotes": 9,
       "arxiv_id": "2608.29188",
       "url": "https://huggingface.co/papers/2608.29188",
       "githubRepo": "https://github.com/ershiyidian/early-branch-locking"

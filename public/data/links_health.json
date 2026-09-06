@@ -1,18 +1,28 @@
 {
-  "timestamp": "2026-09-05T10:39:21.916Z",
+  "timestamp": "2026-09-06T02:06:45.340Z",
   "checked": 25,
-  "healthy": 23,
-  "broken": 2,
+  "healthy": 21,
+  "broken": 4,
   "issues": [
     {
-      "name": "Llama 3.2 Vision (11B)",
-      "url": "https://ai.meta.com/llama/",
-      "status": 400
+      "name": "Quizlet AI",
+      "url": "https://quizlet.com/features/quizlet-ai",
+      "status": 403
     },
     {
-      "name": "Llama 3.2 (3B)",
-      "url": "https://ai.meta.com/llama/",
-      "status": 400
+      "name": "Grammarly",
+      "url": "https://www.grammarly.com",
+      "status": 405
+    },
+    {
+      "name": "Ideogram",
+      "url": "https://ideogram.ai",
+      "status": 403
+    },
+    {
+      "name": "GPT-4o",
+      "url": "https://openai.com/chatgpt",
+      "status": 404
     }
   ]
 }

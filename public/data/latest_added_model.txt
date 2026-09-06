@@ -1,1 +1,1 @@
-DeepSeek-V4-Flash-Vision-Exp
+Qwen3.8-27B
