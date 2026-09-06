@@ -180,7 +180,17 @@ const Inner: React.FC = () => {
   } | null>(() => {
     try {
       const stored = localStorage.getItem("aiverse_site_announcement");
-      return stored ? JSON.parse(stored) : null;
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed?.message && (parsed.message.includes("228+") || parsed.message.includes("238+"))) {
+          parsed.message = parsed.message
+            .replace(/\b(228|238)\+\b/g, "242+")
+            .replace(/compare \d+\+ open/g, "compare 242+ open");
+          localStorage.setItem("aiverse_site_announcement", JSON.stringify(parsed));
+        }
+        return parsed;
+      }
+      return null;
     } catch {
       return null;
     }
@@ -190,7 +200,18 @@ const Inner: React.FC = () => {
     const handleAnnouncementChange = () => {
       try {
         const stored = localStorage.getItem("aiverse_site_announcement");
-        setAnnouncement(stored ? JSON.parse(stored) : null);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed?.message && (parsed.message.includes("228+") || parsed.message.includes("238+"))) {
+            parsed.message = parsed.message
+              .replace(/\b(228|238)\+\b/g, "242+")
+              .replace(/compare \d+\+ open/g, "compare 242+ open");
+            localStorage.setItem("aiverse_site_announcement", JSON.stringify(parsed));
+          }
+          setAnnouncement(parsed);
+          return;
+        }
+        setAnnouncement(null);
       } catch {}
     };
     window.addEventListener("announcement_updated", handleAnnouncementChange);
@@ -999,7 +1020,11 @@ const Inner: React.FC = () => {
         }`}>
           <div className="flex items-center gap-2 max-w-5xl mx-auto w-full justify-center">
             <Sparkles size={14} className="shrink-0" />
-            <span>{announcement.message}</span>
+            <span>
+              {announcement.message
+                .replace(/\b(228|238)\+\b/g, `${entries.length > 0 ? entries.length : 242}+`)
+                .replace(/compare \d+\+ open/g, `compare ${entries.length > 0 ? entries.length : 242}+ open`)}
+            </span>
             {announcement.linkUrl && (
               <a
                 href={announcement.linkUrl}

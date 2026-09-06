@@ -154,7 +154,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [announcement, setAnnouncement] = useState<SiteAnnouncement>(() => {
     try {
       const stored = localStorage.getItem("aiverse_site_announcement");
-      return stored ? JSON.parse(stored) : DEFAULT_ANNOUNCEMENT;
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        const count = defaultEntries.length || 242;
+        if (parsed?.message && (parsed.message.includes("228+") || parsed.message.includes("238+"))) {
+          parsed.message = parsed.message
+            .replace(/\b(228|238)\+\b/g, `${count}+`)
+            .replace(/compare \d+\+ open/g, `compare ${count}+ open`);
+          localStorage.setItem("aiverse_site_announcement", JSON.stringify(parsed));
+        }
+        return parsed;
+      }
+      return DEFAULT_ANNOUNCEMENT;
     } catch {
       return DEFAULT_ANNOUNCEMENT;
     }
